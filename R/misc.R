@@ -1,7 +1,7 @@
 #' Test if GDAL is installed on computer
 #'
 #' This function tests if gdal is installed on the computer.
-#' If not, download it here: http://download.osgeo.org/gdal
+#' If not, download it here: \code{\url{http://download.osgeo.org/gdal}}
 #'
 #' @return Logical. Is it installed?
 #' @seealso \code{\link[gdalUtils]{gdal_setInstallation}}
