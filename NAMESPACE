@@ -1,0 +1,3 @@
+useDynLib(marxan)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)

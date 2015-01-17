@@ -41,3 +41,21 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# ========================
+# Marxan Executable Files
+# ========================
+
+Marxan_x64.exe
+Marxan.exe
+MarOpt_v243_Mac64
+MarOpt_v243_Mac32
+MarOpt_v243_Linux32
+MarOpt_v243_Linux64
+
+
+# ========================
+# Package Binaries
+# ========================
+src-x64
+src-i386
