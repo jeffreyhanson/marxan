@@ -1,3 +1,6 @@
+#' @include marxan-internal.R
+NULL
+
 #' Zonal Sum
 #'
 #' This function calculates the zonal sum of SpatialPolygons in a RasterLayer, RasterStack, or RasterBrick.
@@ -11,15 +14,19 @@
 #'
 #' @return data.frame with sum of raster values in each polygon.
 #' @seealso \code{\link[raster]{zonal}}
-#'
+#' @export
 #' @examples
 #' data(species, planningunits)
-#' zonalSum(planningunits, species[[1]])
-#' zonalSum(planningunits, species)
+#' purast<-rasterize(planningunits, species[[1]])
+#' zonalSum(purast, species[[1]])
+#' zonalSum(purast, species)
 setGeneric("zonalSum", function(x, y, ...) standardGeneric("zonalSum"))
+
+#' @describeIn zonalSum
+#' @export
 setMethod(
 	"zonalSum",
-	signature(x="SpatialPolygons", y="RasterStackOrBrick"),
+	signature(x="RasterLayer", y="RasterStackOrBrick"),
 	function(x, y, speciesNames=names(y), ncores=1) {
 		if (canProcessInMemory(x,2)) {
 			return(rbind.fill(llply(seq_len(nlayers(y)), function(l) {
@@ -40,9 +47,12 @@ setMethod(
 		}
 	}
 )
+
+#' @describeIn zonalSum
+#' @export
 setMethod(
 	"zonalSum",
-	signature(x="SpatialPolygons", y="RasterLayer"),
+	signature(x="RasterLayer", y="RasterLayer"),
 	function(x, y, speciesNames=names(y), ncores=1) {
 		if (canProcessInMemory(x,2)) {
 			return(.zonalSum.RasterLayerInMemory(x, y, speciesNames))

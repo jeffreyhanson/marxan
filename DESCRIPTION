@@ -3,23 +3,48 @@ Type: Package
 Title: Reserve selection using Marxan
 Version: 0.0.0
 Date: 2015-01-12
-Author: Jeffrey O. Hanson <jeffrey.hanson@uqconnect.edu.au>, Matthew E. Watts <m.watts@uq.edu.au>
+Author: Jeffrey O. Hanson <jeffrey.hanson@uqconnect.edu.au>, Matthew E. Watts
+    <m.watts@uq.edu.au>
 Maintainer: Jeffrey O. Hanson <jeffrey.hanson@uqconnect.edu.au>
-Description: This R package contains decision support tools for reserve selection using Marxan. It bring the entire Marxan workflow to R. Key features include the ability to prepare input data for Marxan from raw raster and vector data, execute Marxan, and visualise Marxan solutions. Most of the functions that involve intensive data processing use code compiled in C++, provide options to run processing in parallel, or can make use of other software to reduce run time.
+Description: This R package contains decision support tools for reserve
+    selection using Marxan. It brings the entire Marxan workflow to R. Key
+    features include the ability to prepare input data for Marxan from raw
+    raster and vector data, execute Marxan, and visualise Marxan solutions.
+    Most of the functions that involve intensive data processing use code
+    compiled in C++, provide options to run processing in parallel, or can make
+    use of other software to reduce run time.
 License: GNU AFFERO GENERAL PUBLIC LICENSE (version 3)
+LazyData: true
+Collate:
+    'dependencies.R'
+    'RcppExports.R'
+    'marxan-internal.R'
+    'misc.R'
+    'generics.R'
+    'zonalSum.R'
+    'calcPuVsSpeciesData.R'
+    'calcBoundaryData.R'
+    'MarxanData.R'
+    'MarxanOpts.R'
+    'MarxanResults.R'
+    'MarxanUnsolved.R'
+    'MarxanSolved.R'
+    'data.R'
+    'marxan.R'
 Depends:
-	R (>= 3.1)
+    R (>= 3.1)
 Imports:
-	Rcpp (>= 0.11.3),
-	plyr,
-	rgdal,
-	raster,
-	gdalUtils,
-	shape,
-	ape,
-	fastcluster,
-	PBSmapping,
-	RgoogleMaps,
-	data.table
-LinkingTo: 
-	Rcpp
+    Rcpp (>= 0.11.3),
+    plyr,
+    rgdal,
+    raster,
+    gdalUtils,
+    shape,
+    ape,
+    fastcluster,
+    PBSmapping,
+    RgoogleMaps,
+    data.table
+LinkingTo: Rcpp
+Suggests:
+    testthat

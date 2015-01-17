@@ -1,10 +1,13 @@
+#' @include RcppExports.R marxan-internal.R misc.R generics.R MarxanOpts.R MarxanData.R MarxanUnsolved.R MarxanResults.R MarxanSolved.R
+NULL
+
 #' General Marxan Function
 #'
 #' This is a general function to create Marxan objects from scratch and run the Marxan program to generate solutions.
 #'
 #' @param ... arguments are passed to MarxanData and MarxanOpts functions
 #' @param solve "logical" should the problem be solved using Marxan?
-#' 
+#' @export
 #' @return "MarxanSolved"  or "MarxanUnsolved"
 #' @seealso \code{\link{MarxanOpts}}, \code{\link{MarxanData}}, \code{\link{MarxanResults}}, \code{\link{MarxanUnsolved}} 
 marxan<-function(..., solve=TRUE) {

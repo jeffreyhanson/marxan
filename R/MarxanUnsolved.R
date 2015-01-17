@@ -1,9 +1,13 @@
+#' @include RcppExports.R marxan-internal.R misc.R generics.R MarxanOpts.R MarxanData.R
+NULL
+
 #' MarxanUnsolved: An S4 class to represent Marxan inputs
 #'
 #' This class is used to store Marxan input data and input parameters.
 #'
 #' @slot data "MarxanData" object used to store input data.
 #' @slot opts "MarxanOpts" object used to store input parameters.
+#' @export
 #' @seealso  \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}
 setClass("MarxanUnsolved",
 	representation(
@@ -12,19 +16,21 @@ setClass("MarxanUnsolved",
 	)
 )
 
-#' Create new MarxanUnsolved object
+#' Create a new MarxanUnsolved object
 #'
 #' This function creates a MarxanUnsolved object using MarxanOpts and MarxanData objects.
 #'
 #' @param opts "MarxanOpts" object.
 #' @param data "MarxanData" object.
 #' @return "MarxanUnsolved" object.
+#' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}
 MarxanUnsolved<-function(opts, data) {
 	return(new("MarxanUnsolved", opts=opts, data=data))
 }
 
-#' @describeIn solve solve "MarxanUnsolved" object.
+#' @describeIn solve
+#' @export
 solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE) {
 	# check that Marxan is installed properly
 	findMarxanExecutable()
@@ -60,6 +66,7 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 }
 
 #' @describeIn print
+#' @export
 print.MarxanUnsolved=function(x) {
 	cat("MarxanUnsolved object.\n")
 	print.MarxanOpts(x@opts, FALSE)
@@ -67,11 +74,13 @@ print.MarxanUnsolved=function(x) {
 }
 
 #' @describeIn basemap
+#' @export
 basemap.MarxanUnsolved<-function(x, basemap="none", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
 	return(basemap.MarxanData(x@data, basemap, alpha, grayscale, xzoom, yzoom, force_reset))
 }
 
 #' @describeIn update
+#' @export
 update.MarxanUnsolved<-function(x, formula, evaluate=TRUE, force_reset) {
 	m<-MarxanUnsolved(
 		opts=update.MarxanOpts(x@opts, formula, force_reset),
@@ -81,3 +90,13 @@ update.MarxanUnsolved<-function(x, formula, evaluate=TRUE, force_reset) {
 		m<-solve(m)
 	return(m)
 }
+
+#' @describeIn plot
+#' @export
+setMethod(
+	"plot", 
+	signature(x="MarxanUnsolved", y="character"),
+	function(x, y, basemap="none", colramp="BuGn", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
+		plot(x@data, y, basemap, colramp, alpha, grayscale, xzoom, yzoom, force_reset=force_reset)
+	}
+)

@@ -1,3 +1,6 @@
+#' @include RcppExports.R marxan-internal.R misc.R
+NULL
+
 #' MarxanOpts: An S4 class to represent Marxan input parameters
 #'
 #' This class is used to store Marxan input parameters.
@@ -22,6 +25,7 @@
 #' @slot CLUMPTYPE "integer" clumping penalty type (default=0)
 #' @slot VERBOSITY "integer" amount of output displayed on the program screen (default=3)
 #' @slot NCORES "integer "number of cores to use for processing (default=1)
+#' @export
 setClass("MarxanOpts",
 	representation(
 		BLM="numeric",
@@ -95,6 +99,7 @@ setClass("MarxanOpts",
 #' @param NCORES "integer "number of cores to use for processing (default=1)
 #' @return "MarxanOpts" object
 #' @seealso \code{\link{MarxanOpts-class}},  \code{\link{read.MarxanOpts}}, \code{\link{write.MarxanOpts}}
+#' @export
 #' @examples
 #' x<-MarxanOpts(NCORES=4, NUMREPS=2, NUMITNS=5)
 MarxanOpts=function(...) {
@@ -111,6 +116,7 @@ MarxanOpts=function(...) {
 #'
 #' @param path "character" directory path for location to save input parameters file
 #' @seealso \code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{write.MarxanOpts}}
+#' @export
 #' @examples
 #' x<-MarxanOpts()
 #' write.MarxanData(x, file.path(tempdir(), 'input.dat'))
@@ -135,6 +141,7 @@ read.MarxanOpts=function(path) {
 #' @param outputdir "character" directory path for location where Marxan input data files are saved
 #' @param seed "integer" seed for random number generation in Marxan
 #' @seealso \code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{read.MarxanOpts}}
+#' @export
 #' @examples
 #' x<-MarxanOpts()
 #' write.MarxanData(x, file.path(tempdir(), 'input.dat'))
@@ -200,12 +207,14 @@ VERBOSITY ',x@VERBOSITY,'
 }
 
 #' @describeIn print
+#' @export
 print.MarxanOpts=function(x, header=TRUE) {
 	if (header)
 		cat("MarxanOpts object.\n")
 }
 
 #' @describeIn update
+#' @export
 update.MarxanOpts<-function(x, formula, force_reset=TRUE) {
 	if (force_reset)
 		x$.cache<-new.env()

@@ -1,3 +1,6 @@
+#' @include RcppExports.R marxan-internal.R
+NULL
+
 #' Test if GDAL is installed on computer
 #'
 #' This function tests if gdal is installed on the computer.
@@ -5,7 +8,7 @@
 #'
 #' @return Logical. Is it installed?
 #' @seealso \code{\link[gdalUtils]{gdal_setInstallation}}
-#'
+#' @export
 #' @examples
 #' gdal_setInstallation()
 is.gdalInstalled <- function() {
@@ -22,7 +25,7 @@ is.gdalInstalled <- function() {
 #' @param x "SpatialPolygonsDataFrame" with polygon spatial data
 #' @param y "RasterLayer" with dimensions, extent, and resolution to be used as a template
 #' @param field "character" column name with values to burn into the output raster
-#'
+#' @export
 #' @return RasterLayer
 #' @seealso \code{\link[raster]{rasterize}}, \code{\link{is.gdalInstalled}}
 setGeneric('rasterize.gdal', function(x,y, ...) standardGeneric('rasterize.gdal'))
@@ -41,6 +44,7 @@ setMethod(
 #' This function determines if Marxan is installed on the computer, and will update \code{\link[base]{options}} 
 #'
 #' @return "logical" is it installed?
+#' @export
 #' @examples
 #'	is.marxanInstalled()
 is.marxanInstalled<-function() {
@@ -56,6 +60,7 @@ is.marxanInstalled<-function() {
 #'
 #' @seealso \link{\code{is.marxanInstalled}}
 #' @return Logical. Is it installed?
+#' @export
 #' @examples
 #' # Marxan executable files should be copied to this directory
 #' system.file("bin", package="marxan")
@@ -103,14 +108,15 @@ findMarxanExecutablePath=function() {
 	options(marxanExecutablePath=path)
 }
 
-#' Update Marxan Input Parameters
+#' Update Marxan input parameters
 #'
 #' This function is used in the formula argument of the update function to change input parameters of a "MarxanOpts", "MarxanUnsolved", or "MarxanSolved" object.
 #'
 #' @param name "character" name of parameter to change.
 #' @param value "numeric" new value.
 #' @return "MarxanOptsOperation" object.
-#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{species}}, \code{\link{pu}}
+#' @export
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{spp}}, \code{\link{pu}}
 opt<-function(name, value) {
 	return(
 		structure(
@@ -121,7 +127,7 @@ opt<-function(name, value) {
 	)
 }
 
-#' Update Marxan Species Parameters
+#' Update Marxan species parameters
 #'
 #' This function is used in the formula argument of the update function to change species parameters of a "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #'
@@ -130,9 +136,10 @@ opt<-function(name, value) {
 #' @param spf "numeric" new species penalty factor.
 #' @param target "numeric" new target. 
 #' @note Set arguments 'name', 'spf', 'target' to NA (default) to keep the same.
+#' @export
 #' @return "MarxanSpeciesOperation" object.
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{pu}}
-species<-function(x, name=NA, spf=NA, target=NA) {
+spp<-function(x, name=NA, spf=NA, target=NA) {
 	if (is.na(name) & is.na(spf) & is.na(target))
 		stop("no arguments were specified to change values.")
 	args<-structure(c(name,spf,target), .Names=c("name","spf","target"))
@@ -150,7 +157,7 @@ species<-function(x, name=NA, spf=NA, target=NA) {
 	)
 }
 
-#' Update Marxan Planning Unit Parameters
+#' Update Marxan planning unit parameters
 #'
 #' This function is used in the formula argument of the update function to change planning unit parameters of a "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #'
@@ -158,8 +165,9 @@ species<-function(x, name=NA, spf=NA, target=NA) {
 #' @param cost "numeric" new cost value.
 #' @param status "numeric" new status value.
 #' @note Set argument 'cost' or 'status' to NA (default) to keep the same.
+#' @export
 #' @return "MarxanPuOperation" object.
-#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{species}}
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{spp}}
 pu<-function(id, cost=NA, status=NA) {
 	if (is.na(cost) & is.na(status))
 		stop("no arguments were supplied to change values.")

@@ -1,8 +1,14 @@
+#' @include RcppExports.R dependencies.R
+NULL
+
 # set union classes
-setOldClass("PolyData")
-setClassUnion("PolyDataOrNULL", c("PolyData", "NULL"))
-setClassUnion("MarxanUnsolvedOrSolved", c("MarxanSolved", "MarxanUnsolved"))
-setClassUnion("RasterStackOrBrick", c("RasterBrick", "RasterStack"))
+suppressWarnings(setOldClass("PolySet"))
+suppressWarnings(setClassUnion("PolySetOrNULL", c("PolySet", "NULL")))
+
+# setOldClass("RasterBrick")
+# setOldClass("RasterStack")
+# setOldClass(".RasterBrickSparse")
+suppressWarnings(setClassUnion("RasterStackOrBrick", c("RasterBrick", "RasterStack")))
 
 # misc hidden functions
 marxanURL="http://www.uq.edu.au/marxan/get-marxan-software"
@@ -372,58 +378,6 @@ zonalSum.RasterLayerNotInMemory <- function(bs, polys, rast, speciesName, ncores
 	return(data.frame(species=speciesName, pu=attr(tmp, "ids"), amount=c(tmp)))
 }
 
-# cache methods
-setGeneric("is.cached", function(x,name) standardGeneric("is.cached"))
-setMethod(
-	f="is.cached", 
-	signature(x="MarxanData", name="character"), 
-	function(x,name) {
-		return(!is.null(x@.cache[[names]]))
-	}
-)
-setMethod(
-	f="is.cached", 
-	signature(x="MarxanResults", name="character"), 
-	function(x,name) {
-		return(!is.null(x@.cache[[names]]))
-	}
-)
-
-
-setGeneric("cache", function(x, name, y) standardGeneric("cache"))
-# get methods
-setMethod(
-	f="cache", 
-	signature(x="MarxanData", name="character", y="missing"), 
-	function(x, name, y) {
-		return(x@.cache[[name]])
-	}
-)
-setMethod(
-	f="cache", 
-	signature(x="MarxanResults", name="character", y="missing"), 
-	function(x, name, y) {
-		return(x@.cache[[name]])
-	}
-)
-# set methods
-setMethod(
-	f="cache", 
-	signature(x="MarxanResults", name="character", y="ANY"), 
-	function(x, name, y) {
-		x@.cache[[name]]=y
-	}
-)
-setMethod(
-	f="cache", 
-	signature(x="MarxanData", name="character", y="ANY"), 
-	function(x, name, y) {
-		x@.cache[[name]]=y
-	}
-)
-
-
-
 hashCall=function(expr, skipargs=c(), env=parent.frame()) {
 	for (i in seq_along(names(expr))[c(-1L, (skipargs*-1L)-1L)])
 		if (inherits(expr[[i]], c("name")))
@@ -431,21 +385,6 @@ hashCall=function(expr, skipargs=c(), env=parent.frame()) {
 	return(deparse(expr))
 }
 
-# rcpp functions
-rcpp_calcBoundaryDF <- function(PID, X, Y, tolerance = 0.001, lengthFactor = 1.0, edgeFactor = 1.0) {
-    .Call('marxan_rcpp_calcBoundaryDF', PACKAGE = 'marxan', PID, X, Y, tolerance, lengthFactor, edgeFactor)
-}
 
-rcpp_groupcombine <- function(group_sums) {
-    .Call('marxan_rcpp_groupcombine', PACKAGE = 'marxan', group_sums)
-}
-
-rcpp_groupsum <- function(cat_vec, val_vec) {
-    .Call('marxan_rcpp_groupsum', PACKAGE = 'marxan', cat_vec, val_vec)
-}
-
-rcpp_Polygons2PolyData <- function(polys, n_preallocate = 10000L) {
-    .Call('marxan_rcpp_Polygons2PolyData', PACKAGE = 'marxan', polys, n_preallocate)
-}
 
 

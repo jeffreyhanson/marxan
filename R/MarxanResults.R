@@ -1,3 +1,6 @@
+#' @include misc.R marxan-internal.R generics.R
+NULL
+
 #' MarxanResults: An S4 class to represent Marxan results
 #'
 #' This class is used to store the results from a Marxan run.
@@ -9,7 +12,8 @@
 #' @slot targetsmet "matrix" indicating whether the targets have been met for each species in each solution.
 #' @slot best "integer" with index of best solution.
 #' @slot log "character" with Marxan log  file.
-#' @seealso \code{link{MarxanResults}}, \code{link{read.MarxanResults}}, 
+#' @export
+#' @seealso \code{\link{MarxanResults}}, \code{\link{read.MarxanResults}}, 
 setClass("MarxanResults",
 	representation(
 		summary="data.frame",
@@ -41,9 +45,9 @@ setMethod(
 #' @param occheld "matrix" with the number of occurrences for each species in each solution
 #' @param best "integer" with index of best solution
 #' @param log "character" with Marxan log file
-#'
+#' @export
 #' @return MarxanResults object
-#' @seealso \code{link{MarxanResults-class}} \code{link{read.MarxanResults}}
+#' @seealso \code{\link{MarxanResults-class}} \code{\link{read.MarxanResults}}
 MarxanResults=function(summary, selections, amounthend, occheld, targetsmet, log) {
 	return(new("MarxanResults", summary=summary, selections=selections, amounthend=amountheld, occheld=occheld, targetsmet=targetsmet, best=which.max(summary$score), log=log))
 }
@@ -53,9 +57,9 @@ MarxanResults=function(summary, selections, amounthend, occheld, targetsmet, log
 #' This function reads outputs from a directory after Marxan been run.
 #'
 #' @param dir "character" with file path to directory with Marxan output files.
-#' 
+#' @export
 #' @return "MarxanResults" object
-#' @seealso \code{link{MarxanResults-class}}, \code{link{MarxanResults}}
+#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}
 read.MarxanResults=function(dir) {
 	# check for valid inputs
 	if (!file.exists(dir))
@@ -78,6 +82,7 @@ read.MarxanResults=function(dir) {
 }
 
 #' @describeIn selection
+#' @export
 selection.MarxanResults<-function(x, y="best") {
 	if (is.numeric(y))
 		return(x@selections[y,])
@@ -88,6 +93,7 @@ selection.MarxanResults<-function(x, y="best") {
 }
 
 #' @describeIn score
+#' @export
 score.MarxanResults<-function(x, y="best") {
 	if (is.numeric(y))
 		return(x@summary$Score[y])
@@ -98,11 +104,13 @@ score.MarxanResults<-function(x, y="best") {
 }
 
 #' @describeIn summary
+#' @export
 summary.MarxanResults<-function(x) {
 	return(x@results@summary)
 }
 
 #' @describeIn print
+#' @export
 print.MarxanResults<-function(x, header=TRUE) {
 	if (header)
 		cat("MarxanResults object.\n")
@@ -110,11 +118,13 @@ print.MarxanResults<-function(x, header=TRUE) {
 }
 
 #' @describeIn log
+#' @export
 log.MarxanResults=function(x) {
 	cat(x@log)
 }
 
 #' @describeIn amountheld
+#' @export
 amountheld.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
 		return(x@amountheld)
@@ -124,6 +134,7 @@ amountheld.MarxanResults<-function(x, y=NULL) {
 }
 
 #' @describeIn occheld
+#' @export
 occheld.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
 		return(x@occheld)
@@ -133,6 +144,7 @@ occheld.MarxanResults<-function(x, y=NULL) {
 }
 
 #' @describeIn targetsmet
+#' @export
 targetsmet.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
 		return(x@targetsmet)
@@ -142,6 +154,7 @@ targetsmet.MarxanResults<-function(x, y=NULL) {
 }
 
 #' @describeIn pca
+#' @export
 pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 	# init
 	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))	
@@ -160,6 +173,7 @@ pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 }
 
 #' @describeIn dist
+#' @export
 dist.MarxanResults=function(x, var="selections", method="bray", force_reset=FALSE) {
 	# init
 	callchar=hashCall(match.call())
@@ -172,6 +186,7 @@ dist.MarxanResults=function(x, var="selections", method="bray", force_reset=FALS
 }
 
 #' @describeIn mds
+#' @export
 mds.MarxanResults=function(x, var="selections", method="bray", ..., force_reset=FALSE) {
 	# init
 	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))
@@ -187,6 +202,7 @@ mds.MarxanResults=function(x, var="selections", method="bray", ..., force_reset=
 }
 
 #' @describeIn hclust
+#' @export
 hclust.MarxanResults=function(x, type="mds", var="selections", ..., force_reset=FALSE) {
 	# init
 	callchar=hashCall(match.call())
@@ -207,6 +223,7 @@ hclust.MarxanResults=function(x, type="mds", var="selections", ..., force_reset=
 }
 
 #' @describeIn ordiplot
+#' @export
 ordiplot.MarxanResults=function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	match.arg(type, c("pca", "mds"))
 	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))	
@@ -222,6 +239,7 @@ ordiplot.MarxanResults=function(x, type='mds', var='selections', nbest=1, ..., f
 }
 
 #' @describeIn dendrogram
+#' @export
 dendrogram.MarxanResults=function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	match.arg(type, c("pca", "mds", "dist"))
 	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))
@@ -234,6 +252,7 @@ dendrogram.MarxanResults=function(x, type='mds', var='selections', nbest=1, ...,
 }
 
 #' @describeIn dotchart
+#' @export
 dotchart.MarxanResults<-function(x, var="score", nbest=1) {
 	match.arg(var, 
 		c(
@@ -265,6 +284,32 @@ dotchart.MarxanResults<-function(x, var="score", nbest=1) {
 	prettyDotchart(x@summary[[var]][tmp], pch=16, labels=tmp, main="Solution dotplot", xlab=gsub("_", " ", var, fixed=TRUE), ylab=tmp, pt.cex=rescale(x@summary[[var]][tmp], to=c(1,2)), color=replace(rep("black", nrow(x@summary)), seq_len(nrow(x@summary)) < nbest, "red"))	
 }
 
+#' @describeIn is.cached
+setMethod(
+	f="is.cached", 
+	signature(x="MarxanResults", name="character"), 
+	function(x,name) {
+		return(!is.null(x@.cache[[names]]))
+	}
+)
+
+#' @describeIn cache
+setMethod(
+	f="cache", 
+	signature(x="MarxanResults", name="character", y="ANY"), 
+	function(x, name, y) {
+		x@.cache[[name]]=y
+	}
+)
+
+#' @describeIn cache
+setMethod(
+	f="cache", 
+	signature(x="MarxanResults", name="character", y="missing"), 
+	function(x, name, y) {
+		return(x@.cache[[name]])
+	}
+)
 
 
 

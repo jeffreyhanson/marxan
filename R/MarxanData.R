@@ -1,16 +1,20 @@
+#' @include RcppExports.R marxan-internal.R misc.R generics.R calcBoundaryData.R calcPuVsSpeciesData.R
+NULL
+
 #' MarxanData: An S4 class to represent Marxan input data
 #'
 #' This class is used to store Marxan input data.
 #'
-#' @slot polygons "PolyData" planning unit spatial data
+#' @slot polygons "PolySet" planning unit spatial data
 #' @slot pu "data.frame" planning unit data; with "id", "cost", "status" columns
 #' @slot species "data.frame" with species data; with "id", "target", "spf", and "name" columns
 #' @slot puvspecies "data.frame" with data on species density in each planning unit; with "species", "pu", and "target" columns
 #' @slot boundary "data.frame" with data on the shared boundary length of planning; with "id1", "id2", and "amount" columns 
 #' @slot .cache "environment" used to store processing calculations
+#' @export
 setClass("MarxanData",
 	representation(
-		polygons="PolyDataOrNULL",
+		polygons="PolySetOrNULL",
 		pu="data.frame",
 		species="data.frame",
 		puvspecies="data.frame",
@@ -113,17 +117,17 @@ setMethod(
 #' @param species species "data.frame" species data; with columns "id", "target", "spf", and "name" columns
 #' @param puvspecies puvspecies "data.frame" pu vs. species data; with "species", "pu", and "amount" columns
 #' @param boundary boundary "data.frame" with shared boundary data; with "id1", "id2", and "boundary" columns
-#' @param polygons "PolyData" with planning unit data or "NULL" if geoplotting capabilities are not required
+#' @param polygons "PolySet" with planning unit data or "NULL" if geoplotting capabilities are not required
 #' @return MarxanData object
 #' @seealso \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData-class}}
+#' @export
 #' @examples
 #' data(planningunits, species, speciesRanges)
 #' x<-MarxanData(
 #' 	planningunits@@data,
 #' 	speciesTargets,
 #'  calcPuVsSpeciesData(planningunits, species),
-#'  calcBoundaryData(planningunits),
-#' 	Polygons2PolyData(planning units)
+#'  calcBoundaryData(planningunits)
 #' )
 MarxanData=function(pu, species, puvspecies, boundary, polygons=NULL) {
 	return(new("MarxanData", pu=pu, species=species, puvspecies=puvspecies, boundary=puvspecies, polygons=polygons))
@@ -135,6 +139,7 @@ MarxanData=function(pu, species, puvspecies, boundary, polygons=NULL) {
 #'
 #' @param path "character" file path for input parameter file
 #' @return MarxanData object
+#' @export
 #' @seealso \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}
 read.MarxanData=function(path, ...) {
 	args<-readLines(path)
@@ -154,6 +159,7 @@ read.MarxanData=function(path, ...) {
 #'
 #' @param x "MarxanData" object to save
 #' @param dir "character" directory path for location to save data
+#' @export
 #' @seealso \code{\link{read.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}
 write.MarxanData=function(x, dir=getwd(), ...) {
 	write.table(x@species,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
@@ -179,6 +185,7 @@ write.MarxanData=function(x, dir=getwd(), ...) {
 #' @param verbose "logical" Should information on data pre-processing be displayed?
 #' @return MarxanData object
 #' @seealso \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}
+#' @export
 #' @examples
 #' data(planningunits, species, speciesRanges)
 #' x<-MarxanData(planningunits, speciesRanges, targets="10%")
@@ -192,7 +199,7 @@ format.MarxanData=function(polygons, rasters, targets="20%", spf=1, pu=NULL, spe
 			cat('Projecting polygons to WGS1984 for rendering.\n')
 		geoPolygons<-spTransform(geoPolygons, CRS('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'))
 	}
-	geoPolygons<-rcpp_SpatialPolygons2PolyData(geoPolygons)
+	geoPolygons<-rcpp_Polygons2PolySet(geoPolygons)
 	# set pu
 	if (is.null(pu)) {
 		if (inherits(polygons, "SpatialPolygonsDataFrame")) {
@@ -227,7 +234,7 @@ format.MarxanData=function(polygons, rasters, targets="20%", spf=1, pu=NULL, spe
 			warning("creating boundary length data from polygons in WGS1984; consider supplying in an object a projected CRS.")
 		if (verbose)
 			cat("Calculating boundary data.")
-		boundary<-calcBoundaryData(rcpp_SpatialPolygons2PolyData(polygons@polygons), ...)
+		boundary<-calcBoundaryData(rcpp_Polygons2PolySet(polygons@polygons), ...)
 	}
 	# set puvspecies
 	if (is.null(puvspecies)) {
@@ -246,6 +253,7 @@ format.MarxanData=function(polygons, rasters, targets="20%", spf=1, pu=NULL, spe
 }
 
 #' @describeIn print
+#' @export
 print.MarxanData=function(x, header=TRUE) {
 	if (header)
 		cat("MarxanData object.\n")
@@ -254,6 +262,7 @@ print.MarxanData=function(x, header=TRUE) {
 }
 
 #' @describeIn basemap
+#' @export
 basemap.MarxanData<-function(x, basemap="none", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
 	# fetch data from google or cache
 	if (force_reset || !is.cached(x, google)) {
@@ -264,6 +273,7 @@ basemap.MarxanData<-function(x, basemap="none", alpha=1, grayscale=FALSE, xzoom=
 }
 
 #' @describeIn update
+#' @export
 update.MarxanData<-function(x, formula, force_reset=TRUE) {
 	if (force_reset)
 		x$.cache<-new.env()
@@ -291,4 +301,94 @@ update.MarxanData<-function(x, formula, force_reset=TRUE) {
 	return(x)
 }
 
+#' @describeIn plot
+#' @export
+setMethod(
+	"plot", 
+	signature(x="MarxanData", y="character"),
+	function(x, y, basemap="none", colramp="BuGn", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
+		# init
+		stopifnot(alpha<=1 & alpha>=0)
+		match.arg(y, c("sum", "rich", unique(x@y$name)))
+		match.arg(colramp, rownames(brewer.pal.info))
+		stopifnot(inherits(x@polygons, "PolySet"))
+		# get basemap data
+		if (basemap!="none")
+			basemap<-basemap.MarxanData(x@data, basemap, alpha, grayscale, xzoom, yzoom, force_reset)
+		# get colours for planning units
+		values<-numeric(nrow(x@pu))
+		if (y=="all") {
+			sub<-data.table(x@puvspecies)
+			sub<-sub[,sum(amount),by=pu]
+			values[sub$pu]<-sub$V1
+		} else if (y=="rich") {
+			sub<-data.table(x@puvspecies)
+			sub<-sub[,.N,by=pu]
+			values[sub$pu]<-sub$V1
+		} else {
+			if (is.character(y))
+				y<-x@species$id[which(x@species$name==y)]
+			sub<-x@puvspecies[which(x@puvspecies==y),]
+			values[sub$pu]<-sub$amount
+		}
+		# plot data
+		switch(y,
+			"all"={
+				y<-"Total Species Occurrence"
+			},
+			"rich"={
+				y<-"Species Richness"
+			},
+			"default"={
+				y<-x@species$name[which(x@species$id==y)]
+			}
+		)
+		# make legend
+		prettyGeoplot(x@polygons, col=brewerCols(rescale(values, to=c(0,1))), basemap=basemap, main=y, legend=continuousLegend(values, colramp))
+		return(invisible())
+	}
+)
 
+#' @describeIn is.cached
+setMethod(
+	f="is.cached", 
+	signature(x="MarxanData", name="character"), 
+	function(x,name) {
+		return(!is.null(x@.cache[[names]]))
+	}
+)
+
+#' @describeIn cache
+setMethod(
+	f="cache", 
+	signature(x="MarxanData", name="character", y="ANY"), 
+	function(x, name, y) {
+		x@.cache[[name]]=y
+	}
+)
+
+#' @describeIn cache
+setMethod(
+	f="cache", 
+	signature(x="MarxanData", name="character", y="missing"), 
+	function(x, name, y) {
+		return(x@.cache[[name]])
+	}
+)
+
+#' @describeIn is.comparable
+#' export
+setMethod(
+	f="is.comparable",
+	signature(x="MarxanData", y="MarxanData"),
+	function(x,y) {
+		return(
+			identical(x@pu$id, y@pu$id) &
+			identical(x@species$id, y@species$id) &
+			identical(x@species$name, y@species$name) &
+			identical(x@polygons, y@polygons) &
+			identical(x@boundary$id1, y@boundary$id1) &
+			identical(x@boundary$id2, y@boundary$id2)
+		)
+	}
+)

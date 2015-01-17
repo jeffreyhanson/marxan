@@ -1,3 +1,6 @@
+#' @include RcppExports.R marxan-internal.R misc.R zonalSum.R
+NULL
+
 #' Calculate Planning Units vs. Species Data
 #'
 #' This function calculates the sum of species values in each planning unit.
@@ -13,7 +16,7 @@
 #'
 #' @return data.frame with sum of raster values in each polygon.
 #' @seealso \code{\link{is.gdalInstalled}}, \code{\link{zonalSum}}
-#'
+#' @export
 #' @examples
 #' data(species, planningunits)
 #' calcPuVsSpeciesData(planningunits, species[[1]])
