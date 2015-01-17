@@ -4,7 +4,7 @@
 \alias{dendrogram}
 \alias{dendrogram.MarxanResults}
 \alias{dendrogram.MarxanSolved}
-\title{Dendrogram of Marxan Solutions}
+\title{Dendrogram of Marxan solutions}
 \usage{
 \method{dendrogram}{MarxanResults}(x, type = "mds", var = "selections",
   nbest = 1, ..., force_reset = FALSE)
@@ -42,6 +42,6 @@ Distance matrices and results from multivariate analyses are cached to permit ra
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{link{MarxanResults-class}}, \code{link{MarxanSolved-class}}, \code{link{marxan}}
+\code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 }
 

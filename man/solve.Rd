@@ -6,10 +6,10 @@
 \title{Solve Marxan object}
 \usage{
 \method{solve}{MarxanUnsolved}(x, wd = tempdir(), seeds = sample.int(n =
-  10000L, size = x@opts@NCORES), clean = TRUE)
+  10000L, size = x@opts@NCORES), clean = TRUE, force_reset = FALSE)
 
 \method{solve}{MarxanUnsolved}(x, wd = tempdir(), seeds = sample.int(n =
-  10000L, size = x@opts@NCORES), clean = TRUE)
+  10000L, size = x@opts@NCORES), clean = TRUE, force_reset = FALSE)
 
 solve(x, ...)
 }
@@ -35,7 +35,7 @@ and returns a "MarxanSolved" object with outputs in it.
 \itemize{
 \item \code{MarxanUnsolved}: 
 
-\item \code{MarxanUnsolved}: solve "MarxanUnsolved" object.
+\item \code{MarxanUnsolved}: 
 }}
 \note{
 This function is used to solve a MarxanUnsolved object that has all of its inputs generated. The marxan function (without lower case 'm') provides a more general interface for generating inputs and outputs for Marxan.

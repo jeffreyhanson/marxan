@@ -2,7 +2,7 @@
 % Please edit documentation in R/misc.R
 \name{opt}
 \alias{opt}
-\title{Update Marxan Input Parameters}
+\title{Update Marxan input parameters}
 \usage{
 opt(name, value)
 }
@@ -18,6 +18,6 @@ opt(name, value)
 This function is used in the formula argument of the update function to change input parameters of a "MarxanOpts", "MarxanUnsolved", or "MarxanSolved" object.
 }
 \seealso{
-\code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{species}}, \code{\link{pu}}
+\code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{spp}}, \code{\link{pu}}
 }
 

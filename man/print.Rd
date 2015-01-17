@@ -40,6 +40,6 @@ This function returns information about a Marxan object.
 \item \code{MarxanUnsolved}: 
 }}
 \seealso{
-\code{link{MarxanOpts-class}}, \code{link{MarxanData-class}}, \code{link{MarxanResults-class}}, \code{link{MarxanUnsolved-class}}, \code{link{MarxanSolved-class}},
+\code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanResults-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}},
 }
 

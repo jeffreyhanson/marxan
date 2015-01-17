@@ -16,6 +16,6 @@ read.MarxanResults(dir)
 This function reads outputs from a directory after Marxan been run.
 }
 \seealso{
-\code{link{MarxanResults-class}}, \code{link{MarxanResults}}
+\code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}
 }
 

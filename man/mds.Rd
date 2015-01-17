@@ -19,14 +19,14 @@ mds(x, ...)
 
 \item{var}{"character" should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?}
 
-\item{method}{"character" name of distance metric to use for calculating distance (see \code{link[vegan]{vegdist}}).}
+\item{method}{"character" name of distance metric to use for calculating distance (see \code{\link[vegan]{vegdist}}).}
 
 \item{...}{additional arguments to \code{\link[vegan]{monoMDS}}.}
 
 \item{force_reset}{"logical" should analysis be run even if it is stored in the cache?}
 }
 \value{
-"monoMDS" object
+"monoMDS" object.
 }
 \description{
 This function runs an metric dimensional scaling (using \code{\link[vegan]{monoMDS}}) on Marxan solutions using various characteristics.
@@ -39,6 +39,6 @@ Results cached to permit rapid display for plotting functions.
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{link{MarxanSolved-class}}, \code{link{marxan}}, \code{link{ordiplot}}, \code{link{dendrogram}}
+\code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
 }
 

@@ -28,6 +28,6 @@ MarxanResults object
 This function generates a MarxanResults object. Methods are provided to do this using a directory containing Marxan outputs or using objects already loaded into R.
 }
 \seealso{
-\code{link{MarxanResults-class}} \code{link{read.MarxanResults}}
+\code{\link{MarxanResults-class}} \code{\link{read.MarxanResults}}
 }
 

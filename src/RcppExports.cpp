@@ -54,16 +54,16 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// rcpp_SpatialPolygons2PolyData
-Rcpp::DataFrame rcpp_SpatialPolygons2PolyData(Rcpp::List polys, std::size_t n_preallocate = 10000);
-RcppExport SEXP marxan_rcpp_SpatialPolygons2PolyData(SEXP polysSEXP, SEXP n_preallocateSEXP) {
+// rcpp_Polygons2PolySet
+Rcpp::DataFrame rcpp_Polygons2PolySet(Rcpp::List polys, std::size_t n_preallocate = 10000);
+RcppExport SEXP marxan_rcpp_Polygons2PolySet(SEXP polysSEXP, SEXP n_preallocateSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< Rcpp::List >::type polys(polysSEXP );
         Rcpp::traits::input_parameter< std::size_t >::type n_preallocate(n_preallocateSEXP );
-        Rcpp::DataFrame __result = rcpp_SpatialPolygons2PolyData(polys, n_preallocate);
+        Rcpp::DataFrame __result = rcpp_Polygons2PolySet(polys, n_preallocate);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

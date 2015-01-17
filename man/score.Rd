@@ -4,7 +4,7 @@
 \alias{score}
 \alias{score.MarxanResults}
 \alias{score.MarxanSolved}
-\title{Extract Solution Score}
+\title{Extract solution score}
 \usage{
 \method{score}{MarxanResults}(x, y = "best")
 

@@ -4,7 +4,7 @@
 \alias{selection}
 \alias{selection.MarxanResults}
 \alias{selection.MarxanSolved}
-\title{Extract Solution Selection}
+\title{Extract solution selection}
 \usage{
 \method{selection}{MarxanResults}(x, y = "best")
 

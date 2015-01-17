@@ -4,7 +4,7 @@
 \alias{occheld}
 \alias{occheld.MarxanResults}
 \alias{occheld.MarxanSolved}
-\title{Occurrence Held}
+\title{Extract occurrence held for a solution}
 \usage{
 \method{occheld}{MarxanResults}(x, y = NULL)
 
@@ -36,8 +36,8 @@ This function reports whether a solution has met the targets for each species in
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{link{MarxanResults-class}}, \code{link{MarxanSolved}}, \code{\link{marxan}}
+\code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 
-\code{link{MarxanResults-class}}, \code{link{MarxanSolved}}, \code{\link{marxan}}
+\code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 }
 

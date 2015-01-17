@@ -10,7 +10,7 @@ This class is used to store Marxan input data.
 \section{Slots}{
 
 \describe{
-\item{\code{polygons}}{"PolyData" planning unit spatial data}
+\item{\code{polygons}}{"PolySet" planning unit spatial data}
 
 \item{\code{pu}}{"data.frame" planning unit data; with "id", "cost", "status" columns}
 

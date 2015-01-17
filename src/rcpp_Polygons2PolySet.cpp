@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 
-	Rcpp::DataFrame rcpp_SpatialPolygons2PolyData(Rcpp::List polys, std::size_t n_preallocate=10000) {
+	Rcpp::DataFrame rcpp_Polygons2PolySet(Rcpp::List polys, std::size_t n_preallocate=10000) {
 		// init
 		/// declare, define, preallocate main vars
 		int curr_pid=0;
@@ -62,7 +62,7 @@ using namespace Rcpp;
 			Rcpp::Named("X")=X,
 			Rcpp::Named("Y")=Y
 		);
-		df.attr("class")=CharacterVector::create("PolyData", "data.frame");
+		df.attr("class")=CharacterVector::create("PolySet", "data.frame");
 		return(df);
 	}
 

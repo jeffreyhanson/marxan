@@ -4,7 +4,7 @@
 \alias{ordiplot}
 \alias{ordiplot.MarxanResults}
 \alias{ordiplot.MarxanSolved}
-\title{Ordination Plot of Marxan Solutions}
+\title{Ordination plot of Marxan solutions}
 \usage{
 \method{ordiplot}{MarxanResults}(x, type = "mds", var = "selections",
   nbest = 1, ..., force_reset = FALSE)
@@ -28,7 +28,7 @@ ordiplot(x, ...)
 \item{force_reset}{"logical" should analysis be rerun even if it is stored in the cache?}
 }
 \value{
-"prcomp" or "monoMDS" object
+"prcomp" or "monoMDS" object.
 }
 \description{
 This function makes an ordination plot to visualise the differences between solutions using dimension reduction techniques (ie. NMDS or PCA).
@@ -42,6 +42,6 @@ Distance matrices and results from multivariate analyses are cached to permit ra
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{link{MarxanSolved-class}}, \code{link{marxan}}.
+\code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
 }
 

@@ -25,6 +25,6 @@ This function returns the log file associated with running Marxan.
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{link{MarxanResults-class}}, \code{link{MarxanSolved}}, \code{\link{marxan}}
+\code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 }
 

@@ -4,7 +4,7 @@
 \alias{pca}
 \alias{pca.MarxanResults}
 \alias{pca.MarxanSolved}
-\title{Principle Components Analysis for Marxan Solutions}
+\title{Principle components Analysis on Marxan solutions}
 \usage{
 \method{pca}{MarxanResults}(x, var, ..., force_reset = FALSE)
 
@@ -35,6 +35,6 @@ Results cached to permit rapid display for plotting functions.
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{link{MarxanSolved-class}}, \code{link{marxan}}, \code{link{ordiplot}}, \code{link{dendrogram}}
+\code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
 }
 

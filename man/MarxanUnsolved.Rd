@@ -2,7 +2,7 @@
 % Please edit documentation in R/MarxanUnsolved.R
 \name{MarxanUnsolved}
 \alias{MarxanUnsolved}
-\title{Create new MarxanUnsolved object}
+\title{Create a new MarxanUnsolved object}
 \usage{
 MarxanUnsolved(opts, data)
 }

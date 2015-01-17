@@ -25,6 +25,6 @@ This class is used to store the results from a Marxan run.
 \item{\code{log}}{"character" with Marxan log  file.}
 }}
 \seealso{
-\code{link{MarxanResults}}, \code{link{read.MarxanResults}},
+\code{\link{MarxanResults}}, \code{\link{read.MarxanResults}},
 }
 

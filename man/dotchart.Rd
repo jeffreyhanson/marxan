@@ -4,7 +4,7 @@
 \alias{dotchart}
 \alias{dotchart.MarxanResults}
 \alias{dotchart.MarxanSolved}
-\title{Dot Chart of Marxan Solutions}
+\title{Dot chart of Marxan solutions}
 \usage{
 \method{dotchart}{MarxanResults}(x, var = "score", nbest = 1)
 
@@ -23,17 +23,17 @@ dotchart(x, ...)
 This function makes a dot chart to visualise differences between Marxan solutions using summary variables. Size of dots indicate overall solution quality (ie. 'score').
 Supported summary variables are:
 \tabular{rrr} {
-	short name \tab full name \tab Description.
-	'score' \tab 'Score' \tab quality of solution.
-	'cost' \tab 'Cost' \tab total cost of solution.
-	'npu' \tab 'Planning_Units' \tab number of planning units selected in prioritisation.
-	'con' \tab 'Connectivity' \tab sum boundary length of all edges in selected planning units' that have neighbours.
-	'confrac' \tab 'Connectivity_In_Fraction' \tab connectivity efficiency relative to total boundary length.
-	'conin' \tab 'Connectivity_In' \tab sum boundary length of edges belonging to selected planning units' that have neighbours.
-	'conout' \tab 'Connectivity_Out' \tab sum boundary length of edges belonging to selected planning units' that have neighbours.
- 'penalty' \tab 'Penalty' \tab total species penalty .
- 'shortfall' \tab 'Shortfall' \tab total shortfall for species targets .
- 'mv' \tab 'Missing_Values' \tab number of species that do not have their targets met.
+	short name \tab full name \tab Description\cr
+	'score' \tab 'Score' \tab quality of solution.\cr
+	'cost' \tab 'Cost' \tab total cost of solution.\cr
+	'npu' \tab 'Planning_Units' \tab number of planning units selected in prioritisation.\cr
+	'con' \tab 'Connectivity' \tab sum boundary length of all edges in selected planning units' that have neighbours.\cr
+	'confrac' \tab 'Connectivity_In_Fraction' \tab connectivity efficiency relative to total boundary length.\cr
+	'conin' \tab 'Connectivity_In' \tab sum boundary length of edges belonging to selected planning units' that have neighbours.\cr
+	'conout' \tab 'Connectivity_Out' \tab sum boundary length of edges belonging to selected planning units' that have neighbours.\cr
+ 'penalty' \tab 'Penalty' \tab total species penalty.\cr
+ 'shortfall' \tab 'Shortfall' \tab total shortfall for species targets.\cr
+ 'mv' \tab 'Missing_Values' \tab number of species that do not have their targets met.\cr
 }
 }
 \section{Methods (by class)}{
@@ -43,6 +43,6 @@ Supported summary variables are:
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{link{MarxanResults-class}}, \code{link{MarxanSolved-class}}, \code{link{marxan}}
+\code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 }
 

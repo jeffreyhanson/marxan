@@ -15,7 +15,7 @@ MarxanData(pu, species, puvspecies, boundary, polygons = NULL)
 
 \item{boundary}{boundary "data.frame" with shared boundary data; with "id1", "id2", and "boundary" columns}
 
-\item{polygons}{"PolyData" with planning unit data or "NULL" if geoplotting capabilities are not required}
+\item{polygons}{"PolySet" with planning unit data or "NULL" if geoplotting capabilities are not required}
 }
 \value{
 MarxanData object
@@ -29,8 +29,7 @@ x<-MarxanData(
 	planningunits@data,
 	speciesTargets,
  calcPuVsSpeciesData(planningunits, species),
- calcBoundaryData(planningunits),
-	Polygons2PolyData(planning units)
+ calcBoundaryData(planningunits)
 )
 }
 \seealso{

@@ -13,7 +13,7 @@ rcpp_groupsum <- function(cat_vec, val_vec) {
     .Call('marxan_rcpp_groupsum', PACKAGE = 'marxan', cat_vec, val_vec)
 }
 
-rcpp_SpatialPolygons2PolyData <- function(polys, n_preallocate = 10000L) {
-    .Call('marxan_rcpp_SpatialPolygons2PolyData', PACKAGE = 'marxan', polys, n_preallocate)
+rcpp_Polygons2PolySet <- function(polys, n_preallocate = 10000L) {
+    .Call('marxan_rcpp_Polygons2PolySet', PACKAGE = 'marxan', polys, n_preallocate)
 }
 

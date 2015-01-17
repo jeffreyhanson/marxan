@@ -4,7 +4,7 @@
 \alias{amountheld}
 \alias{amountheld.MarxanResults}
 \alias{amountheld.MarxanSolved}
-\title{Amount Held}
+\title{Extract amount held for a solution}
 \usage{
 \method{amountheld}{MarxanResults}(x, y = NULL)
 
@@ -28,6 +28,6 @@ This function returns the amount held for each species in a solution.
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{link{MarxanResults-class}}, \code{link{MarxanSolved}}, \code{\link{marxan}}
+\code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 }
 

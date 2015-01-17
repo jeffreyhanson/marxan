@@ -7,7 +7,7 @@
 calcBoundaryData(x, ...)
 }
 \arguments{
-\item{x}{PolyData, SpatialPolygons or SpatialPolyognsDataFrame.}
+\item{x}{PolySet, SpatialPolygons or SpatialPolyognsDataFrame.}
 
 \item{tolerance}{numeric to specify precision of vertices.}
 
@@ -19,10 +19,10 @@ calcBoundaryData(x, ...)
 data.frame with columns 'id1', 'id2', and 'amount'.
 }
 \description{
-This function calculates boundary length data for PolyData, SpatialPolygons, and SpatialPolygonsDataFrame objects.
+This function calculates boundary length data for PolySet, SpatialPolygons, and SpatialPolygonsDataFrame objects.
 Be aware that this function is designed to be as fast as possible, as a result it depends on C++ code and if this
 function is used improperly, then it will crash R. Furthermore, multipart polygons with touching edges will likely result in inaccuracies.
-If argument set to SpatialPolygons or SpatialPolygonsDataFrame, this will be converted to PolyData before processing.
+If argument set to SpatialPolygons or SpatialPolygonsDataFrame, this will be converted to PolySet before processing.
 }
 \examples{
 data(planningunits)

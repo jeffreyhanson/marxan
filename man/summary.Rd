@@ -28,6 +28,6 @@ This function returns the summary table output by Marxan.
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{link{MarxanSolved-class}}, \code{link{MarxanResults}}, \code{\link{marxan}}
+\code{\link{MarxanSolved-class}}, \code{\link{MarxanResults}}, \code{\link{marxan}}
 }
 

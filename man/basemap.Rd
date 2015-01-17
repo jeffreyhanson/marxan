@@ -33,7 +33,7 @@ basemap(x, ...)
 \item{force_reset}{"logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.}
 }
 \value{
-"list" with google map data
+"list" with google map data.
 }
 \description{
 This function retrieves google map data for planning units. The google map data is cached to provide fast plotting capabilities.

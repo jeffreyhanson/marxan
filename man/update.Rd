@@ -6,7 +6,7 @@
 \alias{update.MarxanOpts}
 \alias{update.MarxanSolved}
 \alias{update.MarxanUnsolved}
-\title{Update Marxan Inputs}
+\title{Update Marxan inputs}
 \usage{
 \method{update}{MarxanData}(x, formula, force_reset = TRUE)
 
@@ -45,6 +45,6 @@ boundary length modifier. In effect, this lets you take an existing "MarxanUnsol
 \item \code{MarxanUnsolved}: 
 }}
 \seealso{
-\code{link{MarxanSolved-class}}, \code{link{MarxanUnsolved-class}}, \code{link{marxan}}
+\code{\link{MarxanSolved-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{marxan}}, \code{\link{opt}}, \code{\link{spp}}, \code{\link{pu}}
 }
 
