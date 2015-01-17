@@ -18,6 +18,7 @@ Imports:
 	shape,
 	ape,
 	fastcluster,
+	PBSmapping,
 	RgoogleMaps,
 	data.table
 LinkingTo: 

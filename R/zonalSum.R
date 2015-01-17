@@ -16,7 +16,7 @@
 #' data(species, planningunits)
 #' zonalSum(planningunits, species[[1]])
 #' zonalSum(planningunits, species)
-setGeneric("zonalSum", function(x, y) standardGeneric("zonalSum"))
+setGeneric("zonalSum", function(x, y, ...) standardGeneric("zonalSum"))
 setMethod(
 	"zonalSum",
 	signature(x="SpatialPolygons", y="RasterStackOrBrick"),
@@ -56,4 +56,4 @@ setMethod(
 			return(.zonalSum.RasterLayerNotInMemory(bs, y, speciesNames, ncores, ncores>1))
 		}
 	}
-}
+)

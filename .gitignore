@@ -55,7 +55,9 @@ MarOpt_v243_Linux64
 
 
 # ========================
-# Package Binaries
+# Package Binaries and other stuff that should not be github
 # ========================
 src-x64
 src-i386
+admin
+

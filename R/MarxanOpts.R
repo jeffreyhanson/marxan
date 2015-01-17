@@ -49,12 +49,12 @@ setClass("MarxanOpts",
 	prototype=list(
 		BLM=100,
 		PROP=0.5,
-		NUMREPS=10	
+		NUMREPS=10,
 	
-		NUMITNS=1000000,
+		NUMITNS=1000,
 		STARTTEMP=-1,
 		COOLFAC=0,
-		NUMTEMP=100000,
+		NUMTEMP=100,
 			
 		COSTTHRESH=0,
 		THRESHPEN1=0.14,
@@ -199,13 +199,13 @@ VERBOSITY ',x@VERBOSITY,'
 	)
 }
 
-#' @describein print
+#' @describeIn print
 print.MarxanOpts=function(x, header=TRUE) {
 	if (header)
 		cat("MarxanOpts object.\n")
 }
 
-#' @describein update
+#' @describeIn update
 update.MarxanOpts<-function(x, formula, force_reset=TRUE) {
 	if (force_reset)
 		x$.cache<-new.env()
@@ -213,7 +213,7 @@ update.MarxanOpts<-function(x, formula, force_reset=TRUE) {
 	findInvalidMarxanOperations(ops)
 	ops<-opts[which(laply(opts, "MarxanOptsOperation"))]
 	for (i in seq_along(ops))
-		slot(x, opts[[i]]$slot<-opts[[i]]$value
+		slot(x, opts[[i]]$slot)<-opts[[i]]$value
 	return(x)
 }
 

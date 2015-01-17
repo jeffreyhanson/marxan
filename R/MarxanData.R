@@ -119,7 +119,7 @@ setMethod(
 #' @examples
 #' data(planningunits, species, speciesRanges)
 #' x<-MarxanData(
-#' 	planningunits@data,
+#' 	planningunits@@data,
 #' 	speciesTargets,
 #'  calcPuVsSpeciesData(planningunits, species),
 #'  calcBoundaryData(planningunits),
@@ -232,7 +232,7 @@ format.MarxanData=function(polygons, rasters, targets="20%", spf=1, pu=NULL, spe
 	# set puvspecies
 	if (is.null(puvspecies)) {
 		projPolygons=polygons
-		if (!identical(geoPolygons@proj4string, rasters@crs) {
+		if (!identical(geoPolygons@proj4string, rasters@crs)) {
 			if (verbose)
 				cat("Projecting polygons to rasters' CRS")
 			projPolygons<-spTransform(projPolygons, rasters@crs)
@@ -245,7 +245,7 @@ format.MarxanData=function(polygons, rasters, targets="20%", spf=1, pu=NULL, spe
 	return(MarxanData(pu, species, puvpsecies, boundary, polygons))
 }
 
-#' @describein print
+#' @describeIn print
 print.MarxanData=function(x, header=TRUE) {
 	if (header)
 		cat("MarxanData object.\n")
@@ -253,7 +253,7 @@ print.MarxanData=function(x, header=TRUE) {
 	cat("Number of species:",nrow(x@species),"\n")
 }
 
-#' @describein basemap
+#' @describeIn basemap
 basemap.MarxanData<-function(x, basemap="none", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
 	# fetch data from google or cache
 	if (force_reset || !is.cached(x, google)) {
@@ -263,32 +263,30 @@ basemap.MarxanData<-function(x, basemap="none", alpha=1, grayscale=FALSE, xzoom=
 	return(cache(deparse(c(basemap, range(x@polygons[["X"]])*xzoom, range(x@polygons[["Y"]])*yzoom, grayscale))))
 }
 
-#' @describein update
+#' @describeIn update
 update.MarxanData<-function(x, formula, force_reset=TRUE) {
 	if (force_reset)
 		x$.cache<-new.env()
 	ops<-llply(as.list(attr(terms(formula),"variables"))[-1L], eval)
 	findInvalidMarxanOperations(ops)
-	ops<-ops[which(laply(ops, inherits "MarxanDataOperation"))]
+	ops<-ops[which(laply(ops, inherits, "MarxanDataOperation"))]
 	for (i in seq_along(ops)) {
 		# get rows to apply update operation
-		if (ops[[i]]$slot=="species") {
-			if (is.null(ops[[i]]$row)) {
-				if (!is.null(ops[[i]]$id))
-					ops[[i]]$row<-match(ops[[i]]$id, x@species$id)
-				if (!is.null(ops[[i]]$name))
-					ops[[i]]$row<-match(ops[[i]]$name, x@species$name)
+		if (inherits(ops[[i]], "MarxanSpeciesOperation")) {
+			if (is.character(ops[[i]]$x)) {
+				ops[[i]]$row<-match(ops[[i]]$x, x@species$name)
+			} else {
+				ops[[i]]$row<-match(ops[[i]]$x, x@species$id)
 			}
+			for (j in seq_along(ops[[i]]$value))
+				x@species[opts[[i]]$row,opts[[i]]$col[j]] <- opts[[i]]$value[j]			
+		} else if (inherits(ops[[i]], "MarxanPuOperation")) {
+			opts[[i]]$row<-match(ops[[i]]$id, x@pu$id)
+			for (j in seq_along(ops[[i]]$value))
+				x@pu[opts[[i]]$row,opts[[i]]$col[j]] <- opts[[i]]$value[j]
+		} else {
+			stop("Unrecognised update operation.")
 		}
-		if (ops[[i]]$slot=="pu") {
-			if (is.null(ops[[i]]$row)) {
-				if (!is.null(ops[[i]]$id))
-					ops[[i]]$row<-match(ops[[i]]$id, x@pu$id)
-			}
-		}
-		# apply update operations
-		for (j in seq_along(ops[[i]]$col))
-			x@species[opts[[i]]$row,opts[[i]]$col[j]] <- opts[[i]]$value[j]
 	}
 	return(x)
 }

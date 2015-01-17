@@ -2,12 +2,13 @@
 #'
 #' This class is used to store the results from a Marxan run.
 #'
-#' @slot summary "data.frame" with summary information on solutions
-#' @slot selections "matrix" with binary selections
-#' @slot amountheld "matrix" with the amount held for each species in each solution
-#' @slot occheld "matrix" with the number of occurrences for each species in each solution
-#' @slot best "integer" with index of best solution
-#' @slot log "character" with Marxan log  file
+#' @slot summary "data.frame" with summary information on solutions.
+#' @slot selections "matrix" with binary selections.
+#' @slot amountheld "matrix" with the amount held for each species in each solution.
+#' @slot occheld "matrix" with the number of occurrences for each species in each solution.
+#' @slot targetsmet "matrix" indicating whether the targets have been met for each species in each solution.
+#' @slot best "integer" with index of best solution.
+#' @slot log "character" with Marxan log  file.
 #' @seealso \code{link{MarxanResults}}, \code{link{read.MarxanResults}}, 
 setClass("MarxanResults",
 	representation(
@@ -15,7 +16,9 @@ setClass("MarxanResults",
 		selections="matrix",
 		amountheld="matrix",
 		occheld="matrix",
-		log='character'
+		targetsmet="matrix",
+		best="integer",
+		log='character',
 		.cache='environment'
 	)
 )
@@ -41,8 +44,8 @@ setMethod(
 #'
 #' @return MarxanResults object
 #' @seealso \code{link{MarxanResults-class}} \code{link{read.MarxanResults}}
-MarxanResults=function(summary, selections, amounthend, occheld, log) {
-	return(new("MarxanResults", summary=summary, selections=selections, amounthend=amountheld, occheld=occheld, best=which.max(summary$score), log=log))
+MarxanResults=function(summary, selections, amounthend, occheld, targetsmet, log) {
+	return(new("MarxanResults", summary=summary, selections=selections, amounthend=amountheld, occheld=occheld, targetsmet=targetsmet, best=which.max(summary$score), log=log))
 }
 
 #' Read Marxan results from disk
@@ -62,17 +65,19 @@ read.MarxanResults=function(dir) {
 	setnames(mvs, c("Conservation Feature","Amount Held", "Occurrences Held"), c("Conservation.Feature","Amount.Held", "Occurrences.Held"))
 	sumry<-fread(file.path(x,'output_sum.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE,quote=FALSE,data.table=FALSE)
 	names(sumry)<-gsub(" ", ".", names(sumry))
+	sumry$Target.Met=sumry$Target.Met=="yes"
 	# create object
 	return(MarxanResults.data.frame(
 		sumry,
-		as.matrix(fread(file.path(x,'output_solutionsmatrix.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE,quote=FALSE)),
-		as.matrix(dcast(mvs[,c("Conservation.Feature","Amount.Held"),with=FALSE], Conservation.Feature ~ Amount.Held))
-		as.matrix(dcast(mvs[,c("Conservation.Feature","Occurrences.Held"),with=FALSE], Conservation.Feature ~ Occurrences.Held))
+		as.matrix(fread(file.path(x,'output_solutionsmatrix.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE,quote=FALSE))==1,
+		as.matrix(dcast(mvs[,c("Conservation.Feature","Amount.Held"),with=FALSE], Conservation.Feature ~ Amount.Held)),
+		as.matrix(dcast(mvs[,c("Conservation.Feature","Occurrences.Held"),with=FALSE], Conservation.Feature ~ Occurrences.Held)),
+		as.matrix(dcast(mvs[,c("Conservation.Feature","Target.Met"),with=FALSE], Conservation.Feature ~ Target.Met)),
 		paste(readLines(file.path(x,'output_log.csv')), collapse=TRUE)
 	))
 }
 
-#' @descrbiein selection
+#' @describeIn selection
 selection.MarxanResults<-function(x, y="best") {
 	if (is.numeric(y))
 		return(x@selections[y,])
@@ -82,7 +87,7 @@ selection.MarxanResults<-function(x, y="best") {
 		return(x@selections)
 }
 
-#' @describein score
+#' @describeIn score
 score.MarxanResults<-function(x, y="best") {
 	if (is.numeric(y))
 		return(x@summary$Score[y])
@@ -92,49 +97,54 @@ score.MarxanResults<-function(x, y="best") {
 		return(x@summary$Score)
 }
 
-#' @describein summary
+#' @describeIn summary
 summary.MarxanResults<-function(x) {
 	return(x@results@summary)
 }
 
-#' @describein print
+#' @describeIn print
 print.MarxanResults<-function(x, header=TRUE) {
 	if (header)
 		cat("MarxanResults object.\n")
 	cat("Number of solutions:",nrow(x@summary),"\n")
 }
 
-#' @describein log
+#' @describeIn log
 log.MarxanResults=function(x) {
 	cat(x@log)
 }
 
-#' @describein amountHeld
-amountHeld.MarxanResults<-function(x, y="best") {
-	if (is.numeric(y))
-		return(x@amountheld[y,])
-	if (y=="best")
-		return(x@amountheld[x@best,])
-	if (y=="all")
+#' @describeIn amountheld
+amountheld.MarxanResults<-function(x, y=NULL) {
+	if (is.null(y))
 		return(x@amountheld)
-	stop("y should be equal to 'best', 'all' or a an integer.")
+	if (y==0)
+		return(x@amountheld[x@best,])
+	return(x@amountheld[y,])
 }
 
-#' @descrbiein occHeld
-occHeld.MarxanResults<-function(x, y="best") {
-	if (is.numeric(y))
-		return(x@occHeld[y,])
-	if (y=="best")
-		return(x@occHeld[x@best,])
-	if (y=="all")
-		return(x@occHeld)
-	stop("y should be equal to 'best', 'all' or a an integer.")
+#' @describeIn occheld
+occheld.MarxanResults<-function(x, y=NULL) {
+	if (is.null(y))
+		return(x@occheld)
+	if (y==0)
+		return(x@occheld[x@best,])
+	return(x@occheld[y,])
 }
 
-#' @describein pca
+#' @describeIn targetsmet
+targetsmet.MarxanResults<-function(x, y=NULL) {
+	if (is.null(y))
+		return(x@targetsmet)
+	if (y==0)
+		return(x@targetsmet[x@best,])
+	return(x@targetsmet[y,])
+}
+
+#' @describeIn pca
 pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 	# init
-	match.arg(var, c("selections", "occheld", "targetsmet"))	
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))	
 	callchar=hashCall(match.call())
 	# check that pca not being applied to non-continuous data
 	if (var=='selections' || var=='targetsmet')
@@ -149,11 +159,11 @@ pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 	return(cache(x, callchar))
 }
 
-#' @describein dist
+#' @describeIn dist
 dist.MarxanResults=function(x, var="selections", method="bray", force_reset=FALSE) {
 	# init
 	callchar=hashCall(match.call())
-	match.arg(var, c("selections", "occheld", "targetsmet"))	
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))	
 	# cache distance matrix
 	if (force_reset || !is.cached(callchar)) {
 		cache(x, callchar, vegdist(x=slot(x,var), binary=var %in% c('selections', 'targetsmet'), method=method))
@@ -161,10 +171,10 @@ dist.MarxanResults=function(x, var="selections", method="bray", force_reset=FALS
 	return(cache(x, callchar))
 }
 
-#' @describein mds
+#' @describeIn mds
 mds.MarxanResults=function(x, var="selections", method="bray", ..., force_reset=FALSE) {
 	# init
-	match.arg(var, c("selections", "occheld", "targetsmet"))
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))
 	callchar=hashCall(match.call())
 	# check that pca not being applied to non-continuous data
 	if (var=='selections' || var=='targetsmet')
@@ -176,12 +186,12 @@ mds.MarxanResults=function(x, var="selections", method="bray", ..., force_reset=
 	return(cache(x, callchar))
 }
 
-#' @describein hclust
+#' @describeIn hclust
 hclust.MarxanResults=function(x, type="mds", var="selections", ..., force_reset=FALSE) {
 	# init
 	callchar=hashCall(match.call())
 	match.arg(type, c("dist", "pca", "mds"))
-	match.arg(var, c("selections", "occheld", "targetsmet"))
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))
 	# main
 	tmp<-do.call(type, list(x, var, ..., force_reset))
 	if (!is.cached(callchar)) {
@@ -196,10 +206,10 @@ hclust.MarxanResults=function(x, type="mds", var="selections", ..., force_reset=
 	return(cache(x, callchar))
 }
 
-#' @describein ordiplot
+#' @describeIn ordiplot
 ordiplot.MarxanResults=function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	match.arg(type, c("pca", "mds"))
-	match.arg(var, c("selections", "occheld", "targetsmet"))	
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))	
 	if (type=="pca") {
 		tmp<-pca.MarxanResults(x, var, ..., force_reset)
 		prettyPcaBiplot(x=tmp,size=to(x@summary$Score, from=c(1,2)),nbest=nbest, main=paste0("Solution biplot based on ",to.pretty.name(var)))
@@ -211,20 +221,20 @@ ordiplot.MarxanResults=function(x, type='mds', var='selections', nbest=1, ..., f
 	}
 }
 
-#' @describein dendrogram
+#' @describeIn dendrogram
 dendrogram.MarxanResults=function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	match.arg(type, c("pca", "mds", "dist"))
-	match.arg(var, c("selections", "occheld", "targetsmet"))
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))
 	prettyDendrogram(
 		hclust.MarxanResults(x@results, type, var, ..., force_reset)$phylo,
-		scores=rescale(x@summary$Score, to=c(1,2)),
-		nbest=nbest, 
-		main=paste0("Solution dendrogram based on ",to.pretty.name(var))
+		rescale(x@summary$Score, to=c(1,2)),
+		nbest, 
+		paste0("Solution dendrogram based on ",to.pretty.name(var))
 	)
 }
 
-#' @describein dotchart
-dotchart.MarxanResults(x, var="score", nbest=1) {
+#' @describeIn dotchart
+dotchart.MarxanResults<-function(x, var="score", nbest=1) {
 	match.arg(var, 
 		c(
 			'score', 'Score',

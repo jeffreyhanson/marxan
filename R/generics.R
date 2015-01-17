@@ -1,13 +1,11 @@
-
-
 #' Solve Marxan object
 #'
 #' This function executes Marxan using the input parameter and data stored in a "MarxanUsolved" object, 
 #' and returns a "MarxanSolved" object with outputs in it.
 #'
-#' @param x "MarxanUnsolved" or "MarxanSolved" object
+#' @param x "MarxanUnsolved" or "MarxanSolved" object.
 #' @param wd "character" file path to a working directory, this is a temporary directory by default to avoid pollution.
-#' @param seeds "integer" vector of seeds to initialise Marxan 's random number generator
+#' @param seeds "integer" vector of seeds to initialise Marxan 's random number generator.
 #' @param clean "logical" delete files once processing completed?
 #' @param force_reset "logical" should Marxan solutions be recalculated even if "MarxanSolved" object supplied?
 #' @return Marxan object
@@ -18,19 +16,19 @@ solve<-function(x, ...) {UseMethod('solve')}
 #'
 #' Extract selections for a given solution from a "MarxanResults or "MarxanSolved" object.
 #'
-#' @param x "MarxanResults or "MarxanSolved" object
-#' @param y 'best' to return selection for best solution, 'all' to return all solutions, or "integer" to return y'th solution
-#' @return "matrix" or "numeric" vector with planning units statuses depending on arguments
-#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
+#' @param x "MarxanResults or "MarxanSolved" object.
+#' @param y 'best' to return selection for best solution, 'all' to return all solutions, or "integer" to return y'th solution.
+#' @return "matrix" or "numeric" vector with planning units statuses depending on arguments.
+#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
 selection<-function(x, ...) {UseMethod('selection')}
 
 #' Extract Solution Score
 #'
 #' Extract solution score from "MarxanResults" or "MarxanSolved" object.
 #'
-#' @param x "MarxanResults or "MarxanSolved" object
-#' @param y 'best' to return best solution score, 'all' to return all scores, or "integer" to return score for y'th solution
-#' @return "matrix" or "numeric" vector with solution scores depending on arguments
+#' @param x "MarxanResults or "MarxanSolved" object.
+#' @param y 'best' to return best solution score, 'all' to return all scores, or "integer" to return score for y'th solution.
+#' @return "matrix" or "numeric" vector with solution scores depending on arguments.
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 score<-function(x, ...) {UseMethod('score')}
 
@@ -38,9 +36,9 @@ score<-function(x, ...) {UseMethod('score')}
 #'
 #' This function returns the summary table output by Marxan.
 #'
-#' @param x "MarxanSolved" or "MarxanResults" object
+#' @param x "MarxanSolved" or "MarxanResults" object.
 #' 
-#' @return "data.frame" with solution information
+#' @return "data.frame" with solution information.
 #' @seealso \code{link{MarxanSolved-class}}, \code{link{MarxanResults}}, \code{\link{marxan}}
 summary<-function(x, ...) {UseMethod('summary')}
 
@@ -48,7 +46,7 @@ summary<-function(x, ...) {UseMethod('summary')}
 #'
 #' This function returns information about a Marxan object.
 #'
-#' @param x any "MarxanOpts", "MarxanData", "MarxanResults", "MarxanUnsolved", or "MarxanSolved" object
+#' @param x any "MarxanOpts", "MarxanData", "MarxanResults", "MarxanUnsolved", or "MarxanSolved" object.
 #' 
 #' @seealso \code{link{MarxanOpts-class}}, \code{link{MarxanData-class}}, \code{link{MarxanResults-class}}, \code{link{MarxanUnsolved-class}}, \code{link{MarxanSolved-class}}, 
 print<-function(x, ...) {UseMethod('print')}
@@ -57,7 +55,7 @@ print<-function(x, ...) {UseMethod('print')}
 #'
 #' This function returns the log file associated with running Marxan.
 #'
-#' @param x "MarxanResults" or "MarxanSolved" object
+#' @param x "MarxanResults" or "MarxanSolved" object.
 #' 
 #' @seealso \code{link{MarxanResults-class}}, \code{link{MarxanSolved}}, \code{\link{marxan}}
 log<-function(x, ...) {UseMethod('log')}
@@ -65,30 +63,37 @@ log<-function(x, ...) {UseMethod('log')}
 
 #' Amount Held
 #'
-#' This function returns the amount held for all features in a solution.
+#' This function returns the amount held for each species in a solution.
 #'
-#' @param x "MarxanResults" or "MarxanSolved" object
-#' @return "matrix" or "numeric" vector with solution scores depending on arguments
+#' @param x "MarxanResults" or "MarxanSolved" object.
+#' @return "matrix" or "numeric" vector depending on arguments.
 #' @seealso \code{link{MarxanResults-class}}, \code{link{MarxanSolved}}, \code{\link{marxan}}
-amountHeld<-function(x, ...) {UseMethod('amountHeld')}
+amountheld<-function(x, ...) {UseMethod('amountheld')}
 
 
 #' Occurrence Held
 #'
-#' This function returns the number of occurrences held for all features in a solution.
+#' This function returns the number of occurrences held for each species in a solution.
 #'
-#' @param x "MarxanResults" or "MarxanSolved" object
-#
-#' @return "matrix" or "numeric" vector with solution scores depending on arguments
+#' @param x "MarxanResults" or "MarxanSolved" object.
+#' @return "matrix" or "numeric" vector depending on arguments.
 #' @seealso \code{link{MarxanResults-class}}, \code{link{MarxanSolved}}, \code{\link{marxan}}
-occHeld<-function(x, ...) {UseMethod('occHeld')}
+occheld<-function(x, ...) {UseMethod('occheld')}
 
+#' Targets Met
+#'
+#' This function reports whether a solution has met the targets for each species in a solution.
+#'
+#' @param x "MarxanResults" or "MarxanSolved" object.
+#' @return "matrix" or "logical" vector depending on arguments.
+#' @seealso \code{link{MarxanResults-class}}, \code{link{MarxanSolved}}, \code{\link{marxan}}
+occheld<-function(x, ...) {UseMethod('occheld')}
 
 #' Compare Marxan Objects
 #'
 #' This function checks objects to see if they share the same input data.
 #'
-#' @param x "MarxanData", "MarxanUnsolved", or "MarxanSolved" objects
+#' @param x "MarxanData", "MarxanUnsolved", or "MarxanSolved" objects.
 #' @return "logical" are the objects based on the same data?
 #' @seealso \code{link{MarxanData-class}}, \code{link{MarxanUnsolved-class}}, \code{link{MarxanSolved-class}}
 setGeneric("is.comparable", function(x, y) standardGeneric("is.comparable"))
@@ -108,21 +113,21 @@ setMethod(
 )
 setMethod(
 	f="is.comparable",
-	signature(x="Marxan", y="Marxan"),
+	signature(x="MarxanUnsolvedOrSolved", y="MarxanUnsolvedOrSolved"),
 	function(x,y) {
 		return(is.comparable(x@data, y@data))
 	}
 )
 setMethod(
 	f="is.comparable",
-	signature(x="MarxanData", y="Marxan"),
+	signature(x="MarxanData", y="MarxanUnsolvedOrSolved"),
 	function(x,y) {
 		return(is.comparable(x, y@data))
 	}
 )
 setMethod(
 	f="is.comparable",
-	signature(x="Marxan", y="MarxanData"),
+	signature(x="MarxanUnsolvedOrSolved", y="MarxanData"),
 	function(x,y) {
 		return(is.comparable(x@data, y))
 	}
@@ -133,11 +138,11 @@ setMethod(
 #' This function runs an principle components analysis on Marxan solutions using various characteristics.
 #' Results cached to permit rapid display for plotting functions.
 #'
-#' @param x "MarxanSolved" object
+#' @param x "MarxanSolved" object.
 #' @param var "character" should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
-#' @param ... arguments to \code{\link[stats]{prcomp}}
+#' @param ... arguments to \code{\link[stats]{prcomp}}.
 #' @param force_reset "logical" should analysis be run even if it is stored in the cache?
-#' @return "prcomp" object with Euclidean distances between rotated data for ordination plots
+#' @return "prcomp" object with Euclidean distances between rotated data for ordination plots.
 #' @seealso \code{link{MarxanSolved-class}}, \code{link{marxan}}, \code{link{ordiplot}}, \code{link{dendrogram}}
 pca<-function(x) {UseMethod("pca")}
 
@@ -147,11 +152,11 @@ pca<-function(x) {UseMethod("pca")}
 #' This function calculates a dissimilty matrix for Marxan solutions using various characteristics.
 #' Results cached to permit rapid display for plotting functions.
 #'
-#' @param x "MarxanSolved" object
+#' @param x "MarxanSolved" object.
 #' @param var "character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param method "character" name of distance metric to use for calculating distance (see \code{link[vegan]{vegdist}})
 #' @param force_reset "logical" should analysis be run even if it is stored in the cache?
-#' @return "dist"  with dissimilarity indices
+#' @return "dist"  with dissimilarity indices.
 #' @seealso \code{link{MarxanSolved-class}}, \code{link{marxan}}, \code{link{ordiplot}}, \code{link{dendrogram}}
 dist<-function(x) {UseMethod("dist")}
 dist.default<-stats::dist
@@ -163,8 +168,8 @@ dist.default<-stats::dist
 #'
 #' @param x "MarxanSolved" object
 #' @param var "character" should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
-#' @param method "character" name of distance metric to use for calculating distance (see \code{link[vegan]{vegdist}})
-#' @param ... additional arguments to \code{\link[vegan]{monoMDS}}
+#' @param method "character" name of distance metric to use for calculating distance (see \code{link[vegan]{vegdist}}).
+#' @param ... additional arguments to \code{\link[vegan]{monoMDS}}.
 #' @param force_reset "logical" should analysis be run even if it is stored in the cache?
 #' @return "monoMDS" object
 #' @seealso \code{link{MarxanSolved-class}}, \code{link{marxan}}, \code{link{ordiplot}}, \code{link{dendrogram}}
@@ -178,10 +183,10 @@ mds=function(x, ...) UseMethod("mds")
 #' @param x "MarxanSolved" object
 #' @param type "character" use metric dimensional scaling ('mds'), or principle components analysis ('pca'), or distance matrix('dist') for analysis?
 #' @param  "character" should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
-#' @param method "character" name of distance metric to use for calculating distance (see \code{link[vegan]{vegdist}})
-#' @param ... arguments to \code{\link[vegan]{monoMDS}}, or \code{\link[stats]{prcomp}}
+#' @param method "character" name of distance metric to use for calculating distance (see \code{link[vegan]{vegdist}}).
+#' @param ... arguments to \code{\link[vegan]{monoMDS}}, or \code{\link[stats]{prcomp}}.
 #' @param force_reset "logical" should analysis be run even if it is stored in the cache?
-#' @return "hclust" object with an extra element named "phylo" that stores a "phylo" representation for pretty plotting
+#' @return "hclust" object with an extra element named "phylo" that stores a "phylo" representation for pretty plotting.
 #' @seealso \code{link{MarxanSolved-class}}, \code{link{marxan}}, \code{link{ordiplot}}, \code{link{dendrogram}}
 hclust=function(x, ...) UseMethod("mds")
 
@@ -195,10 +200,10 @@ hclust=function(x, ...) UseMethod("mds")
 #' @param type "character" use 'mds' or 'pca' for analysis?
 #' @param var "character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param nbest "integer" color the n best solutions in "red"
-#' @param ... arguments to \code{\link[vegan]{monoMDS}}, \code{\link[stats]{prcomp}}, \code{\link{mds.MarxanResults}}, and \code{\link{pca.MarxanResults}}. For instance, to use euclidean distances, use dist='euclidean'
+#' @param ... arguments to \code{\link[vegan]{monoMDS}}, \code{\link[stats]{prcomp}}, \code{\link{mds.MarxanResults}}, and \code{\link{pca.MarxanResults}}. For instance, to use euclidean distances, use dist='euclidean'.
 #' @param force_reset "logical" should analysis be rerun even if it is stored in the cache?
 #' @return "prcomp" or "monoMDS" object
-#' @seealso \code{link{MarxanSolved-class}}, \code{link{marxan}}
+#' @seealso \code{link{MarxanSolved-class}}, \code{link{marxan}}.
 ordiplot=function(x, ...) UseMethod("ordiplot")
 
 #' Dendrogram of Marxan Solutions
@@ -207,14 +212,14 @@ ordiplot=function(x, ...) UseMethod("ordiplot")
 #' Clustering can be applied to distances between raw data, or to results from dimensional reduction analysis (ie. MDS and PCA).
 #' Distance matrices and results from multivariate analyses are cached to permit rapid display.
 #'
-#' @param x "MarxanSolved" object
+#' @param x "MarxanSolved" object.
 #' @param type "character" use 'nmds' or 'pca' or 'dist' for analysis?
 #' @param var "character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
-#' @param nbest "integer" color the n best solutions in "red"
-#' @param ... arguments to \code{\link[vegan]{monoMDS}}, \code{\link[stats]{prcomp}}, \code{\link{nmds.MarxanResults}}, and \code{\link{pca.MarxanResults}}
+#' @param nbest "integer" color the n best solutions in "red".
+#' @param ... arguments to \code{\link[vegan]{monoMDS}}, \code{\link[stats]{prcomp}}, \code{\link{nmds.MarxanResults}}, and \code{\link{pca.MarxanResults}}.
 #' @param force_reset "logical" should analysis be rerun even if it is stored in the cache?
-#' @return "prcomp" or "monoMDS" object
-#' @seealso \code{link{MarxanResults-class}}, \code{link{MarxanSolved-class}}, \code{link{marxan}}, 
+#' @return "prcomp" or "monoMDS" object.
+#' @seealso \code{link{MarxanResults-class}}, \code{link{MarxanSolved-class}}, \code{link{marxan}}
 dendrogram=function(x, ...) UseMethod("dendrogram")
 
 #' Dot Chart of Marxan Solutions
@@ -222,22 +227,22 @@ dendrogram=function(x, ...) UseMethod("dendrogram")
 #' This function makes a dot chart to visualise differences between Marxan solutions using summary variables. Size of dots indicate overall solution quality (ie. 'score').
 #' Supported summary variables are:
 #' \tabular{rrr} {
-#' 	short name \tab full name \tab Description
-#' 	'score' \tab 'Score' \tab quality of solution
-#' 	'cost' \tab 'Cost' \tab total cost of solution
-#' 	'npu' \tab 'Planning_Units' \tab number of planning units selected in prioritisation
-#' 	'con' \tab 'Connectivity' \tab sum boundary length of all edges in selected planning units' that have neighbours
-#' 	'confrac' \tab 'Connectivity_In_Fraction' \tab connectivity efficiency relative to total boundary length
-#' 	'conin' \tab 'Connectivity_In' \tab sum boundary length of edges belonging to selected planning units' that have neighbours
-#' 	'conout' \tab 'Connectivity_Out' \tab sum boundary length of edges belonging to selected planning units' that have neighbours
-#'  'penalty' \tab 'Penalty' \tab total species penalty 
-#'  'shortfall' \tab 'Shortfall' \tab total shortfall for species targets 
-#'  'mv' \tab 'Missing_Values' \tab number of species that do not have their targets met
+#' 	short name \tab full name \tab Description.
+#' 	'score' \tab 'Score' \tab quality of solution.
+#' 	'cost' \tab 'Cost' \tab total cost of solution.
+#' 	'npu' \tab 'Planning_Units' \tab number of planning units selected in prioritisation.
+#' 	'con' \tab 'Connectivity' \tab sum boundary length of all edges in selected planning units' that have neighbours.
+#' 	'confrac' \tab 'Connectivity_In_Fraction' \tab connectivity efficiency relative to total boundary length.
+#' 	'conin' \tab 'Connectivity_In' \tab sum boundary length of edges belonging to selected planning units' that have neighbours.
+#' 	'conout' \tab 'Connectivity_Out' \tab sum boundary length of edges belonging to selected planning units' that have neighbours.
+#'  'penalty' \tab 'Penalty' \tab total species penalty .
+#'  'shortfall' \tab 'Shortfall' \tab total shortfall for species targets .
+#'  'mv' \tab 'Missing_Values' \tab number of species that do not have their targets met.
 #' }
 #' 
-#' @param x "MarxanResults" or "MarxanSolved"
+#' @param x "MarxanResults" or "MarxanSolved".
 #' @param var "character" what variable should be used to compare solutions?
-#' @param nbest "integer" color the n best solutions in "red"
+#' @param nbest "integer" color the n best solutions in "red".
 #' @seealso \code{link{MarxanResults-class}}, \code{link{MarxanSolved-class}}, \code{link{marxan}}
 dotchart=function(x, ...) UseMethod("dotchart")
 
@@ -282,7 +287,7 @@ basemap<-function(x, ...) {UseMethod("basemap")}
 #' @param force_reset "logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.
 #' @note This function will return an error if spatial polygons were not supplied during the construction of the Marxan object. Furthermore, "MarxanData" and "MarxanUnsolved" objects can only be used to display species densities.
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{basemap}} \code{\link{marxan}}, \code{\link{dendrogram}}, \code{\link{dotchart}}, \code{\link{ordiplot}}
-setGeneric("plot", function(x,y, ...) standardGeneric("plot")
+setGeneric("plot", function(x,y, ...) standardGeneric("plot"))
 setMethod(
 	"plot", 
 	signature(x="MarxanData", y="character"),
@@ -363,10 +368,10 @@ setMethod(
 		cols[which(x@data@pu$status<2)]<-brewerCols(values[which(x@data@pu$status<2)])
 		prettyGeoplot(
 			x@data@polygons,
-			col<-cols,
-			basemap=basemap,
-			main<-ifelse(y==x@results@best, paste0("Best Solution (",y,")"), paste0("Solution (",y,")"))
-			fun<-categoricalLegend(c(lockedoutcol,brewerCols(c(0,1),colramp),lockedincol),c("Locked Out", "Not Selected", "Selected", "Locked In"))
+			cols,
+			basemap,
+			ifelse(y==x@results@best, paste0("Best Solution (",y,")"), paste0("Solution (",y,")")),
+			categoricalLegend(c(lockedoutcol,brewerCols(c(0,1),colramp),lockedincol),c("Locked Out", "Not Selected", "Selected", "Locked In"))
 		)
 	}
 )
@@ -390,17 +395,17 @@ setMethod(
 		cols[which(x@data@pu$status==3)]<-lockedoutcol
 		prettyGeoplot(
 			x@data@polygons,
-			col=cols,
-			basemap=basemap,
-			main="Selection Frequencies",
-			fun=continuousLegend(values,colramp)	
+			cols,
+			basemap,
+			"Selection Frequencies",
+			continuousLegend(values,colramp)	
 		)
 	}
 )
 setMethod(
 	"plot",
 	signature(x="MarxanSolved",y="MarxanSolved"),
-	function(x, y, i=NULL, j=i basemap="none", colramp="Spectral", xlockedincol="#000000FF", xlockedoutcol="#D7D7D7FF", ylockedincol="#FFFFFFFF", ylockedoutcol="#D7D7D7FF", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
+	function(x, y, i=NULL, j=i, basemap="none", colramp="Spectral", xlockedincol="#000000FF", xlockedoutcol="#D7D7D7FF", ylockedincol="#FFFFFFFF", ylockedoutcol="#D7D7D7FF", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
 		# check for issues
 		stopifnot(alpha<=1 & alpha>=0)
 		match.arg(colramp, rownames(brewer.pal.info))
@@ -423,9 +428,9 @@ setMethod(
 			cols[which(nchar(cols)==0)]<-brewer.pal(rescale(order(values),to=c(0,1)))
 			prettyGeoplot(
 				x@data@polygons,
-				col<-cols,
-				basemap=basemap,
-				main<-"Difference between planning unit selection frequencies (perentile)",
+				cols,
+				basemap,
+				"Difference between planning unit selection frequencies (perentile)",
 				fun<-continuousLegend(
 					seq(0,1,0.1),
 					colramp
@@ -439,10 +444,10 @@ setMethod(
 			cols[which(nchar(cols)==0)]<-brewer.pal(rescale(x@results@selections[i,which(nchar(cols)==0)]-y@results@selections[j,which(nchar(cols)==0)],from=c(-1,1),to=c(0,1)))
 			prettyGeoplot(
 				x@data@polygons,
-				col<-cols,
-				basemap=basemap,
-				main<-paste0("Difference in  selections for solution ",i,ifelse(i==x@results@best, " (best)", ""), " and ",j, ifelse(j==y@results@best, " (best)", ""))
-				fun<-categoricalLegend(
+				cols,
+				basemap,
+				paste0("Difference in  selections for solution ",i,ifelse(i==x@results@best, " (best)", ""), " and ",j, ifelse(j==y@results@best, " (best)", "")),
+				categoricalLegend(
 					c( brewerCols(seq(0,1,0.25),colramp),xlockedincol,ylockedincol,xlockedoutcol,ylockedoutcol),
 					c("x=1 & y=0", "x=1 & y=0", "x=0 & y=0", "x=0 & y=1", "x locked in", "y locked in", "x locked out", "y locked out")
 				)

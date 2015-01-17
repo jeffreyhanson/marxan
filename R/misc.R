@@ -103,5 +103,77 @@ findMarxanExecutablePath=function() {
 	options(marxanExecutablePath=path)
 }
 
+#' Update Marxan Input Parameters
+#'
+#' This function is used in the formula argument of the update function to change input parameters of a "MarxanOpts", "MarxanUnsolved", or "MarxanSolved" object.
+#'
+#' @param name "character" name of parameter to change.
+#' @param value "numeric" new value.
+#' @return "MarxanOptsOperation" object.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{species}}, \code{\link{pu}}
+opt<-function(name, value) {
+	return(
+		structure(
+			list(name,value),
+			.Names = c("slot", "value"),
+			class = c("MarxanUpdateOperation", "MarxanOptsOperation")
+		)
+	)
+}
 
+#' Update Marxan Species Parameters
+#'
+#' This function is used in the formula argument of the update function to change species parameters of a "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#'
+#' @param x "numeric" species id or "character" species name.
+#' @param name "character" new species name.
+#' @param spf "numeric" new species penalty factor.
+#' @param target "numeric" new target. 
+#' @note Set arguments 'name', 'spf', 'target' to NA (default) to keep the same.
+#' @return "MarxanSpeciesOperation" object.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{pu}}
+species<-function(x, name=NA, spf=NA, target=NA) {
+	if (is.na(name) & is.na(spf) & is.na(target))
+		stop("no arguments were specified to change values.")
+	args<-structure(c(name,spf,target), .Names=c("name","spf","target"))
+	args<-args[!is.na(args)]
+	return(
+		structure(
+			list(
+				x, 
+				args,
+				names(args)
+			),
+			.Names = c("x", "value", "col"),
+			class = c("MarxanUpdateOperation", "MarxanSpeciesOperation",  "MarxanDataOperation")
+		)
+	)
+}
 
+#' Update Marxan Planning Unit Parameters
+#'
+#' This function is used in the formula argument of the update function to change planning unit parameters of a "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#'
+#' @param id "integer" id of the planning unit.
+#' @param cost "numeric" new cost value.
+#' @param status "numeric" new status value.
+#' @note Set argument 'cost' or 'status' to NA (default) to keep the same.
+#' @return "MarxanPuOperation" object.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{species}}
+pu<-function(id, cost=NA, status=NA) {
+	if (is.na(cost) & is.na(status))
+		stop("no arguments were supplied to change values.")
+	args<-structure(c(cost,status), .Names=c("cost","status"))
+	args<-args[!is.na(args)]	
+	return(
+		structure(
+			list(
+				id, 
+				args,
+				names(args)
+			),
+			.Names = c("x", "value", "col"),
+			class = c("MarxanUpdateOperation", "MarxanPuOperation",  "MarxanDataOperation")
+		)
+	)
+}

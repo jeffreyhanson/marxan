@@ -1,3 +1,10 @@
+# set union classes
+setOldClass("PolyData")
+setClassUnion("PolyDataOrNULL", c("PolyData", "NULL"))
+setClassUnion("MarxanUnsolvedOrSolved", c("MarxanSolved", "MarxanUnsolved"))
+setClassUnion("RasterStackOrBrick", c("RasterBrick", "RasterStack"))
+
+# misc hidden functions
 marxanURL="http://www.uq.edu.au/marxan/get-marxan-software"
 
 is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
@@ -36,6 +43,26 @@ parseArg=function(name, args) {
 	return(strsplit(val, " ", fixed=TRUE)[[1L]][[2L]])
 }
 
+asym.setequal <- function(x,y) {
+	return(length(seqdiff(x,y))==0)
+}
+
+
+merge.MarxanResults=function(x) {
+	x=MarxanResults(
+		ldply(x, slot, name="summary"),
+		do.call(rbind, laply(x, slot, name="solutions")),
+		ldply(x, slot, name="amountheld"),
+		ldply(x, slot, name="occheld"),
+		paste(laply(x, slot, name="log"), collapse="\n")
+	)
+	x@summary$Run_Number<-seq_len(nrow(x@summary))
+	return(x)
+}
+
+
+
+### pretty plotting functions
 prettyBiplot=function(x,size,nbest,xlab,ylab,main) {
 	plot(xlim=range(x[,1]), ylim=range(x[,2]), main=main, xlab=xlab, ylab=ylab)
 	text(x=x[,1], y=y[,2], labels=seq_len(nrow(x)), col=replace(rep("black", nrow(x)), which(order(size,decreasing=TRUE)<=nbest), "red"), cex=size)
@@ -243,12 +270,15 @@ prettyGeoplot=function(polygons, col, basemap, main, fun) {
 	return(invisible())
 }
 
+### color function
 brewerCols<-function(values, pal, alpha=1) {
 	r<-colorRamp(brewer.pal(brewer.pal.info$maxcolors[which(rownames(brewer.pal.info)==pal)], pal), alpha=TRUE)(values)
 	r[,4]=rescale(alpha, from=c(0,1), to=c(0,255))
 	return(rgb(r, maxColorValue=255))
 }
 
+
+### automated legend functions
 continuousLegend=function(values, pal) {
 	return(
 		function() {
@@ -270,9 +300,10 @@ categoricalLegend=function(col,labels) {
 	)
 }
 
+# update functions
 findInvalidMarxanOperations=function(ops) {
-	isinvalid<-!laply(ops, inherits "MarxanOperation")
-	if (any(isinvalid)
+	isinvalid<-!laply(ops, inherits, "MarxanUpdateOperation")
+	if (any(isinvalid))
 		stop(
 			paste(
 				paste(
@@ -324,9 +355,8 @@ updateOperation=function(x, arg, value) {
 	return(x)
 }
 
-asym.setequal <- function(x,y) {
-	return(length(seqdiff(x,y))==0)
-}
+
+# raster processing functions
 
 zonalSum.RasterLayerInMemory <- function(polys, rast, speciesName) {
 	tmp=.rcpp_groupsum(getValues(polys),getValues(rast))
@@ -342,31 +372,8 @@ zonalSum.RasterLayerNotInMemory <- function(bs, polys, rast, speciesName, ncores
 	return(data.frame(species=speciesName, pu=attr(tmp, "ids"), amount=c(tmp)))
 }
 
-merge.MarxanResults=function(x) {
-	x=MarxanResults(
-		ldply(x, slot, name="summary"),
-		do.call(rbind, laply(x, slot, name="solutions")),
-		ldply(x, slot, name="amountheld"),
-		ldply(x, slot, name="occheld"),
-		paste(laply(x, slot, name="log"), collapse="\n")
-	)
-	x@summary$Run_Number<-seq_len(nrow(x@summary))
-	return(x)
-}
-
-# set union classes
-setClassUnion("PolyDataOrNULL", c("PolyData", "NULL"))
-setClassUnion("Marxan", c("MarxanSolved", "MarxanUnsolved"))
-
 # cache methods
 setGeneric("is.cached", function(x,name) standardGeneric("is.cached"))
-setMethod(
-	f="is.cached", 
-	signature(x="Marxan", name="character"), 
-	function(x,name) {
-		return(!is.null(x@data@.cache[[names]]))
-	}
-)
 setMethod(
 	f="is.cached", 
 	signature(x="MarxanData", name="character"), 
@@ -374,22 +381,17 @@ setMethod(
 		return(!is.null(x@.cache[[names]]))
 	}
 )
+setMethod(
+	f="is.cached", 
+	signature(x="MarxanResults", name="character"), 
+	function(x,name) {
+		return(!is.null(x@.cache[[names]]))
+	}
+)
+
 
 setGeneric("cache", function(x, name, y) standardGeneric("cache"))
-setMethod(
-	f="cache", 
-	signature(x="Marxan", name="character", y="missing"), 
-	function(x, name, y) {
-		return(x@data@.cache[[name]])
-	}
-)
-setMethod(
-	f="cache", 
-	signature(x="Marxan", name="character", y="ANY"), 
-	function(x, name, y) {
-		x@data@.cache[[name]]=y
-	}
-)
+# get methods
 setMethod(
 	f="cache", 
 	signature(x="MarxanData", name="character", y="missing"), 
@@ -399,11 +401,28 @@ setMethod(
 )
 setMethod(
 	f="cache", 
+	signature(x="MarxanResults", name="character", y="missing"), 
+	function(x, name, y) {
+		return(x@.cache[[name]])
+	}
+)
+# set methods
+setMethod(
+	f="cache", 
+	signature(x="MarxanResults", name="character", y="ANY"), 
+	function(x, name, y) {
+		x@.cache[[name]]=y
+	}
+)
+setMethod(
+	f="cache", 
 	signature(x="MarxanData", name="character", y="ANY"), 
 	function(x, name, y) {
 		x@.cache[[name]]=y
 	}
 )
+
+
 
 hashCall=function(expr, skipargs=c(), env=parent.frame()) {
 	for (i in seq_along(names(expr))[c(-1L, (skipargs*-1L)-1L)])

@@ -10,7 +10,7 @@
 #' @param lengthFactor numeric to scale boundary lengths.
 #' @param edgeFactor numeric to scale boundary lengths that do not have any neighbors.
 #' @return data.frame with columns 'id1', 'id2', and 'amount'.
-#' @seelalso this function is based on the QMARXAN algorithm \code{\url{http://aproposinfosystems.com/products/qmarxan/}} for calculating boundary length.
+#' @seealso this function is based on the QMARXAN algorithm \code{\url{http://aproposinfosystems.com/products/qmarxan/}} for calculating boundary length.
 #' @examples 
 #' data(planningunits)
 #' bound.dat <- calcBoundaryData(planningunits)

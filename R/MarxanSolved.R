@@ -23,96 +23,100 @@ setClass("MarxanSolved",
 #' @return "MarxanUnsolved" object.
 #' @seealso \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanResults-class}}
 MarxanSolved<-function(MarxanUnsolved, MarxanResults) {
-	return(new("MarxanUnsolved", opts=unsolved@opts, data=unsolved@data reuslts=results))
+	return(new("MarxanUnsolved", opts=unsolved@opts, data=unsolved@data, reuslts=results))
 }
 
-#' @describein solve
-solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, force_reset=FALSE) {
+#' @describeIn solve
+solve.MarxanUnsolved<-function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, force_reset=FALSE) {
 	if (!force_reset)
 		stop("This object already has Marxan solutions. Use force_reset=TRUE to force recalculation of solutions.")
-	return(solve(MarxanUnsolved(opts=x@opts,data=x@data), wd, seeds, clean)
+	return(solve(MarxanUnsolved(opts=x@opts,data=x@data), wd, seeds, clean))
 }
 
-#' @describein selection
+#' @describeIn selection
 selection.MarxanSolved<-function(x, y="best") {
 	return(selection.MarxanResults(x@results, y))
 }
 
-#' @describein score
+#' @describeIn score
 score.MarxanSolved<-function(x, y="best") {
 	return(score.MarxanResults(x@results, y))
 }
 
-#' @describein summary
+#' @describeIn summary
 summary.MarxanSolved<-function(x) {
 	return(summary.MarxanResults(x@results))
 }
 
-#' @describein print
-print.MarxanSolved=function(x) {
+#' @describeIn print
+print.MarxanSolved<-function(x) {
 	cat("MarxanSolved object.\n")
 	print.MarxanOpts(x@opts, FALSE)
 	print.MarxanData(x@data, FALSE)
 	print.MarxanResults(x@results, FALSE)
 }
 
-#' @describein log
-log.MarxanSolved=function(x) {
+#' @describeIn log
+log.MarxanSolved<-function(x) {
 	log.MarxanResults(x@results)
 }
 
-#' @describein amountHeld
-amountHeld.MarxanSolved<-function(x, y="best") {
-	return(amountHeld.MarxanResults(x@results, y))
+#' @describeIn amountheld
+amountheld.MarxanSolved<-function(x, y=NULL) {
+	return(amountheld.MarxanResults(x@results, y))
 }
 
-#' @describein occHeld
-occHeld.MarxanSolved<-function(x, y="best") {
-	return(occHeld.MarxanResults(x@results, y))
-
+#' @describeIn occheld
+occheld.MarxanSolved<-function(x, y=NULL) {
+	return(occheld.MarxanResults(x@results, y))
 }
 
-#' @describein pca
-pca.MarxanSolved=function(x, var='selections', ... force_reset=FALSE) {
-	return(dist.MarxanResults(x@results, var, ..., force_reset=force_reset))
+#' @describeIn targetsmet
+targetsmet.MarxanSolved<-function(x, y=NULL) {
+	return(targetsmet.MarxanResults(x@results, y))
 }
 
-#' @describein dist
-dist.MarxanSolved=function(x, var='selections', method="bray", force_reset=FALSE) {
+#' @describeIn pca
+pca.MarxanSolved<-function(x, var='selections', ..., force_reset=FALSE) {
+	return(dist.MarxanResults(x@results, var, ..., force_reset=force_reset))	
+}
+
+#' @describeIn dist
+dist.MarxanSolved<-function(x, var='selections', method="bray", force_reset=FALSE) {
 	return(dist.MarxanResults(x@results, var, method, force_reset=force_reset))
 }
 
-#' @describein mds
-mds.MarxanSolved=function(x, var='selections', method="bray", ..., force_reset=FALSE) {
+#' @describeIn mds
+mds.MarxanSolved<-function(x, var='selections', method="bray", ..., force_reset=FALSE) {
 	return(mds.MarxanResults(x@results, var, method, ..., force_reset=force_reset))
 }
 
-#' @describein hclust
-hclust.MarxanSolved=function(x, type='mds', var='selections', ..., force_reset=FALSE) {
+#' @describeIn hclust
+hclust.MarxanSolved<-function(x, type='mds', var='selections', ..., force_reset=FALSE) {
 	return(mds.MarxanResults(x@results, type='mds', var='selections', ..., force_reset=force_reset))
 }
 
-#' @describein ordiplot
-ordiplot.MarxanSolved=function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
+#' @describeIn ordiplot
+ordiplot.MarxanSolved<-function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	return(ordiplot.MarxanResults(x@results, type, var, nbest, ..., force_reset=force_reset))
 }
 
-#' @describein dendrogram
-dendrogram.MarxanSolved=function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
+#' @describeIn dendrogram
+dendrogram.MarxanSolved<-function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	return(dendrogram.MarxanResults(x@results, type, var, nbest, ..., force_reset=force_reset))
 }
 
-#' @describein dotchart
-dotchart.MarxanSolved(x, var="score", nbest=1) {
+#' @describeIn dotchart
+dotchart.MarxanSolved<-function(x, var="score", nbest=1) {
 	dotchart.MarxanResults(x@results, var, nbest)
 }
 
-#' @describein basemap
+#' @describeIn basemap
 basemap.MarxanSolved<-function(x, basemap="none", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
 	return(basemap.MarxanData(x@data, basemap, alpha, grayscale, xzoom, yzoom, force_reset))
 }
 
-#' @describein update
+#' @describeIn update
 update.MarxanSolved<-function(x, formula, evaluate=TRUE, force_reset=TRUE) {
 	return(update.MarxanUnsolved(MarxanUnsolved(x@opts, x@data), formula, evaluate, force_reset))
 }
