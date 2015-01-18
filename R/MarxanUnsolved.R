@@ -31,9 +31,9 @@ MarxanUnsolved<-function(opts, data) {
 
 #' @describeIn solve
 #' @export
-solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE) {
+solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, verbose=FALSE) {
 	# check that Marxan is installed properly
-	findMarxanExecutable()
+	findMarxanExecutablePath()
 	stopifnot(is.marxanInstalled())
 	# check inputs are valid
 	stopifnot(file.exists(wd))
@@ -44,24 +44,47 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 	dir.create(file.path(wd, 'input'),recursive=TRUE, showWarnings=TRUE)
 	laply(coredirs, dir.create, recursive=TRUE, showWarnings=TRUE)
 	# sink to disk marxan files
-	write.MarxanData(x@data)
+	write.MarxanData(x@data,dir=file.path(wd, 'input'))
 	# create input files
-	Map(write.MarxanOpts, x@opts, dir=coredirs, seed=seeds)
+	for (i in seq_along(coredirs))
+		write.MarxanOpts(x@opts, file.path(wd, 'input'), coredirs[i], seed=seeds[i])
 	# copy marxan to core dir
-	file.copy(options()$marxanExecutablePath, file.path(coredirs, options()$marxanExecutablePath))
-	# set up parallelisation
+	file.copy(options()$marxanExecutablePath, file.path(coredirs, basename(options()$marxanExecutablePath)))
+	# set up parrallelisation
 	if (x@opts@NCORES>1)
-		registerDoSnow(makeCluster(x@opts@NCORES, type="SOCK"))
-	llply(x=options()$marxanExecutablePath, y=coredirs, .parallel=x@opts@NCORES>1, 
-		function(x,y) {
-			system(paste0('"',x,'" "',y,'"'))
-		}
-	)
-	# import and merge results
-	x=new("MarxanSolved", data=x@data, opts=x@opts, results=merge.MarxanResults(laply(coredirs, read.MarxanResults)))
+		registerDoSNOW(makeCluster(x@opts@NCORES, type="SOCK"))
+	# run marxan
+	if (verbose) {
+		status<-alply(
+			cbind.data.frame(
+				file.path(coredirs, basename(options()$marxanExecutablePath)),
+				file.path(coredirs, 'input.dat'),
+				(verbose & seq_along(coredirs)==1)
+			), 1, .parallel=x@opts@NCORES>1, 
+			function(x) {
+				return(system(paste0('"',x[[1]],'" "',x[[2]],'" -s'), show.output.on.console=x[[3]]))
+			}
+		)
+	} else {
+		suppressWarnings(status<-alply(
+			cbind.data.frame(
+				file.path(coredirs, basename(options()$marxanExecutablePath)),
+				file.path(coredirs, 'input.dat'),
+				(verbose & seq_along(coredirs)==1)
+			), 1, .parallel=x@opts@NCORES>1, 
+			function(x) {
+				return(system(paste0('"',x[[1]],'" "',x[[2]],'" -s'), show.output.on.console=x[[3]]))
+			}
+		))
+	}
+	# check to see how it went
+	if (any(unlist(status, use.names=FALSE, recursive=FALSE)!=0))
+		stop("Marxan failed to execute.")
+	# if succesful; import and merge results
+	x=new("MarxanSolved", data=x@data, opts=x@opts, results=merge.MarxanResults(llply(coredirs, read.MarxanResults)))
 	# clean dir
 	if (clean)
-		unlink(wd, recurisve=TRUE, force=FALSE)
+		unlink(wd, recursive=TRUE, force=FALSE)
 	return(x)
 }
 
@@ -73,6 +96,21 @@ print.MarxanUnsolved=function(x) {
 	print.MarxanData(x@data, FALSE)
 }
 
+#' @export
+# setMethod(
+	# 'show',
+	# 'MarxanUnsolved',
+	# function(x, ...)
+		# print.MarxanUnsolved(x, ...)
+# )
+
+#' @export
+#' @describeIn names
+names.MarxanUnsolved<-function(x) {
+	return(names(x@data))
+}
+
+
 #' @describeIn basemap
 #' @export
 basemap.MarxanUnsolved<-function(x, basemap="none", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
@@ -81,13 +119,13 @@ basemap.MarxanUnsolved<-function(x, basemap="none", alpha=1, grayscale=FALSE, xz
 
 #' @describeIn update
 #' @export
-update.MarxanUnsolved<-function(x, formula, evaluate=TRUE, force_reset) {
+update.MarxanUnsolved<-function(x, formula, solve=TRUE, force_reset=TRUE) {
 	m<-MarxanUnsolved(
-		opts=update.MarxanOpts(x@opts, formula, force_reset),
+		opts=update.MarxanOpts(x@opts, formula),
 		data=update.MarxanData(x@data, formula, force_reset)
 	)
-	if (evaluate)
-		m<-solve(m)
+	if (solve)
+		m<-solve.MarxanUnsolved(m)
 	return(m)
 }
 

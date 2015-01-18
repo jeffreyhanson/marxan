@@ -33,9 +33,15 @@ setMethod(
 	'rasterize.gdal',
 	signature(x="SpatialPolygonsDataFrame", y="RasterLayer"),
 	function(x, y, field=NULL) {
+		if (is.null(field)) {
+			x@data$id<-seq_len(nrow(x@data))
+			field<-'id'
+		}
+		if (!field %in% names(x@data))
+			stop(paste0("x@data does not have a field ",field, "."))
 		writeOGR(x, tempdir(), 'polys', driver='ESRI Shapefile', overwrite=TRUE)
 		writeRaster(setValues(y, NA), file.path(tempdir(), 'rast.tif'), NAflag=-9999, overwrite=TRUE)
-		return(gdal_rasterize(file.path(tempdir(), 'polys.shp'), file.path(tempdir(), 'rast.tif'), l="polys", a="id", output_Raster=TRUE)[[1]])
+		return(gdal_rasterize(file.path(tempdir(), 'polys.shp'), file.path(tempdir(), 'rast.tif'), l="polys", a=field, output_Raster=TRUE)[[1]])
 	}
 )
 
@@ -72,14 +78,14 @@ is.marxanInstalled<-function() {
 #' is.marxanInstalled()
 findMarxanExecutablePath=function() {
 	# if path already set then return it
-	!is.null(options()$marxanExecutablePath)
+	if(!is.null(options()$marxanExecutablePath))
 		return(options()$marxanExecutablePath)
 	# if path not set then set it
 	if (.Platform$OS.type=="windows") {
 		if (.Platform$r_arch=="x64") {
-			path=list.files(system.file("bin", package="marxan"), "^marxan.*x64.exe$",full.names=TRUE)
+			path=list.files(system.file("bin", package="marxan"), "^Marxan.*x64.exe$",full.names=TRUE)
 		} else if (.Platform$r_arch=="i386") {
-			path=system.file('bin/marxan.exe', package="marxan")
+			path=system.file('bin/Marxan.exe', package="marxan")
 		} else {
 			stop('Marxan will only run in 64bit or 32bit Windows environments.')
 		}
@@ -108,80 +114,5 @@ findMarxanExecutablePath=function() {
 	options(marxanExecutablePath=path)
 }
 
-#' Update Marxan input parameters
-#'
-#' This function is used in the formula argument of the update function to change input parameters of a "MarxanOpts", "MarxanUnsolved", or "MarxanSolved" object.
-#'
-#' @param name "character" name of parameter to change.
-#' @param value "numeric" new value.
-#' @return "MarxanOptsOperation" object.
-#' @export
-#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{spp}}, \code{\link{pu}}
-opt<-function(name, value) {
-	return(
-		structure(
-			list(name,value),
-			.Names = c("slot", "value"),
-			class = c("MarxanUpdateOperation", "MarxanOptsOperation")
-		)
-	)
-}
 
-#' Update Marxan species parameters
-#'
-#' This function is used in the formula argument of the update function to change species parameters of a "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
-#'
-#' @param x "numeric" species id or "character" species name.
-#' @param name "character" new species name.
-#' @param spf "numeric" new species penalty factor.
-#' @param target "numeric" new target. 
-#' @note Set arguments 'name', 'spf', 'target' to NA (default) to keep the same.
-#' @export
-#' @return "MarxanSpeciesOperation" object.
-#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{pu}}
-spp<-function(x, name=NA, spf=NA, target=NA) {
-	if (is.na(name) & is.na(spf) & is.na(target))
-		stop("no arguments were specified to change values.")
-	args<-structure(c(name,spf,target), .Names=c("name","spf","target"))
-	args<-args[!is.na(args)]
-	return(
-		structure(
-			list(
-				x, 
-				args,
-				names(args)
-			),
-			.Names = c("x", "value", "col"),
-			class = c("MarxanUpdateOperation", "MarxanSpeciesOperation",  "MarxanDataOperation")
-		)
-	)
-}
 
-#' Update Marxan planning unit parameters
-#'
-#' This function is used in the formula argument of the update function to change planning unit parameters of a "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
-#'
-#' @param id "integer" id of the planning unit.
-#' @param cost "numeric" new cost value.
-#' @param status "numeric" new status value.
-#' @note Set argument 'cost' or 'status' to NA (default) to keep the same.
-#' @export
-#' @return "MarxanPuOperation" object.
-#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{spp}}
-pu<-function(id, cost=NA, status=NA) {
-	if (is.na(cost) & is.na(status))
-		stop("no arguments were supplied to change values.")
-	args<-structure(c(cost,status), .Names=c("cost","status"))
-	args<-args[!is.na(args)]	
-	return(
-		structure(
-			list(
-				id, 
-				args,
-				names(args)
-			),
-			.Names = c("x", "value", "col"),
-			class = c("MarxanUpdateOperation", "MarxanPuOperation",  "MarxanDataOperation")
-		)
-	)
-}

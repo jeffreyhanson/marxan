@@ -27,12 +27,12 @@ setMethod(
 	"calcBoundaryData",
 	signature(x="PolySet"),
 	function(x, tolerance=0.001, lengthFactor=1.0, edgeFactor=1.0) {
-		ret<-.rcpp_calcBoundaryDF(x, tolerance=tolerance, lengthFactor=lengthFactor, edgeFactor=edgeFactor)
-		if (!is.null(ret$warnings)) {
-			warning("Invalid geometries detected, see element \"warnings\" for more information.")
-			return(ret)
+		ret<-rcpp_calcBoundaryDF(x, tolerance=tolerance, lengthFactor=lengthFactor, edgeFactor=edgeFactor)
+		if (length(ret$warnings)!=0) {
+			warning("Invalid geometries detected, see \"warnings\" attribute for more information.")
+			attr(ret$bldf, "warnings")<-ret$warnings
 		}
-		return(ret)
+		return(ret$bldf)
 	}
 )
 
@@ -42,12 +42,7 @@ setMethod(
 	"calcBoundaryData",
 	signature(x="SpatialPolygons"),
 	function(x, tolerance=0.001, lengthFactor=1.0, edgeFactor=1.0) {
-		ret<-rcpp_calcBoundaryDF(rcpp_Polygons2PolySet(x@polygons), tolerance=tolerance, lengthFactor=lengthFactor, edgeFactor=edgeFactor)
-		if (!is.null(ret$warnings)) {
-			warning("Invalid geometries detected, see element \"warnings\" for more information.")
-			return(ret)
-		}
-		return(ret)
+		return(calcBoundaryData(rcpp_Polygons2PolySet(x@polygons), tolerance=tolerance, lengthFactor=lengthFactor, edgeFactor=edgeFactor))
 	}
 )
 

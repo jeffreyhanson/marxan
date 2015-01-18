@@ -56,6 +56,15 @@ summary<-function(x, ...) {UseMethod('summary')}
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanResults-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}, 
 print<-function(x, ...) {UseMethod('print')}
 
+#' Names
+#'
+#' This function returns the species names for a Marxan object.
+#'
+#' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @note "MaranResults" objects do not store species names.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+# names<-function(x, ...) {UseMethod('names')}
+
 #' Log
 #'
 #' This function returns the log file associated with running Marxan.
@@ -95,7 +104,7 @@ occheld<-function(x, ...) {UseMethod('occheld')}
 #' @return "matrix" or "logical" vector depending on arguments.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
-occheld<-function(x, ...) {UseMethod('occheld')}
+targetsmet<-function(x, ...) {UseMethod('targetsmet')}
 
 #' Compare Marxan objects
 #'
@@ -283,7 +292,7 @@ setGeneric("plot", function(x,y, ...) standardGeneric("plot"))
 #' @return "MarxanSolved" or "MarxanUnsolved" object depending on solve argument.
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{marxan}}, \code{\link{opt}}, \code{\link{spp}}, \code{\link{pu}}
-update<-function(x, formula, evaluate) UseMethod("update")
+update<-function(x, formula, solve, ...) UseMethod("update")
 
 #' Test if hash is cached in a Marxan object
 #'

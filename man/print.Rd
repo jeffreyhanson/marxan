@@ -20,12 +20,18 @@
 \method{print}{MarxanUnsolved}(x)
 
 print(x, ...)
+
+print(x, ...)
 }
 \arguments{
 \item{x}{any "MarxanOpts", "MarxanData", "MarxanResults", "MarxanUnsolved", or "MarxanSolved" object.}
+
+\item{x}{any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
 }
 \description{
 This function returns information about a Marxan object.
+
+This function returns the species names for a Marxan object.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -39,7 +45,12 @@ This function returns information about a Marxan object.
 
 \item \code{MarxanUnsolved}: 
 }}
+\note{
+"MaranResults" objects do not store species names.
+}
 \seealso{
 \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanResults-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}},
+
+\code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 }
 

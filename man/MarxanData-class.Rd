@@ -10,15 +10,19 @@ This class is used to store Marxan input data.
 \section{Slots}{
 
 \describe{
-\item{\code{polygons}}{"PolySet" planning unit spatial data}
+\item{\code{polygons}}{"PolySet" planning unit spatial data.}
 
-\item{\code{pu}}{"data.frame" planning unit data; with "id", "cost", "status" columns}
+\item{\code{pu}}{"data.frame" planning unit data; with 'id', 'cost', 'status' columns.}
 
-\item{\code{species}}{"data.frame" with species data; with "id", "target", "spf", and "name" columns}
+\item{\code{species}}{"data.frame" with species data; with 'id', 'target', 'spf', and 'name' columns.}
 
-\item{\code{puvspecies}}{"data.frame" with data on species density in each planning unit; with "species", "pu", and "target" columns}
+\item{\code{puvspecies}}{"data.frame" with data on species density in each planning unit, with 'species', 'pu', and 'target' columns, ordered by 'pu'.}
 
-\item{\code{boundary}}{"data.frame" with data on the shared boundary length of planning; with "id1", "id2", and "amount" columns}
+\item{\code{puvspecies_spo}}{"data.frame" with data on species density in each planning unit; with 'species', 'pu', and 'target' columns, ordered by 'species'.}
+
+\item{\code{boundary}}{"data.frame" with data on the shared boundary length of planning; with 'id1', 'id2', and 'amount' columns.}
+
+\item{\code{skipchecks}}{"logical" skip data integrity checks? May improve speed for big data sets.}
 
 \item{\code{.cache}}{"environment" used to store processing calculations}
 }}

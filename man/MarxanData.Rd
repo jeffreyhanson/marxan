@@ -4,18 +4,25 @@
 \alias{MarxanData}
 \title{Create new MarxanData object}
 \usage{
-MarxanData(pu, species, puvspecies, boundary, polygons = NULL)
+MarxanData(pu, species, puvspecies, boundary, polygons = NULL,
+  puvspecies_spo = NULL, skipchecks = FALSE, .cache = new.env())
 }
 \arguments{
-\item{pu}{"data.frame" planning unit data; with columns "id", "cost", and "status" columns}
+\item{pu}{"data.frame" planning unit data; with columns 'id', 'cost', and 'status' columns.}
 
-\item{species}{species "data.frame" species data; with columns "id", "target", "spf", and "name" columns}
+\item{species}{species "data.frame" species data; with columns 'id', 'target', 'spf', and 'name' columns.}
 
-\item{puvspecies}{puvspecies "data.frame" pu vs. species data; with "species", "pu", and "amount" columns}
+\item{puvspecies}{"data.frame" pu vs. species data, with 'species', 'pu', and 'amount' columns, sorted by 'pu'.}
 
-\item{boundary}{boundary "data.frame" with shared boundary data; with "id1", "id2", and "boundary" columns}
+\item{boundary}{"data.frame" with shared boundary data; with "id1", "id2", and "boundary" columns.}
 
-\item{polygons}{"PolySet" with planning unit data or "NULL" if geoplotting capabilities are not required}
+\item{polygons}{"PolySet" with planning unit data or "NULL" if geoplotting capabilities are not required.}
+
+\item{puvspecies_spo}{"data.frame" with values in puvspecies sorted by species. Defaults to NULL so this is calculated automatically from argument to puvspecies.}
+
+\item{skipchecks}{"logical" skip data integrity checks? May improve speed for big data sets. Defaults to FALSE.}
+
+\item{.cache}{"environment" the cache used to store objects to speed up plottnig functions. Do not set this unless you know what you're doing.}
 }
 \value{
 MarxanData object

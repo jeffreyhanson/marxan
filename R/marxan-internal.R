@@ -24,14 +24,14 @@ is.finite.numeric <- function(x) {
 }
 
 is.valid.character <- function(x) {
-	return(is.character(x) & !any(is.na(x)))
+	return(is.character(x) & all(!is.na(x)))
 }
 
-to.colors=function(values, cols) {
+to.colors<-function(values, cols) {
 	return(rgb(colorRamp(cols)(rescale(values)), maxColorValue=255))
 }
 
-to.pretty.name=function(x) {
+to.pretty.name<-function(x) {
 	return(
 		switch(x,
 			"selections"="planning unit selections",
@@ -42,39 +42,30 @@ to.pretty.name=function(x) {
 	)
 }
 
-parseArg=function(name, args) {
+parseArg<-function(name, args, error=TRUE) {
 	val=grep(name,args, value=TRUE)
-	if (length(val)!=1L)
+	if (error & length(val)!=1L) {
 		stop(paste("Cannot find argument",name,"in Marxan input file."))
-	return(strsplit(val, " ", fixed=TRUE)[[1L]][[2L]])
+	} else if (length(val)!=1L) {
+		return(NULL)
+	} else {
+		return(strsplit(val, " ", fixed=TRUE)[[1L]][[2L]])
+	}
 }
 
 asym.setequal <- function(x,y) {
-	return(length(seqdiff(x,y))==0)
-}
-
-
-merge.MarxanResults=function(x) {
-	x=MarxanResults(
-		ldply(x, slot, name="summary"),
-		do.call(rbind, laply(x, slot, name="solutions")),
-		ldply(x, slot, name="amountheld"),
-		ldply(x, slot, name="occheld"),
-		paste(laply(x, slot, name="log"), collapse="\n")
-	)
-	x@summary$Run_Number<-seq_len(nrow(x@summary))
-	return(x)
+	return(length(setdiff(x,y))==0)
 }
 
 
 
 ### pretty plotting functions
-prettyBiplot=function(x,size,nbest,xlab,ylab,main) {
+prettyBiplot<-function(x,size,nbest,xlab,ylab,main) {
 	plot(xlim=range(x[,1]), ylim=range(x[,2]), main=main, xlab=xlab, ylab=ylab)
 	text(x=x[,1], y=y[,2], labels=seq_len(nrow(x)), col=replace(rep("black", nrow(x)), which(order(size,decreasing=TRUE)<=nbest), "red"), cex=size)
 }
 
-prettyPcaBiplot=function(x, size, nbest, choices=1L:2L, scale=1, pc.biplot=FALSE, ...) {
+prettyPcaBiplot<-function(x, size, nbest, choices=1L:2L, scale=1, pc.biplot=FALSE, ...) {
     if (length(choices) != 2L) 
         stop("length of choices must be 2")
     if (!length(scores <- x$x)) 
@@ -95,7 +86,7 @@ prettyPcaBiplot=function(x, size, nbest, choices=1L:2L, scale=1, pc.biplot=FALSE
     prettyPcaBiplotSub(t(t(scores[, choices])/lam), t(t(x$rotation[,choices]) * lam), size, nbest, ...)
 }
 
-prettyPcaBiplotSub=function (x, y, size, nbest, var.axes = TRUE, col, cex = rep(par("cex"), 2), 
+prettyPcaBiplotSub<-function (x, y, size, nbest, var.axes = TRUE, col, cex = rep(par("cex"), 2), 
     xlabs = NULL, ylabs = NULL, expand = 1, xlim = NULL, ylim = NULL, 
     arrow.len = 0.1, main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
     ...)
@@ -160,7 +151,7 @@ prettyPcaBiplotSub=function (x, y, size, nbest, var.axes = TRUE, col, cex = rep(
     invisible()
 }
 
-prettyDendrogram=function(phy, scores, nbest=1, main) {
+prettyDendrogram<-function(phy, scores, nbest=1, main) {
 	tipInd=which(rank(scores)<=nbest)
 	bestEdges=which.edge(phy, phy$tip.label[tipInd])
 	edge.cols=replace(rep("black", length(phy$edge)), bestEdges, "red")
@@ -170,7 +161,7 @@ prettyDendrogram=function(phy, scores, nbest=1, main) {
 	axisPhylo(2, las = 1)	
 }
 
-prettyDotchart=function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"), 
+prettyDotchart<-function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"), 
     pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"), 
     lcolor = "gray", xlim = range(x[is.finite(x)]), main = NULL, 
     xlab = NULL, ylab = NULL, pt.cex, ...) 
@@ -264,7 +255,7 @@ prettyDotchart=function (x, labels = NULL, groups = NULL, gdata = NULL, cex = pa
     invisible()
 }
 
-prettyGeoplot=function(polygons, col, basemap, main, fun) {
+prettyGeoplot<-function(polygons, col, basemap, main, fun) {
 	par(oma=c(0,0,3,0))
 	mtext(side=3, line=0.5, cex=3, main)
 	if (is.list(basemap)) {
@@ -285,7 +276,7 @@ brewerCols<-function(values, pal, alpha=1) {
 
 
 ### automated legend functions
-continuousLegend=function(values, pal) {
+continuousLegend<-function(values, pal) {
 	return(
 		function() {
 			posx=c(0.3, 0.4)
@@ -298,7 +289,7 @@ continuousLegend=function(values, pal) {
 	)
 }
 
-categoricalLegend=function(col,labels) {
+categoricalLegend<-function(col,labels) {
 	return(
 		function() {
 			legend(bg="white", legend=labels, fill=col)	
@@ -307,7 +298,7 @@ categoricalLegend=function(col,labels) {
 }
 
 # update functions
-findInvalidMarxanOperations=function(ops) {
+findInvalidMarxanOperations<-function(ops) {
 	isinvalid<-!laply(ops, inherits, "MarxanUpdateOperation")
 	if (any(isinvalid))
 		stop(
@@ -324,7 +315,7 @@ findInvalidMarxanOperations=function(ops) {
 		)
 }
 
-updateOperation=function(x, arg, value) {
+updateOperation<-function(x, arg, value) {
 	# parse command
 	splt=strsplit(arg, ".", fixed=TRUE)
 	if (splt[[1]][[1]]=="opts") {
@@ -363,22 +354,21 @@ updateOperation=function(x, arg, value) {
 
 
 # raster processing functions
-
 zonalSum.RasterLayerInMemory <- function(polys, rast, speciesName) {
-	tmp=.rcpp_groupsum(getValues(polys),getValues(rast))
+	tmp=rcpp_groupsum(getValues(polys),getValues(rast))
 	return(data.frame(species=speciesName, pu=attr(tmp, "ids"), amount=c(tmp)))
 }
 
 zonalSum.RasterLayerNotInMemory <- function(bs, polys, rast, speciesName, ncores, registered) {
 	if (registered & .Platform$OS.type=="windows")
 		clusterExport(clust, c("bs","polys", "rast", "rcpp_groupsum"))
-	tmp=.rcpp_groupcombine(llply(seq_len(bs$n), .parallel=registered, function(i) {
-		return(.rcpp_groupsum(getValues(polys, bs$row[i], bs$nrows[i]), getValues(rast, bs$row[i], bs$nrows[i])))
+	tmp=rcpp_groupcombine(llply(seq_len(bs$n), .parallel=registered, function(i) {
+		return(rcpp_groupsum(getValues(polys, bs$row[i], bs$nrows[i]), getValues(rast, bs$row[i], bs$nrows[i])))
 	}))
 	return(data.frame(species=speciesName, pu=attr(tmp, "ids"), amount=c(tmp)))
 }
 
-hashCall=function(expr, skipargs=c(), env=parent.frame()) {
+hashCall<-function(expr, skipargs=c(), env=parent.frame()) {
 	for (i in seq_along(names(expr))[c(-1L, (skipargs*-1L)-1L)])
 		if (inherits(expr[[i]], c("name")))
 			expr[[i]]=eval(expr[[i]], envir=env)
@@ -386,5 +376,13 @@ hashCall=function(expr, skipargs=c(), env=parent.frame()) {
 }
 
 
-
+# Many thanks and all the street creds to user "Charles" on StackOverflow
+# http://stackoverflow.com/questions/5307313/fastest-tall-wide-pivoting-in-r
+pivot<-function(col, row, value) {
+  col<-as.factor(col)
+  row<-as.factor(row)
+  mat<-array(dim = c(nlevels(row), nlevels(col)), dimnames = list(levels(row), levels(col)))
+  mat[(as.integer(col) - 1L) * nlevels(row) + as.integer(row)] = value
+  mat
+}
 

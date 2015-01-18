@@ -10,12 +10,13 @@
 \usage{
 \method{update}{MarxanData}(x, formula, force_reset = TRUE)
 
-\method{update}{MarxanOpts}(x, formula, force_reset = TRUE)
+\method{update}{MarxanOpts}(x, formula)
 
 \method{update}{MarxanSolved}(x, formula, evaluate = TRUE,
   force_reset = TRUE)
 
-\method{update}{MarxanUnsolved}(x, formula, evaluate = TRUE, force_reset)
+\method{update}{MarxanUnsolved}(x, formula, solve = TRUE,
+  force_reset = TRUE)
 
 update(x, formula, evaluate)
 }

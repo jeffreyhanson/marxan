@@ -4,20 +4,20 @@
 \alias{MarxanResults}
 \title{Create MarxanResults object}
 \usage{
-MarxanResults(summary, selections, amounthend, occheld, targetsmet, log)
+MarxanResults(summary, selections, amountheld, occheld, targetsmet, log)
 }
 \arguments{
 \item{summary}{"data.frame" with summary information on solutions}
 
 \item{selections}{"matrix" with binary selections}
 
+\item{amountheld}{"matrix" with the amount held for each species in each solution}
+
 \item{occheld}{"matrix" with the number of occurrences for each species in each solution}
 
 \item{log}{"character" with Marxan log file}
 
 \item{dir}{directory from which to load Marxan data}
-
-\item{amountheld}{"matrix" with the amount held for each species in each solution}
 
 \item{best}{"integer" with index of best solution}
 }

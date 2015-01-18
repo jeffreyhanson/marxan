@@ -28,9 +28,9 @@ setClass("MarxanResults",
 )
 setMethod(
 	"initialize", 
-	"MarxanData", 
-	function(.Object, .cache=new.env()) {
-		callNextMethod(.Object, .cache=.cache)
+	"MarxanResults", 
+	function(.Object, summary, selections, amountheld, occheld, targetsmet, best, log, .cache=new.env()) {
+		callNextMethod(.Object, summary=summary, selections=selections, amountheld=amountheld, occheld=occheld, targetsmet=targetsmet, best=best, log=log, .cache=.cache)
 	}
 )
 
@@ -48,8 +48,8 @@ setMethod(
 #' @export
 #' @return MarxanResults object
 #' @seealso \code{\link{MarxanResults-class}} \code{\link{read.MarxanResults}}
-MarxanResults=function(summary, selections, amounthend, occheld, targetsmet, log) {
-	return(new("MarxanResults", summary=summary, selections=selections, amounthend=amountheld, occheld=occheld, targetsmet=targetsmet, best=which.max(summary$score), log=log))
+MarxanResults=function(summary, selections, amountheld, occheld, targetsmet, log) {
+	return(new("MarxanResults", summary=summary, selections=selections, amountheld=amountheld, occheld=occheld, targetsmet=targetsmet, best=which.max(summary$Score), log=log))
 }
 
 #' Read Marxan results from disk
@@ -65,20 +65,43 @@ read.MarxanResults=function(dir) {
 	if (!file.exists(dir))
 		stop('Directory does not exist.')
 	# load data
-	mvs<-rbind.fill(laply(list.files(dir, "^output_mv.*.csv$", full.names=TRUE), fread, header=TRUE,sep=",",stringsAsFactors=FALSE,quote=FALSE))
-	setnames(mvs, c("Conservation Feature","Amount Held", "Occurrences Held"), c("Conservation.Feature","Amount.Held", "Occurrences.Held"))
-	sumry<-fread(file.path(x,'output_sum.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE,quote=FALSE,data.table=FALSE)
+	pths=list.files(dir, "^output_mv.*.csv$", full.names=TRUE)
+	mvs<-rbind.fill(llply(pths, fread, header=TRUE,sep=",",stringsAsFactors=FALSE, data.table=FALSE))
+	mvs$sol_id<-rep(seq_along(pths), each=nrow(mvs)/length(pths))
+	setnames(mvs, c("Conservation Feature","Amount Held", "Occurrences Held", "Target Met"), c("Conservation.Feature","Amount.Held", "Occurrences.Held", "Target.Met"))
+	mvs$Target.Met<-mvs$Target.Met=="yes"
+	sumry<-fread(file.path(dir,'output_sum.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE,data.table=FALSE)
 	names(sumry)<-gsub(" ", ".", names(sumry))
-	sumry$Target.Met=sumry$Target.Met=="yes"
 	# create object
-	return(MarxanResults.data.frame(
-		sumry,
-		as.matrix(fread(file.path(x,'output_solutionsmatrix.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE,quote=FALSE))==1,
-		as.matrix(dcast(mvs[,c("Conservation.Feature","Amount.Held"),with=FALSE], Conservation.Feature ~ Amount.Held)),
-		as.matrix(dcast(mvs[,c("Conservation.Feature","Occurrences.Held"),with=FALSE], Conservation.Feature ~ Occurrences.Held)),
-		as.matrix(dcast(mvs[,c("Conservation.Feature","Target.Met"),with=FALSE], Conservation.Feature ~ Target.Met)),
-		paste(readLines(file.path(x,'output_log.csv')), collapse=TRUE)
+	return(MarxanResults(
+		summary=sumry,
+		selections=as.matrix(fread(file.path(dir,'output_solutionsmatrix.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE))==1,
+		amountheld=pivot(mvs$Conservation.Feature, mvs$sol_id, mvs$Amount.Held),
+		occheld=pivot(mvs$Conservation.Feature, mvs$sol_id, mvs$Occurrences.Held),
+		targetsmet=pivot(mvs$Conservation.Feature, mvs$sol_id, mvs$Target.Met),
+		log=paste(readLines(file.path(dir,'output_log.dat')), collapse="\n")
 	))
+}
+
+#' Merge Marxan results
+#'
+#' This function merges a list of MarxanResults into a single MarxanResults object.
+#'
+#' @param x "list" of "MarxanResults" objects.
+#' @export
+#' @return "MarxanResults" object
+#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}
+merge.MarxanResults<-function(x) {
+	x=MarxanResults(
+		summary=ldply(x, slot, name="summary"),
+		selections=do.call(rbind, llply(x, slot, name="selections")),
+		amountheld=do.call(rbind, llply(x, slot, name="amountheld")),
+		occheld=do.call(rbind, llply(x, slot, name="occheld")),
+		targetsmet=do.call(rbind, llply(x, slot, name="targetsmet")),
+		log=paste(laply(x, slot, name="log"), collapse="\n")
+	)
+	x@summary$Run_Number<-seq_len(nrow(x@summary))
+	return(x)
 }
 
 #' @describeIn selection
@@ -116,6 +139,15 @@ print.MarxanResults<-function(x, header=TRUE) {
 		cat("MarxanResults object.\n")
 	cat("Number of solutions:",nrow(x@summary),"\n")
 }
+
+#' @export
+# setMethod(
+	# 'show',
+	# 'MarxanResults',
+	# function(x, ...)
+		# print.MarxanResults(x, ...)
+# )
+
 
 #' @describeIn log
 #' @export

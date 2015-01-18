@@ -38,7 +38,7 @@ MarxanSolved<-function(MarxanUnsolved, MarxanResults) {
 
 #' @describeIn solve
 #' @export
-solve.MarxanUnsolved<-function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, force_reset=FALSE) {
+solve.MarxanSolved<-function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, force_reset=FALSE) {
 	if (!force_reset)
 		stop("This object already has Marxan solutions. Use force_reset=TRUE to force recalculation of solutions.")
 	return(solve(MarxanUnsolved(opts=x@opts,data=x@data), wd, seeds, clean))
@@ -69,6 +69,20 @@ print.MarxanSolved<-function(x) {
 	print.MarxanOpts(x@opts, FALSE)
 	print.MarxanData(x@data, FALSE)
 	print.MarxanResults(x@results, FALSE)
+}
+
+#' @export
+# setMethod(
+	# 'show',
+	# 'MarxanSolved',
+	# function(x, ...)
+		# print.MarxanSolved(x, ...)
+# )
+
+#' @export
+#' @describeIn names
+names.MarxanSolved<-function(x) {
+	return(names(x@data))
 }
 
 #' @describeIn log

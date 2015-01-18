@@ -113,7 +113,7 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 
-	Rcpp::List rcpp_createBoundaryDF(Rcpp::DataFrame df , double tolerance=0.001, double lengthFactor=1.0, double edgeFactor=1.0) {
+	Rcpp::List rcpp_calcBoundaryDF(Rcpp::DataFrame df , double tolerance=0.001, double lengthFactor=1.0, double edgeFactor=1.0) {
 		//// initialization
 		/// declare variables and preallocate memory
 		std::vector<int> PID = df["PID"];

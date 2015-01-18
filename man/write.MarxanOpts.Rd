@@ -4,15 +4,15 @@
 \alias{write.MarxanOpts}
 \title{Write Marxan Input Parameters to Disk}
 \usage{
-write.MarxanOpts(x, dir, outputdir = dir, seed = sample.int(n = 10000L, n =
-  1L))
+write.MarxanOpts(x, inputdir, outputdir = inputdir, seed = sample.int(n =
+  10000L, size = 1L))
 }
 \arguments{
-\item{dir}{"character" directory path for location to save input parameters file}
-
 \item{outputdir}{"character" directory path for location where Marxan input data files are saved}
 
 \item{seed}{"integer" seed for random number generation in Marxan}
+
+\item{dir}{"character" directory path for location to save input parameters file}
 }
 \description{
 This function writes Marxan parameter settings to a file.

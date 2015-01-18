@@ -50,7 +50,7 @@ calcPuVsSpeciesData <- function(x, y, speciesNames=names(y), ncores=1, gdal=FALS
 	if (inherits(y, c("RasterBrick", "RasterStack")))
 		temprast=y[[1]]
 	if (gdal & is.gdalInstalled()) {
-		x<-rasterize.gdal(x, temprast, field)
+		x<-rasterize.gdal(x, temprast, "id")
 	} else {
 		x<-rasterize(x, temprast, method="ngb")
 	}

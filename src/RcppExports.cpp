@@ -5,9 +5,9 @@
 
 using namespace Rcpp;
 
-// rcpp_createBoundaryDF
-Rcpp::List rcpp_createBoundaryDF(Rcpp::DataFrame df, double tolerance = 0.001, double lengthFactor = 1.0, double edgeFactor = 1.0);
-RcppExport SEXP marxan_rcpp_createBoundaryDF(SEXP dfSEXP, SEXP toleranceSEXP, SEXP lengthFactorSEXP, SEXP edgeFactorSEXP) {
+// rcpp_calcBoundaryDF
+Rcpp::List rcpp_calcBoundaryDF(Rcpp::DataFrame df, double tolerance = 0.001, double lengthFactor = 1.0, double edgeFactor = 1.0);
+RcppExport SEXP marxan_rcpp_calcBoundaryDF(SEXP dfSEXP, SEXP toleranceSEXP, SEXP lengthFactorSEXP, SEXP edgeFactorSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -16,7 +16,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP );
         Rcpp::traits::input_parameter< double >::type lengthFactor(lengthFactorSEXP );
         Rcpp::traits::input_parameter< double >::type edgeFactor(edgeFactorSEXP );
-        Rcpp::List __result = rcpp_createBoundaryDF(df, tolerance, lengthFactor, edgeFactor);
+        Rcpp::List __result = rcpp_calcBoundaryDF(df, tolerance, lengthFactor, edgeFactor);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

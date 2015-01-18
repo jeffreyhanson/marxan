@@ -30,7 +30,7 @@ setMethod(
 	function(x, y, speciesNames=names(y), ncores=1) {
 		if (canProcessInMemory(x,2)) {
 			return(rbind.fill(llply(seq_len(nlayers(y)), function(l) {
-					return(.zonalSum.RasterLayerInMemory(x, y[[l]], speciesNames[l]))
+					return(zonalSum.RasterLayerInMemory(x, y[[l]], speciesNames[l]))
 			})))
 		} else {
 			bs<-blockSize(x)	
@@ -42,7 +42,7 @@ setMethod(
 			}
 			# main processing
 			return(rbind.fill(llply(seq_len(nlayers(y)), function(l) {
-				return(.zonalSum.RasterLayerNotInMemory(bs, x, y[[l]], speciesNames[l], registered=ncores>1))
+				return(zonalSum.RasterLayerNotInMemory(bs, x, y[[l]], speciesNames[l], registered=ncores>1))
 			})))
 		}
 	}
@@ -55,7 +55,7 @@ setMethod(
 	signature(x="RasterLayer", y="RasterLayer"),
 	function(x, y, speciesNames=names(y), ncores=1) {
 		if (canProcessInMemory(x,2)) {
-			return(.zonalSum.RasterLayerInMemory(x, y, speciesNames))
+			return(zonalSum.RasterLayerInMemory(x, y, speciesNames))
 		} else {
 			bs<-blockSize(x)
 			if(ncores>1) {
@@ -63,7 +63,7 @@ setMethod(
 				clusterEvalQ(clust, {library(raster);library(Rcpp)})
 				registerDoSNOW(clust)
 			}
-			return(.zonalSum.RasterLayerNotInMemory(bs, y, speciesNames, ncores, ncores>1))
+			return(zonalSum.RasterLayerNotInMemory(bs, y, speciesNames, ncores, ncores>1))
 		}
 	}
 )
