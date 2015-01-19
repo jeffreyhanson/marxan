@@ -1,7 +1,7 @@
 marxan
 ============
 
-#### This R package contains decision support tools for reserve selection using Marxan. It brings the entire Marxan workflow to R. Key features include the ability to prepare input data for Marxan from raw    raster and vector data, execute Marxan, and visualise Marxan solutions. Most of the functions that involve intensive data processing use code compiled in C++, provide options to run processing in parallel, or can make use of other software to reduce run time.
+#### This R package contains decision support tools for reserve selection using Marxan. It brings the entire Marxan workflow to R. Key features include the ability to prepare input data for Marxan, execute Marxan, and visualise Marxan solutions.
 
 ##### Installation instructions
 
