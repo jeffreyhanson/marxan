@@ -14,7 +14,7 @@ if (!require('devtools'))
 library(devtools)
 install_github('paleo13/marxan')
 
-``
+```
 
 Next, download the [Marxan software](http://www.uq.edu.au/marxan/marxan-software), unzip it, and copy the executable files ('MarOpt_v243_Linux32', 'MarOpt_v243_Linux64', 'MarOpt_v243_Mac32', 'MarOpt_v243_Mac64', 'Marxan.exe', and 'Marxan_x64'), into the 'bin' folder where the R package was installed. This 'bin' folder can be found by running:
 
