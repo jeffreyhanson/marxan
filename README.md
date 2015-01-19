@@ -1,9 +1,9 @@
 marxan
 ============
 
-### This R package contains decision support tools for reserve selection using Marxan. It brings the entire Marxan workflow to R. Key features include the ability to prepare input data for Marxan from raw    raster and vector data, execute Marxan, and visualise Marxan solutions. Most of the functions that involve intensive data processing use code compiled in C++, provide options to run processing in parallel, or can make use of other software to reduce run time.
+#### This R package contains decision support tools for reserve selection using Marxan. It brings the entire Marxan workflow to R. Key features include the ability to prepare input data for Marxan from raw    raster and vector data, execute Marxan, and visualise Marxan solutions. Most of the functions that involve intensive data processing use code compiled in C++, provide options to run processing in parallel, or can make use of other software to reduce run time.
 
-#### Installation instructions
+##### Installation instructions
 
 To install this package, execute the following commands in R:
 
@@ -31,7 +31,7 @@ is.marxanInstalled(verbose=TRUE)
 
 If everything works, you should see the message 'marxan R package successfully installed'. If not, try repeating the above steps. Failing that, lodge an issue [here](https://github.com/paleo13/marxan/issues).
 
-#### Quick start guide
+##### Quick start guide
 
 First, let's load some example data.
 
@@ -81,9 +81,7 @@ dotchart(ms, var='score')
 dotchart(ms, var='score', nbest=5, n=20)
 ```
 
-How can we visualise the variation in the solutions? Are most of them the same but with a few small differences, or do the solutions tend to fall into one or two main groups? Well, building on the work of 
-
-what they all look like and understand which ones are different to other ones? Well, you could try making a geoplot of each solution but this would take ages and useless if you have a terrible memory like me. 
+How can we visualise the variation in the solutions? Are most of them the same but with a few small differences, or do the solutions tend to fall into one or two main groups?
 
 Fortunately, statisticians solved this problem a long time ago. We can use dimension reducing techniques to find commonalities in the solutions, and reduce variation in the solutions to a manageable number of dimensions. 
 
