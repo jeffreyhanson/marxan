@@ -227,18 +227,18 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 #'
 #' @param polygons "SpatialPolygons" with planning unit data.
 #' @param rasters "RasterLayer", "RasterStack", "RasterBrick" with species distribution data.
-#' @param targets "numeric" vector for targets for each species (eg. 12), or "character" vector with percent-based targets (eg. '12%'). Defaults to '20%' for each species.
+#' @param targets "numeric" vector for targets for each species (eg. 12), or "character" vector with percent-based targets (eg. '12\%'). Defaults to '20\%' for each species.
 #' @param pu "data.frame" planning unit data; with "integer" 'id', "numeric" 'cost', "integer" 'status' columns. Default behaviour is to generate a table with all costs and statuses set to 1 and 0 (respectively).
 #' @param species "data.frame" with species data; with "integer" 'id', "numeric" 'target', "numeric" 'spf', and "character" 'name' columns. Default behaviour is to base targets on \code{target} argument, set 'spf' to 1, and set 'names' use names of layers in \code{rasters} argument.
 #' @param puvspecies "data.frame" pu vs. species data; with "species", "pu", and "amount" columns. Defaults to \code{NULL}, and will be calculated using \code{calcPuVsSpeciesData}.
 #' @param puvspecies_spo "data.frame" with data in \code{puvspecies} ordered by 'species' column. Defaults to \code{NULL}, and will generate data from \code{puvspecies}.
 #' @param boundary "data.frame" with data on the shared boundary length of planning; with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns. Default behaviour is to calculate this using \code{calcBoundaryData}.
 #' @param Additional arguments to \code{calcBoundaryData} and \code{calcPuVsSpeciesData}.
-#' @seealso \code{\link{MarxanData-class}}, , \code{\link{MarxanData}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}.
+#' @seealso \code{\link{MarxanData-class}}, \code{\link{MarxanData}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}.
 #' @export
 #' @examples
 #' data(planningunits, species)
-#' x<-MarxanData(planningunits, rasters=species, targets="10%")
+#' x<-MarxanData(planningunits, rasters=species, targets="10\%")
 #' y<-MarxanData(planningunits, rasters=species)
 #' stopifnot(identical(x,y))
 format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers(rasters)), sepdistance=rep(0, nlayers(rasters)), sepnum=rep(0,nlayers(rasters)), targetocc=rep(0,nlayers(rasters)), pu=NULL, species=NULL, puvspecies=NULL, puvspecies_spo=NULL, boundary=NULL, ..., verbose=FALSE) {
