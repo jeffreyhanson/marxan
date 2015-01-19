@@ -6,16 +6,16 @@
 \alias{selection.MarxanSolved}
 \title{Extract solution selection}
 \usage{
-\method{selection}{MarxanResults}(x, y = "best")
+\method{selection}{MarxanResults}(x, y = NULL)
 
-\method{selection}{MarxanSolved}(x, y = "best")
+\method{selection}{MarxanSolved}(x, y = NULL)
 
 selection(x, ...)
 }
 \arguments{
 \item{x}{"MarxanResults or "MarxanSolved" object.}
 
-\item{y}{'best' to return selection for best solution, 'all' to return all solutions, or "integer" to return y'th solution.}
+\item{y}{"missing" to return all solution selections, "integer" 0 to return selection for best solution, "integer" value greater than 0 for y'th solution selection.}
 }
 \value{
 "matrix" or "numeric" vector with planning units statuses depending on arguments.

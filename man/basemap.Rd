@@ -7,30 +7,27 @@
 \alias{basemap.MarxanUnsolved}
 \title{Basemap}
 \usage{
-\method{basemap}{MarxanData}(x, basemap = "none", alpha = 1,
-  grayscale = FALSE, xzoom = c(1, 1), yzoom = c(1, 1),
+\method{basemap}{MarxanData}(x, basemap = "hybrid", grayscale = FALSE,
   force_reset = FALSE)
 
-\method{basemap}{MarxanSolved}(x, basemap = "none", alpha = 1,
-  grayscale = FALSE, xzoom = c(1, 1), yzoom = c(1, 1),
+\method{basemap}{MarxanSolved}(x, basemap = "none", grayscale = FALSE,
   force_reset = FALSE)
 
-\method{basemap}{MarxanUnsolved}(x, basemap = "none", alpha = 1,
-  grayscale = FALSE, xzoom = c(1, 1), yzoom = c(1, 1),
+\method{basemap}{MarxanUnsolved}(x, basemap = "none", grayscale = FALSE,
   force_reset = FALSE)
 
 basemap(x, ...)
 }
 \arguments{
-\item{basemap}{"character" name of basemap to display. Valid names are "roadmap", "mobile", "satellite", "terrain", "hybrid", "mapmaker-roadmap", "mapmaker-hybrid".}
+\item{basemap}{"character" name of base map to display. Valid names are "roadmap", "mobile", "satellite", "terrain", "hybrid", "mapmaker-roadmap", "mapmaker-hybrid".}
 
-\item{grayscale}{"logical" should basemap be gray scale?}
+\item{grayscale}{"logical" should base map be gray scale?}
+
+\item{force_reset}{"logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.}
 
 \item{xzoom}{"numeric" zoom the geoplot in or out along the x-axis by this percent.}
 
 \item{yzoom}{"numeric" zoom the geoplot in or out along the y-axis by this percent.}
-
-\item{force_reset}{"logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.}
 }
 \value{
 "list" with google map data.

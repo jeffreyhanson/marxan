@@ -10,13 +10,13 @@ is.gdalInstalled()
 Logical. Is it installed?
 }
 \description{
-This function tests if gdal is installed on the computer.
-If not, download it here: \code{\url{http://download.osgeo.org/gdal}}
+This function tests if GDAL is installed on the computer.
+If not, download it here: \code{\url{http://download.osgeo.org/gdal}}.
 }
 \examples{
 gdal_setInstallation()
 }
 \seealso{
-\code{\link[gdalUtils]{gdal_setInstallation}}
+\code{\link[gdalUtils]{gdal_setInstallation}}.
 }
 

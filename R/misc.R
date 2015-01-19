@@ -3,11 +3,11 @@ NULL
 
 #' Test if GDAL is installed on computer
 #'
-#' This function tests if gdal is installed on the computer.
-#' If not, download it here: \code{\url{http://download.osgeo.org/gdal}}
+#' This function tests if GDAL is installed on the computer.
+#' If not, download it here: \code{\url{http://download.osgeo.org/gdal}}.
 #'
 #' @return Logical. Is it installed?
-#' @seealso \code{\link[gdalUtils]{gdal_setInstallation}}
+#' @seealso \code{\link[gdalUtils]{gdal_setInstallation}}.
 #' @export
 #' @examples
 #' gdal_setInstallation()
@@ -18,16 +18,18 @@ is.gdalInstalled <- function() {
 
 #' Rasterize polygon data using GDAL
 #'
-#' This function converts a SpatialPolygonsDataFrame to raster format using GDAL.
+#' This function converts a "SpatialPolygonsDataFrame" to a "RasterLayer" using GDAL.
 #' It is expected to be faster than \code{\link[raster]{rasterize}} for large datasets.
-#' However, it will be significantly slower for small datasets.
-#'
-#' @param x "SpatialPolygonsDataFrame" with polygon spatial data
-#' @param y "RasterLayer" with dimensions, extent, and resolution to be used as a template
-#' @param field "character" column name with values to burn into the output raster
+#' However, it will be significantly slower for small datasets because the data will need to be written and read from disk.
+#' @param x "SpatialPolygonsDataFrame" object.
+#' @param y "RasterLayer" with dimensions, extent, and resolution to be used as a template for new raster.
+#' @param field "character" column name with values to burn into the output raster. If not supplied, default behaviour is to burn polygon indices into the "RasterLayer".
 #' @export
-#' @return RasterLayer
-#' @seealso \code{\link[raster]{rasterize}}, \code{\link{is.gdalInstalled}}
+#' @return "RasterLayer" object.
+#' @seealso \code{\link[raster]{rasterize}}, \code{\link{is.gdalInstalled}}.
+#' @examples
+#' data(species,planningunits)
+#' x<-rasterize.gdal(planningunits[1:5,],species[[1]])
 setGeneric('rasterize.gdal', function(x,y, ...) standardGeneric('rasterize.gdal'))
 setMethod(
 	'rasterize.gdal',
@@ -38,7 +40,7 @@ setMethod(
 			field<-'id'
 		}
 		if (!field %in% names(x@data))
-			stop(paste0("x@data does not have a field ",field, "."))
+			stop(paste0("x@data does not have a field called ",field, "."))
 		writeOGR(x, tempdir(), 'polys', driver='ESRI Shapefile', overwrite=TRUE)
 		writeRaster(setValues(y, NA), file.path(tempdir(), 'rast.tif'), NAflag=-9999, overwrite=TRUE)
 		return(gdal_rasterize(file.path(tempdir(), 'polys.shp'), file.path(tempdir(), 'rast.tif'), l="polys", a=field, output_Raster=TRUE)[[1]])
@@ -47,25 +49,34 @@ setMethod(
 
 #' Test if Marxan is installed on computer
 #'
-#' This function determines if Marxan is installed on the computer, and will update \code{\link[base]{options}} 
+#' This function determines if Marxan is installed on the computer, and will update \code{\link[base]{options}}.
 #'
-#' @return "logical" is it installed?
+#' @return "logical" Is it installed?
+#' @seealso \code{\link[base]{options}}, \code{\link{findMarxanExecutablePath}}.
 #' @export
 #' @examples
-#'	is.marxanInstalled()
-is.marxanInstalled<-function() {
-	return(!is.null(options()$marxanExecutablePath) & file.exists(options()$marxanExecutablePath))
+#' options()$marxanExecutablePath
+#' is.marxanInstalled()
+
+is.marxanInstalled<-function(verbose=FALSE) {
+	if (!verbose)
+		return(!is.null(options()$marxanExecutablePath) & file.exists(options()$marxanExecutablePath))
+	if (!is.null(options()$marxanExecutablePath) & file.exists(options()$marxanExecutablePath)) {
+		cat('marxan R package successfully installed\n')
+	} else {
+		cat('marxan R package cannot find Marxan executable files. Installation incomplete.\n')
+	}
+	return(invisible())
 }
 
 #' Find Marxan executable suitable for computer
 #'
 #' This function checks the computer's specifications and sets options('marxanExecutablePath') accordingly.
-#' Marxan exectuables can be downloaded from \code{\link{marxanURL}}, and installed by unzipping the files contents, and copying them
-#' into the /bin folder in this package's installation directory. 
-#' If a suitable executable cannot be found, this function will fail and provide information. determines if Marxan is installed on the computer, and will update \code{\link[base]{options}} 
+#' Marxan exectuables can be downloaded from \code{\link{marxanURL}}, and installed by unzipping the files contents, and copying them into the /bin folder in this package's installation directory. 
+#' If a suitable executable cannot be found, this function will fail and provide information.
 #'
-#' @seealso \link{\code{is.marxanInstalled}}
-#' @return Logical. Is it installed?
+#' @seealso \link{\code{is.marxanInstalled}}.
+#' @return "logical" Is Marxan installed?
 #' @export
 #' @examples
 #' # Marxan executable files should be copied to this directory

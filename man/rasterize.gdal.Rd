@@ -7,21 +7,25 @@
 rasterize.gdal(x, y, ...)
 }
 \arguments{
-\item{x}{"SpatialPolygonsDataFrame" with polygon spatial data}
+\item{x}{"SpatialPolygonsDataFrame" object.}
 
-\item{y}{"RasterLayer" with dimensions, extent, and resolution to be used as a template}
+\item{y}{"RasterLayer" with dimensions, extent, and resolution to be used as a template for new raster.}
 
-\item{field}{"character" column name with values to burn into the output raster}
+\item{field}{"character" column name with values to burn into the output raster. If not supplied, default behaviour is to burn polygon indices into the "RasterLayer".}
 }
 \value{
-RasterLayer
+"RasterLayer" object.
 }
 \description{
-This function converts a SpatialPolygonsDataFrame to raster format using GDAL.
+This function converts a "SpatialPolygonsDataFrame" to a "RasterLayer" using GDAL.
 It is expected to be faster than \code{\link[raster]{rasterize}} for large datasets.
-However, it will be significantly slower for small datasets.
+However, it will be significantly slower for small datasets because the data will need to be written and read from disk.
+}
+\examples{
+data(species,planningunits)
+x<-rasterize.gdal(planningunits[1:5,],species[[1]])
 }
 \seealso{
-\code{\link[raster]{rasterize}}, \code{\link{is.gdalInstalled}}
+\code{\link[raster]{rasterize}}, \code{\link{is.gdalInstalled}}.
 }
 

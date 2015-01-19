@@ -15,7 +15,7 @@
 ordiplot(x, ...)
 }
 \arguments{
-\item{x}{"MarxanSolved" object}
+\item{x}{"MarxanResults" or "MarxanSolved" object.}
 
 \item{type}{"character" use 'mds' or 'pca' for analysis?}
 

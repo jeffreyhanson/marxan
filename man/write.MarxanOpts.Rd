@@ -8,11 +8,11 @@ write.MarxanOpts(x, inputdir, outputdir = inputdir, seed = sample.int(n =
   10000L, size = 1L))
 }
 \arguments{
-\item{outputdir}{"character" directory path for location where Marxan input data files are saved}
+\item{outputdir}{"character" directory path for location where Marxan input data files are saved.}
 
-\item{seed}{"integer" seed for random number generation in Marxan}
+\item{seed}{"integer" seed for random number generation in Marxan.}
 
-\item{dir}{"character" directory path for location to save input parameters file}
+\item{dir}{"character" directory path for location to save input parameters file.}
 }
 \description{
 This function writes Marxan parameter settings to a file.
@@ -24,6 +24,6 @@ y<-read.MarxanData(file.path(tempdir(), 'input.dat'))
 stopifnot(identical(x,y))
 }
 \seealso{
-\code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{read.MarxanOpts}}
+\code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{read.MarxanOpts}}.
 }
 

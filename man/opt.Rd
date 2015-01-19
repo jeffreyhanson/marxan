@@ -15,7 +15,11 @@ opt(...)
 "MarxanOptsOperation" object.
 }
 \description{
-This function is used in the formula argument of the update function to change input parameters of a "MarxanOpts", "MarxanUnsolved", or "MarxanSolved" object.
+This function is used in the formula argument of the update function to change input parameters of a "MarxanOpts" object.
+}
+\examples{
+opt(BLM=90)
+opt(PROP=0.7, NUMITNS=100)
 }
 \seealso{
 \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{spp}}, \code{\link{pu}}

@@ -10,21 +10,25 @@ This class is used to store the results from a Marxan run.
 \section{Slots}{
 
 \describe{
-\item{\code{summary}}{"data.frame" with summary information on solutions.}
+\item{\code{summary}}{"data.frame" with summary information on solutions (output_sum.dat).}
 
-\item{\code{selections}}{"matrix" with binary selections.}
+\item{\code{selections}}{"matrix" with binary selections (output_solutionsmatrix.csv).}
 
-\item{\code{amountheld}}{"matrix" with the amount held for each species in each solution.}
+\item{\code{amountheld}}{"matrix" with the amount held for each species in each solution (collation of output_mv*.csv files).}
 
-\item{\code{occheld}}{"matrix" with the number of occurrences for each species in each solution.}
+\item{\code{occheld}}{"matrix" with the number of occurrences for each species in each solution (collation of output_mv*.csv files).}
 
-\item{\code{targetsmet}}{"matrix" indicating whether the targets have been met for each species in each solution.}
+\item{\code{sepacheived}}{"matrix" indicating the separation achieved (collation of output_mv*.csv files).}
+
+\item{\code{targetsmet}}{"matrix" indicating whether the targets have been met for each species in each solution (collation of output_mv*.csv files).}
+
+\item{\code{mpm}}{"matrix" indicating minimum proportion met (MPM; collation of output_mv*.csv files).}
 
 \item{\code{best}}{"integer" with index of best solution.}
 
-\item{\code{log}}{"character" with Marxan log  file.}
+\item{\code{log}}{"character" with Marxan log  file (otuput_log.dat).}
 }}
 \seealso{
-\code{\link{MarxanResults}}, \code{\link{read.MarxanResults}},
+\code{\link{MarxanResults}}, \code{\link{read.MarxanResults}}, \code{\link{write.MarxanResults}}.
 }
 

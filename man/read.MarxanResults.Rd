@@ -2,20 +2,23 @@
 % Please edit documentation in R/MarxanResults.R
 \name{read.MarxanResults}
 \alias{read.MarxanResults}
-\title{Read Marxan results from disk}
+\title{Read Marxan results}
 \usage{
 read.MarxanResults(dir)
 }
 \arguments{
-\item{dir}{"character" with file path to directory with Marxan output files.}
+\item{dir}{"character" with file path to directory containing Marxan output files.}
 }
 \value{
 "MarxanResults" object
 }
 \description{
-This function reads outputs from a directory after Marxan been run.
+This function reads files output from Marxan.
+}
+\note{
+This function assumes specific Marxan output files are present in the directory. If any of these are missing the function will crash.
 }
 \seealso{
-\code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}
+\code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}.
 }
 

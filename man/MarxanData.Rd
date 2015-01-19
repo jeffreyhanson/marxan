@@ -8,38 +8,42 @@ MarxanData(pu, species, puvspecies, boundary, polygons = NULL,
   puvspecies_spo = NULL, skipchecks = FALSE, .cache = new.env())
 }
 \arguments{
-\item{pu}{"data.frame" planning unit data; with columns 'id', 'cost', and 'status' columns.}
+\item{pu}{"data.frame" planning unit data; with "integer" 'id', "numeric" 'cost', "integer" 'status' columns.}
 
-\item{species}{species "data.frame" species data; with columns 'id', 'target', 'spf', and 'name' columns.}
+\item{species}{"data.frame" with species data; with "integer" 'id', "numeric" 'target', "numeric" 'spf', and "character" 'name' columns.}
 
-\item{puvspecies}{"data.frame" pu vs. species data, with 'species', 'pu', and 'amount' columns, sorted by 'pu'.}
+\item{puvspecies}{"data.frame" with data on species density in each planning unit, with "integer" 'species', "integer" 'pu', and "numeric" 'target' columns. This "data.frame" is sorted in order of 'pu' column.}
 
-\item{boundary}{"data.frame" with shared boundary data; with "id1", "id2", and "boundary" columns.}
+\item{boundary}{"data.frame" with data on the shared boundary length of planning; with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns.}
 
-\item{polygons}{"PolySet" with planning unit data or "NULL" if geoplotting capabilities are not required.}
+\item{polygons}{"PolySet" planning unit spatial data. Defaults to \code{NULL} so that Marxan large problems can still be handled.}
 
-\item{puvspecies_spo}{"data.frame" with values in puvspecies sorted by species. Defaults to NULL so this is calculated automatically from argument to puvspecies.}
+\item{puvspecies_spo}{"data.frame" with data in \code{puvspecies} ordered by 'species' column. Defaults to \code{NULL}, and will generate data from \code{puvspecies}.}
 
-\item{skipchecks}{"logical" skip data integrity checks? May improve speed for big data sets. Defaults to FALSE.}
+\item{skipchecks}{"logical" Skip data integrity checks? May improve speed for big data sets. Defaults to \code{FALSE}.}
 
-\item{.cache}{"environment" the cache used to store objects to speed up plottnig functions. Do not set this unless you know what you're doing.}
+\item{.cache}{"environment" used to cache calculations. Defaults to a new environment.}
 }
 \value{
 MarxanData object
 }
 \description{
-This function creates a MarxanData using pre-processed data.
+This function creates a "MarxanData" object using pre-processed data.
+}
+\note{
+Generally, users are not encouraged to change arguments to \code{.cache}.
 }
 \examples{
-data(planningunits, species, speciesRanges)
+data(planningunits, species)
 x<-MarxanData(
 	planningunits@data,
-	speciesTargets,
- calcPuVsSpeciesData(planningunits, species),
- calcBoundaryData(planningunits)
+	data.frame(id=1L, target=12, spf=23, name='species1', stringsAsFactors=FALSE),
+ calcPuVsSpeciesData(planningunits, species[[1]]),
+ calcBoundaryData(planningunits),
+ SpatialPolygons2PolySet(planningunits)
 )
 }
 \seealso{
-\code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData-class}}
+\code{\link[PBSmapping]{PolySet}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData-class}}.
 }
 

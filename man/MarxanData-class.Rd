@@ -10,20 +10,23 @@ This class is used to store Marxan input data.
 \section{Slots}{
 
 \describe{
-\item{\code{polygons}}{"PolySet" planning unit spatial data.}
+\item{\code{polygons}}{"PolySet" planning unit spatial data or "NULL" if data not available.}
 
-\item{\code{pu}}{"data.frame" planning unit data; with 'id', 'cost', 'status' columns.}
+\item{\code{pu}}{"data.frame" planning unit data; with "integer" 'id', "numeric" 'cost', "integer" 'status' columns.}
 
-\item{\code{species}}{"data.frame" with species data; with 'id', 'target', 'spf', and 'name' columns.}
+\item{\code{species}}{"data.frame" with species data; with "integer" 'id', "numeric" 'target', "numeric" 'spf', and "character" 'name' columns.}
 
-\item{\code{puvspecies}}{"data.frame" with data on species density in each planning unit, with 'species', 'pu', and 'target' columns, ordered by 'pu'.}
+\item{\code{puvspecies}}{"data.frame" with data on species density in each planning unit, with "integer" 'species', "integer" 'pu', and "numeric" 'target' columns. This "data.frame" is sorted in order of 'pu' column.}
 
-\item{\code{puvspecies_spo}}{"data.frame" with data on species density in each planning unit; with 'species', 'pu', and 'target' columns, ordered by 'species'.}
+\item{\code{puvspecies_spo}}{"data.frame" with data in \code{puvspecies} ordered by 'species' column.}
 
-\item{\code{boundary}}{"data.frame" with data on the shared boundary length of planning; with 'id1', 'id2', and 'amount' columns.}
+\item{\code{boundary}}{"data.frame" with data on the shared boundary length of planning; with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns.}
 
-\item{\code{skipchecks}}{"logical" skip data integrity checks? May improve speed for big data sets.}
+\item{\code{skipchecks}}{"logical" Skip data integrity checks? May improve speed for big data sets.}
 
-\item{\code{.cache}}{"environment" used to store processing calculations}
+\item{\code{.cache}}{"environment" used to cache calculations.}
 }}
+\seealso{
+\code{\link[PBSmapping]{PolySet}}.
+}
 

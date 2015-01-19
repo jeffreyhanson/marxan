@@ -2,45 +2,45 @@
 % Please edit documentation in R/MarxanData.R
 \name{format.MarxanData}
 \alias{format.MarxanData}
-\title{Format Data for Marxan}
+\title{Format data for Marxan}
 \usage{
-\method{format}{MarxanData}(polygons, rasters, targets = "20\%", spf = 1,
-  pu = NULL, species = NULL, puvspecies = NULL, boundary = NULL, ...,
-  verbose = FALSE)
+\method{format}{MarxanData}(polygons, rasters, targets = "20\%",
+  spf = rep(1, nlayers(rasters)), sepdistance = rep(0, nlayers(rasters)),
+  sepnum = rep(0, nlayers(rasters)), targetocc = rep(0, nlayers(rasters)),
+  pu = NULL, species = NULL, puvspecies = NULL, puvspecies_spo = NULL,
+  boundary = NULL, ..., verbose = FALSE)
 }
 \arguments{
-\item{polygons}{"SpatialPolygons" with planning unit data}
+\item{polygons}{"SpatialPolygons" with planning unit data.}
 
-\item{rasters}{"RasterLayer", "RasterStack", "RasterBrick" with species distribution data}
+\item{rasters}{"RasterLayer", "RasterStack", "RasterBrick" with species distribution data.}
 
-\item{targets}{"numeric" or "character" vector with absolute or percent-based targets}
+\item{targets}{"numeric" vector for targets for each species (eg. 12), or "character" vector with percent-based targets (eg. '12%'). Defaults to '20%' for each species.}
 
-\item{pu}{"data.frame" planning unit data; with columns "id", "cost", and "status" columns (optional)}
+\item{pu}{"data.frame" planning unit data; with "integer" 'id', "numeric" 'cost', "integer" 'status' columns. Default behaviour is to generate a table with all costs and statuses set to 1 and 0 (respectively).}
 
-\item{species}{"data.frame" species data; with columns "id", "target", "spf", and "name" columns (optional)}
+\item{species}{"data.frame" with species data; with "integer" 'id', "numeric" 'target', "numeric" 'spf', and "character" 'name' columns. Default behaviour is to base targets on \code{target} argument, set 'spf' to 1, and set 'names' use names of layers in \code{rasters} argument.}
 
-\item{puvspecies}{"data.frame" pu vs. species data; with "species", "pu", and "amount" columns (optional)}
+\item{puvspecies}{"data.frame" pu vs. species data; with "species", "pu", and "amount" columns. Defaults to \code{NULL}, and will be calculated using \code{calcPuVsSpeciesData}.}
 
-\item{boundary}{"data.frame" with shared boundary data; with "id1", "id2", and "boundary" columns (optional)}
+\item{puvspecies_spo}{"data.frame" with data in \code{puvspecies} ordered by 'species' column. Defaults to \code{NULL}, and will generate data from \code{puvspecies}.}
 
-\item{verbose}{"logical" Should information on data pre-processing be displayed?}
-}
-\value{
-MarxanData object
+\item{boundary}{"data.frame" with data on the shared boundary length of planning; with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns. Default behaviour is to calculate this using \code{calcBoundaryData}.}
+
+\item{Additional}{arguments to \code{calcBoundaryData} and \code{calcPuVsSpeciesData}.}
 }
 \description{
 This function prepares spatially explicit planning unit and species data for Marxan processing.
-By default, raw data can be provided which will processed for Marxan. However, if particular Marxan input file have
-already been generated, these can be supplied using the pu, species, puvspecies, or boundary arguments to avoid re-processing
-these outputs.
+By default, raw data can be provided which be used to generate all Marxan inputs from scratch. However, if particular Marxan input file have
+already been generated, these can be supplied to avoid re-processing data.
 }
 \examples{
-data(planningunits, species, speciesRanges)
-x<-MarxanData(planningunits, speciesRanges, targets="10\%")
-y<-MarxanData(planningunits, speciesRanges, species=species)
+data(planningunits, species)
+x<-MarxanData(planningunits, rasters=species, targets="10\%")
+y<-MarxanData(planningunits, rasters=species)
 stopifnot(identical(x,y))
 }
 \seealso{
-\code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}
+\code{\link{MarxanData-class}}, , \code{\link{MarxanData}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}.
 }
 

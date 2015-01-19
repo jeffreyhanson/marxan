@@ -5,22 +5,26 @@ NULL
 #'
 #' This class is used to store the results from a Marxan run.
 #'
-#' @slot summary "data.frame" with summary information on solutions.
-#' @slot selections "matrix" with binary selections.
-#' @slot amountheld "matrix" with the amount held for each species in each solution.
-#' @slot occheld "matrix" with the number of occurrences for each species in each solution.
-#' @slot targetsmet "matrix" indicating whether the targets have been met for each species in each solution.
+#' @slot summary "data.frame" with summary information on solutions (output_sum.dat).
+#' @slot selections "matrix" with binary selections (output_solutionsmatrix.csv).
+#' @slot amountheld "matrix" with the amount held for each species in each solution (collation of output_mv*.csv files).
+#' @slot occheld "matrix" with the number of occurrences for each species in each solution (collation of output_mv*.csv files).
+#' @slot sepacheived "matrix" indicating the separation achieved (collation of output_mv*.csv files).
+#' @slot targetsmet "matrix" indicating whether the targets have been met for each species in each solution (collation of output_mv*.csv files).
+#' @slot mpm "matrix" indicating minimum proportion met (MPM; collation of output_mv*.csv files).
 #' @slot best "integer" with index of best solution.
-#' @slot log "character" with Marxan log  file.
+#' @slot log "character" with Marxan log  file (otuput_log.dat). 
 #' @export
-#' @seealso \code{\link{MarxanResults}}, \code{\link{read.MarxanResults}}, 
+#' @seealso \code{\link{MarxanResults}}, \code{\link{read.MarxanResults}}, \code{\link{write.MarxanResults}}.
 setClass("MarxanResults",
 	representation(
 		summary="data.frame",
 		selections="matrix",
 		amountheld="matrix",
 		occheld="matrix",
+		sepacheived="matrix",
 		targetsmet="matrix",
+		mpm="matrix",
 		best="integer",
 		log='character',
 		.cache='environment'
@@ -29,75 +33,84 @@ setClass("MarxanResults",
 setMethod(
 	"initialize", 
 	"MarxanResults", 
-	function(.Object, summary, selections, amountheld, occheld, targetsmet, best, log, .cache=new.env()) {
-		callNextMethod(.Object, summary=summary, selections=selections, amountheld=amountheld, occheld=occheld, targetsmet=targetsmet, best=best, log=log, .cache=.cache)
+	function(.Object, summary, selections, amountheld, occheld, sepacheived, targetsmet, mpm, best, log, .cache=new.env()) {
+		callNextMethod(.Object, summary=summary, selections=selections, amountheld=amountheld, occheld=occheld, sepacheived=sepacheived, targetsmet=targetsmet, mpm=mpm, best=best, log=log, .cache=.cache)
 	}
 )
 
 #' Create MarxanResults object
 #'
-#' This function generates a MarxanResults object. Methods are provided to do this using a directory containing Marxan outputs or using objects already loaded into R. 
+#' This function creates a new MarxanResults object.
 #'
-#' @param dir directory from which to load Marxan data
-#' @param summary "data.frame" with summary information on solutions
-#' @param selections "matrix" with binary selections
-#' @param amountheld "matrix" with the amount held for each species in each solution
-#' @param occheld "matrix" with the number of occurrences for each species in each solution
-#' @param best "integer" with index of best solution
-#' @param log "character" with Marxan log file
+#' @param summary "data.frame" with summary information on solutions (output_sum.dat).
+#' @param selections "matrix" with binary selections (output_solutionsmatrix.csv).
+#' @param amountheld "matrix" with the amount held for each species in each solution (collation of output_mv*.csv files).
+#' @param occheld "matrix" with the number of occurrences for each species in each solution (collation of output_mv*.csv files).
+#' @param sepacheived "matrix" indicating the separation achieved (collation of output_mv*.csv files).
+#' @param targetsmet "matrix" indicating whether the targets have been met for each species in each solution (collation of output_mv*.csv files).
+#' @param mpm "matrix" indicating minimum proportion met (MPM; collation of output_mv*.csv files).
+#' @param log "character" with Marxan log  file (otuput_log.dat). 
 #' @export
+#' @note "integer" slot 'best' is automatically calculated from \code{summary}.
 #' @return MarxanResults object
 #' @seealso \code{\link{MarxanResults-class}} \code{\link{read.MarxanResults}}
-MarxanResults=function(summary, selections, amountheld, occheld, targetsmet, log) {
-	return(new("MarxanResults", summary=summary, selections=selections, amountheld=amountheld, occheld=occheld, targetsmet=targetsmet, best=which.max(summary$Score), log=log))
+MarxanResults=function(summary, selections, amountheld, occheld, sepacheived, targetsmet, mpm, log) {
+	return(new("MarxanResults", summary=summary, selections=selections, amountheld=amountheld, occheld=occheld, sepacheived=sepacheived, targetsmet=targetsmet, mpm=mpm, best=which.max(summary$Score), log=log))
 }
 
-#' Read Marxan results from disk
+#' Read Marxan results
 #'
-#' This function reads outputs from a directory after Marxan been run.
+#' This function reads files output from Marxan.
 #'
-#' @param dir "character" with file path to directory with Marxan output files.
+#' @param dir "character" with file path to directory containing Marxan output files.
+#' @note This function assumes specific Marxan output files are present in the directory. If any of these are missing the function will crash.
 #' @export
 #' @return "MarxanResults" object
-#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}
+#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}.
 read.MarxanResults=function(dir) {
 	# check for valid inputs
 	if (!file.exists(dir))
 		stop('Directory does not exist.')
 	# load data
-	pths=list.files(dir, "^output_mv.*.csv$", full.names=TRUE)
+	pths<-list.files(dir, "^output_mv.*.csv$", full.names=TRUE)
+	pths<-pths[which(basename(pths)!='output_mvbest.csv')]
 	mvs<-rbind.fill(llply(pths, fread, header=TRUE,sep=",",stringsAsFactors=FALSE, data.table=FALSE))
 	mvs$sol_id<-rep(seq_along(pths), each=nrow(mvs)/length(pths))
-	setnames(mvs, c("Conservation Feature","Amount Held", "Occurrences Held", "Target Met"), c("Conservation.Feature","Amount.Held", "Occurrences.Held", "Target.Met"))
+	setnames(mvs, c("Conservation Feature","Amount Held", "Occurrences Held", "Target Met", "Separation Achieved"), c("Conservation.Feature","Amount.Held", "Occurrences.Held", "Target.Met", "Separation.Achieved"))
 	mvs$Target.Met<-mvs$Target.Met=="yes"
 	sumry<-fread(file.path(dir,'output_sum.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE,data.table=FALSE)
 	names(sumry)<-gsub(" ", ".", names(sumry))
 	# create object
 	return(MarxanResults(
 		summary=sumry,
-		selections=as.matrix(fread(file.path(dir,'output_solutionsmatrix.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE))==1,
+		selections=as.matrix(fread(file.path(dir,'output_solutionsmatrix.csv'),header=TRUE,sep=",",stringsAsFactors=FALSE,drop=1))==1,
 		amountheld=pivot(mvs$Conservation.Feature, mvs$sol_id, mvs$Amount.Held),
 		occheld=pivot(mvs$Conservation.Feature, mvs$sol_id, mvs$Occurrences.Held),
+		sepacheived=pivot(mvs$Conservation.Feature, mvs$sol_id, mvs$Separation.Achieved),
 		targetsmet=pivot(mvs$Conservation.Feature, mvs$sol_id, mvs$Target.Met),
+		mpm=pivot(mvs$Conservation.Feature, mvs$sol_id, mvs$MPM),
 		log=paste(readLines(file.path(dir,'output_log.dat')), collapse="\n")
 	))
 }
 
 #' Merge Marxan results
 #'
-#' This function merges a list of MarxanResults into a single MarxanResults object.
+#' This function merges a list of "MarxanResults" objects into a single MarxanResults object. 
+#' It used for collating Marxan results data when Marxan runs have been run in parallel.
 #'
 #' @param x "list" of "MarxanResults" objects.
 #' @export
 #' @return "MarxanResults" object
-#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}
+#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}.
 merge.MarxanResults<-function(x) {
 	x=MarxanResults(
 		summary=ldply(x, slot, name="summary"),
 		selections=do.call(rbind, llply(x, slot, name="selections")),
 		amountheld=do.call(rbind, llply(x, slot, name="amountheld")),
 		occheld=do.call(rbind, llply(x, slot, name="occheld")),
+		sepacheived=do.call(rbind, llply(x, slot, name="sepacheived")),
 		targetsmet=do.call(rbind, llply(x, slot, name="targetsmet")),
+		mpm=do.call(rbind, llply(x, slot, name="mpm")),
 		log=paste(laply(x, slot, name="log"), collapse="\n")
 	)
 	x@summary$Run_Number<-seq_len(nrow(x@summary))
@@ -106,24 +119,23 @@ merge.MarxanResults<-function(x) {
 
 #' @describeIn selection
 #' @export
-selection.MarxanResults<-function(x, y="best") {
-	if (is.numeric(y))
-		return(x@selections[y,])
-	if (y=="best")
-		return(x@selections[x@best,])
-	if (y=="all")
+selection.MarxanResults<-function(x, y=NULL) {
+	if (is.null(y))
 		return(x@selections)
+	if (y==0)
+		return(x@selections[x@best,])
+	return(x@selections[y,])
 }
+
 
 #' @describeIn score
 #' @export
-score.MarxanResults<-function(x, y="best") {
-	if (is.numeric(y))
-		return(x@summary$Score[y])
-	if (y=="best")
-		return(x@summary$Score[x@best])
-	if (y=="all")
+score.MarxanResults<-function(x, y=NULL) {
+	if (is.null(y))
 		return(x@summary$Score)
+	if (y==0)
+		return(x@summary$Score[x@best])
+	return(x@summary$Score[y])
 }
 
 #' @describeIn summary
@@ -185,12 +197,34 @@ targetsmet.MarxanResults<-function(x, y=NULL) {
 	return(x@targetsmet[y,])
 }
 
+#' @describeIn mpm
+#' @export
+mpm.MarxanResults<-function(x, y=NULL) {
+	if (is.null(y))
+		return(x@mpm)
+	if (y==0)
+		return(x@mpm[x@best,])
+	return(x@mpm[y,])
+}
+
+#' @describeIn sepacheived
+#' @export
+sepacheived.MarxanResults<-function(x, y=NULL) {
+	if (is.null(y))
+		return(x@sepacheived)
+	if (y==0)
+		return(x@sepacheived[x@best,])
+	return(x@sepacheived[y,])
+}
+
 #' @describeIn pca
 #' @export
 pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 	# init
-	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))	
-	callchar=hashCall(match.call())
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
+	if (length(unique(aaply(slot(x, var), 1, paste, collapse=",", .drop=TRUE, .expand=FALSE)))==1)
+		stop('All solutions have the same values for this variable.')
+	callchar=hashCall(match.call(), 1)
 	# check that pca not being applied to non-continuous data
 	if (var=='selections' || var=='targetsmet')
 		warning("Running a pca on binary data is not recommended; consider using a NMDS with method='bray'.")
@@ -208,10 +242,12 @@ pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 #' @export
 dist.MarxanResults=function(x, var="selections", method="bray", force_reset=FALSE) {
 	# init
-	callchar=hashCall(match.call())
-	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))	
+	callchar=hashCall(match.call(), 1)
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
+	if (length(unique(aaply(slot(x, var), 1, paste, collapse=",", .drop=TRUE, .expand=FALSE)))==1)
+		stop('All solutions have the same values for this variable.')
 	# cache distance matrix
-	if (force_reset || !is.cached(callchar)) {
+	if (force_reset || !is.cached(x, callchar)) {
 		cache(x, callchar, vegdist(x=slot(x,var), binary=var %in% c('selections', 'targetsmet'), method=method))
 	}
 	return(cache(x, callchar))
@@ -221,32 +257,33 @@ dist.MarxanResults=function(x, var="selections", method="bray", force_reset=FALS
 #' @export
 mds.MarxanResults=function(x, var="selections", method="bray", ..., force_reset=FALSE) {
 	# init
-	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))
-	callchar=hashCall(match.call())
-	# check that pca not being applied to non-continuous data
-	if (var=='selections' || var=='targetsmet')
-		warning("Running a pca on binary data is not recommended; consider using a NMDS with method='bray'.")
+	callchar=hashCall(match.call(), 1)
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
+	if (length(unique(aaply(slot(x, var), 1, paste, collapse=",", .drop=TRUE, .expand=FALSE)))==1)
+		stop('All solutions have the same values for this variable.')	
 	# cache nmds matrix
-	if (force_reset || !is.cached(callchar)) {
-		cache(x,callchar, monoMDS(dist(x, var, method, force_reset), k=2, ...))
+	if (force_reset || !is.cached(x, callchar)) {
+		cache(x,callchar, monoMDS(dist.MarxanResults(x, var, method, force_reset=force_reset), k=2, ...))
 	}
 	return(cache(x, callchar))
 }
 
 #' @describeIn hclust
 #' @export
-hclust.MarxanResults=function(x, type="mds", var="selections", ..., force_reset=FALSE) {
+hclust.MarxanResults=function(x, type="dist", var="selections", ..., force_reset=FALSE) {
 	# init
-	callchar=hashCall(match.call())
+	callchar=hashCall(match.call(), 1)
 	match.arg(type, c("dist", "pca", "mds"))
-	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
+	if (length(unique(aaply(slot(x, var), 1, paste, collapse=",", .drop=TRUE, .expand=FALSE)))==1)
+		stop('All solutions have the same values for this variable.')	
 	# main
-	tmp<-do.call(type, list(x, var, ..., force_reset))
-	if (!is.cached(callchar)) {
+	tmp<-do.call(type, list(x, var, ..., force_reset=force_reset))
+	if (!is.cached(x, callchar)) {
 		switch(type,
 			"dist"={tmp<-fastcluster::hclust(tmp)},
-			"mds"={tmp<-fastcluster::hclust(tmp$points)},
-			"pca"={tmp<-fastcluster::hclust(tmp$dist)}
+			"mds"={tmp<-fastcluster::hclust(stats::dist(tmp$points,'euclidean'))},
+			"pca"={tmp<-fastcluster::hclust(stats::dist(tmp$dist, 'euclidean'))}
 		)
 		tmp$phylo<-as.phylo(tmp)
 		cache(x, callchar, tmp)
@@ -256,36 +293,41 @@ hclust.MarxanResults=function(x, type="mds", var="selections", ..., force_reset=
 
 #' @describeIn ordiplot
 #' @export
-ordiplot.MarxanResults=function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
+ordiplot.MarxanResults<-function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	match.arg(type, c("pca", "mds"))
-	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))	
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
+	if (length(unique(aaply(slot(x, var), 1, paste, collapse=",", .drop=TRUE, .expand=FALSE)))==1)
+		stop('All solutions have the same values for this variable.')	
 	if (type=="pca") {
-		tmp<-pca.MarxanResults(x, var, ..., force_reset)
-		prettyPcaBiplot(x=tmp,size=to(x@summary$Score, from=c(1,2)),nbest=nbest, main=paste0("Solution biplot based on ",to.pretty.name(var)))
-		return(tmp)
+		tmp<-pca.MarxanResults(x, var, ..., force_reset=force_reset)
+		prettyPcaBiplot(x=tmp,size=rescale(x@summary$Score, to=c(1,2)),nbest=nbest, main=paste0("Solution biplot based on ",to.pretty.name(var)))
 	} else if (type=="mds") {
-		tmp<-mds.MarxanResults(x, var, ..., force_reset)
-		prettyBiplot(x=tmp$points,size=to(x@summary$Score, from=c(1,2)),nbest=nbest,xlab="MDS1", ylab="MDS2", main=paste0("Solution biplot based on ",to.pretty.name(var)))
-		return(tmp)
+		tmp<-mds.MarxanResults(x, var, ..., force_reset=force_reset)
+		prettyBiplot(x=tmp$points,size=rescale(x@summary$Score, to=c(1,2)),nbest=nbest,xlab="MDS1", ylab="MDS2", main=paste0("Solution biplot based on ",to.pretty.name(var)))
 	}
+	return(invisible(tmp))
 }
 
 #' @describeIn dendrogram
 #' @export
 dendrogram.MarxanResults=function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	match.arg(type, c("pca", "mds", "dist"))
-	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet"))
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
+	if (length(unique(aaply(slot(x, var), 1, paste, collapse=",", .drop=TRUE, .expand=FALSE)))==1)
+		stop('All solutions have the same values for this variable.')	
+	tmp<-hclust.MarxanResults(x, type, var, ..., force_reset=force_reset)$phylo
 	prettyDendrogram(
-		hclust.MarxanResults(x@results, type, var, ..., force_reset)$phylo,
+		tmp,
 		rescale(x@summary$Score, to=c(1,2)),
 		nbest, 
 		paste0("Solution dendrogram based on ",to.pretty.name(var))
 	)
+	return(invisible(tmp))
 }
 
 #' @describeIn dotchart
 #' @export
-dotchart.MarxanResults<-function(x, var="score", nbest=1) {
+dotchart.MarxanResults<-function(x, var="score", nbest=1, n=50) {
 	match.arg(var, 
 		c(
 			'score', 'Score',
@@ -312,8 +354,20 @@ dotchart.MarxanResults<-function(x, var="score", nbest=1) {
 		'shortfall'={var<-'Shortfall'},
 		'mv'={var<-'Missing_Values'}
 	)
-	tmp<-order(summary[[var]])
-	prettyDotchart(x@summary[[var]][tmp], pch=16, labels=tmp, main="Solution dotplot", xlab=gsub("_", " ", var, fixed=TRUE), ylab=tmp, pt.cex=rescale(x@summary[[var]][tmp], to=c(1,2)), color=replace(rep("black", nrow(x@summary)), seq_len(nrow(x@summary)) < nbest, "red"))	
+	n=min(nrow(x@summary),n)
+	ord<-order(x@summary[[var]])[seq_len(n)]
+	tmp<-x@summary[ord,]
+	cex<-rescale(tmp[[var]], to=c(1,2))
+	prettyDotchart(
+		x=tmp[[var]], 
+		pch=16, 
+		labels=ord,
+		main="Solutions", 
+		xlab=gsub("_", " ", var, fixed=TRUE), 
+		pt.cex=cex, 
+		lab.cex=0.8, 
+		color=replace(rep("black", n), (n-seq_len(nbest))+1, "red")
+	)
 }
 
 #' @describeIn is.cached
@@ -321,7 +375,7 @@ setMethod(
 	f="is.cached", 
 	signature(x="MarxanResults", name="character"), 
 	function(x,name) {
-		return(!is.null(x@.cache[[names]]))
+		return(!is.null(x@.cache[[name]]))
 	}
 )
 

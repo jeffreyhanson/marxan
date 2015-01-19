@@ -11,23 +11,17 @@
 \method{occheld}{MarxanSolved}(x, y = NULL)
 
 occheld(x, ...)
-
-occheld(x, ...)
 }
 \arguments{
 \item{x}{"MarxanResults" or "MarxanSolved" object.}
 
-\item{x}{"MarxanResults" or "MarxanSolved" object.}
+\item{y}{"missing" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for y'th solution value.}
 }
 \value{
 "matrix" or "numeric" vector depending on arguments.
-
-"matrix" or "logical" vector depending on arguments.
 }
 \description{
 This function returns the number of occurrences held for each species in a solution.
-
-This function reports whether a solution has met the targets for each species in a solution.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -36,8 +30,6 @@ This function reports whether a solution has met the targets for each species in
 \item \code{MarxanSolved}: 
 }}
 \seealso{
-\code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
-
 \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 }
 

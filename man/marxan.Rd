@@ -2,9 +2,19 @@
 % Please edit documentation in R/marxan.R
 \name{marxan}
 \alias{marxan}
+\alias{marxan.SpatialPolygons}
+\alias{marxan.character}
+\alias{marxan.data.frame}
 \title{General Marxan Function}
 \usage{
-marxan(..., solve = TRUE)
+marxan(x, ...)
+
+\method{marxan}{character}(path, solve = TRUE)
+
+\method{marxan}{SpatialPolygons}(polygons, rasters, ..., solve = TRUE)
+
+\method{marxan}{data.frame}(pu, species, puvspecies, boundary, ...,
+  solve = TRUE)
 }
 \arguments{
 \item{...}{arguments are passed to MarxanData and MarxanOpts functions}
@@ -16,6 +26,17 @@ marxan(..., solve = TRUE)
 }
 \description{
 This is a general function to create Marxan objects from scratch and run the Marxan program to generate solutions.
+}
+\section{Methods (by class)}{
+\itemize{
+\item \code{character}: 
+
+\item \code{SpatialPolygons}: 
+
+\item \code{data.frame}: 
+}}
+\note{
+See the package vignette for help.
 }
 \seealso{
 \code{\link{MarxanOpts}}, \code{\link{MarxanData}}, \code{\link{MarxanResults}}, \code{\link{MarxanUnsolved}}

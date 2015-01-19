@@ -6,7 +6,7 @@
 \alias{hclust.MarxanSolved}
 \title{Hierarchical Clustering for Marxan Solutions}
 \usage{
-\method{hclust}{MarxanResults}(x, type = "mds", var = "selections", ...,
+\method{hclust}{MarxanResults}(x, type = "dist", var = "selections", ...,
   force_reset = FALSE)
 
 \method{hclust}{MarxanSolved}(x, type = "mds", var = "selections", ...,
@@ -15,7 +15,7 @@
 hclust(x, ...)
 }
 \arguments{
-\item{x}{"MarxanSolved" object}
+\item{x}{"MarxanResults" or "MarxanSolved" object.}
 
 \item{type}{"character" use metric dimensional scaling ('mds'), or principle components analysis ('pca'), or distance matrix('dist') for analysis?}
 

@@ -22,9 +22,13 @@ spp(x, name = NA, spf = NA, target = NA)
 This function is used in the formula argument of the update function to change species parameters of a "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 }
 \note{
-Set arguments 'name', 'spf', 'target' to NA (default) to keep the same.
+Only specified parameters are changed, all unspecific parameters will remain unchanged.
+}
+\examples{
+spp(1, name='species1')
+spp(2, spf=5)
 }
 \seealso{
-\code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{pu}}
+\code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{pu}}.
 }
 

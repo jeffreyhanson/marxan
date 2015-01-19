@@ -4,15 +4,19 @@
 \alias{is.marxanInstalled}
 \title{Test if Marxan is installed on computer}
 \usage{
-is.marxanInstalled()
+is.marxanInstalled(verbose = FALSE)
 }
 \value{
-"logical" is it installed?
+"logical" Is it installed?
 }
 \description{
-This function determines if Marxan is installed on the computer, and will update \code{\link[base]{options}}
+This function determines if Marxan is installed on the computer, and will update \code{\link[base]{options}}.
 }
 \examples{
+options()$marxanExecutablePath
 is.marxanInstalled()
+}
+\seealso{
+\code{\link[base]{options}}, \code{\link{findMarxanExecutablePath}}.
 }
 

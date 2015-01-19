@@ -10,11 +10,11 @@ This class is used to store Marxan input data and input parameters.
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{"MarxanData" object used to store input data.}
-
 \item{\code{opts}}{"MarxanOpts" object used to store input parameters.}
+
+\item{\code{data}}{"MarxanData" object used to store input data.}
 }}
 \seealso{
-\code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}
+\code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}.
 }
 

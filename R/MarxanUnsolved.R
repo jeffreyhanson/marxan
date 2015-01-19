@@ -5,10 +5,10 @@ NULL
 #'
 #' This class is used to store Marxan input data and input parameters.
 #'
-#' @slot data "MarxanData" object used to store input data.
 #' @slot opts "MarxanOpts" object used to store input parameters.
+#' @slot data "MarxanData" object used to store input data.
 #' @export
-#' @seealso  \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}
+#' @seealso  \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}.
 setClass("MarxanUnsolved",
 	representation(
 		data="MarxanData",
@@ -24,14 +24,14 @@ setClass("MarxanUnsolved",
 #' @param data "MarxanData" object.
 #' @return "MarxanUnsolved" object.
 #' @export
-#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}.
 MarxanUnsolved<-function(opts, data) {
 	return(new("MarxanUnsolved", opts=opts, data=data))
 }
 
 #' @describeIn solve
 #' @export
-solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, verbose=FALSE) {
+solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, verbose=TRUE) {
 	# check that Marxan is installed properly
 	findMarxanExecutablePath()
 	stopifnot(is.marxanInstalled())
@@ -54,29 +54,20 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 	if (x@opts@NCORES>1)
 		registerDoSNOW(makeCluster(x@opts@NCORES, type="SOCK"))
 	# run marxan
-	if (verbose) {
-		status<-alply(
-			cbind.data.frame(
-				file.path(coredirs, basename(options()$marxanExecutablePath)),
-				file.path(coredirs, 'input.dat'),
-				(verbose & seq_along(coredirs)==1)
-			), 1, .parallel=x@opts@NCORES>1, 
-			function(x) {
-				return(system(paste0('"',x[[1]],'" "',x[[2]],'" -s'), show.output.on.console=x[[3]]))
-			}
-		)
-	} else {
-		suppressWarnings(status<-alply(
-			cbind.data.frame(
-				file.path(coredirs, basename(options()$marxanExecutablePath)),
-				file.path(coredirs, 'input.dat'),
-				(verbose & seq_along(coredirs)==1)
-			), 1, .parallel=x@opts@NCORES>1, 
-			function(x) {
-				return(system(paste0('"',x[[1]],'" "',x[[2]],'" -s'), show.output.on.console=x[[3]]))
-			}
-		))
-	}
+	oldwd<-getwd()
+	suppressWarnings(status<-alply(
+		data.frame(
+			file.path(coredirs, basename(options()$marxanExecutablePath)),
+			file.path(coredirs, 'input.dat'),
+			(verbose & seq_along(coredirs)==1),
+			stringsAsFactors=FALSE
+		), 1, .parallel=x@opts@NCORES>1, 
+		function(x) {
+			setwd(dirname(x[[2]]))
+			return(system(paste0('"',x[[1]],'" "',x[[2]],'" -s'), show.output.on.console=x[[3]]))
+		}
+	))
+	setwd(oldwd)
 	# check to see how it went
 	if (any(unlist(status, use.names=FALSE, recursive=FALSE)!=0))
 		stop("Marxan failed to execute.")
@@ -113,8 +104,8 @@ names.MarxanUnsolved<-function(x) {
 
 #' @describeIn basemap
 #' @export
-basemap.MarxanUnsolved<-function(x, basemap="none", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
-	return(basemap.MarxanData(x@data, basemap, alpha, grayscale, xzoom, yzoom, force_reset))
+basemap.MarxanUnsolved<-function(x, basemap="none", grayscale=FALSE, force_reset=FALSE) {
+	return(basemap.MarxanData(x@data, basemap, grayscale, force_reset))
 }
 
 #' @describeIn update
@@ -134,7 +125,40 @@ update.MarxanUnsolved<-function(x, formula, solve=TRUE, force_reset=TRUE) {
 setMethod(
 	"plot", 
 	signature(x="MarxanUnsolved", y="character"),
-	function(x, y, basemap="none", colramp="BuGn", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
-		plot(x@data, y, basemap, colramp, alpha, grayscale, xzoom, yzoom, force_reset=force_reset)
+	function(x, y, basemap="none", colramp="BuGn", alpha=1, grayscale=FALSE, force_reset=FALSE) {
+		plot(x@data, y, basemap, colramp, alpha, grayscale, force_reset=force_reset)
 	}
 )
+
+
+#' Read Marxan input data and parameters
+#'
+#' This function saves "MarxanUnsolved" objects to disk.
+#'
+#' @param path "character" path for input file to load.
+#' @param skipchecks "logical" Should data integrity checks be skipped?
+#' @export
+#' @seealso \code{\link{MarxanUnsolved}}, \code{\link{MarxanUnsolved-class}}, \code{\link{read.MarxanOpts}}, \code{\link{read.MarxanData}}.
+read.MarxanUnsolved<-function(path, skipchecks=FALSE) {
+	return(
+		MarxanUnsolved(
+			read.MarxanOpts(path),
+			read.MarxanData(path, skipchecks=skipchecks)
+		)
+	)
+}
+
+
+#' Write Marxan input data and parameters
+#'
+#' This function saves "MarxanUnsolved" objects to disk.
+#'
+#' @param x "MarxanUnsolved" object to save.
+#' @param dir "character" directory path for location to save data.
+#' @export
+#' @seealso \code{\link{MarxanUnsolved}}, \code{\link{MarxanUnsolved-class}}, \code{\link{write.MarxanOpts}}, \code{\link{write.MarxanData}}.
+write.MarxanUnsolved<-function(x, dir=getwd()) {
+	write.MarxanData(x@data, dir)
+	write.MarxanOpts(x@opts, dir)
+}
+

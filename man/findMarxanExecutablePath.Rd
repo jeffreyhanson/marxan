@@ -7,13 +7,12 @@
 findMarxanExecutablePath()
 }
 \value{
-Logical. Is it installed?
+"logical" Is Marxan installed?
 }
 \description{
 This function checks the computer's specifications and sets options('marxanExecutablePath') accordingly.
-Marxan exectuables can be downloaded from \code{\link{marxanURL}}, and installed by unzipping the files contents, and copying them
-into the /bin folder in this package's installation directory.
-If a suitable executable cannot be found, this function will fail and provide information. determines if Marxan is installed on the computer, and will update \code{\link[base]{options}}
+Marxan exectuables can be downloaded from \code{\link{marxanURL}}, and installed by unzipping the files contents, and copying them into the /bin folder in this package's installation directory.
+If a suitable executable cannot be found, this function will fail and provide information.
 }
 \examples{
 # Marxan executable files should be copied to this directory
@@ -26,6 +25,6 @@ findMarxanExecutablePath()
 is.marxanInstalled()
 }
 \seealso{
-\link{\code{is.marxanInstalled}}
+\link{\code{is.marxanInstalled}}.
 }
 

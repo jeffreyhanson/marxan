@@ -4,28 +4,34 @@
 \alias{MarxanResults}
 \title{Create MarxanResults object}
 \usage{
-MarxanResults(summary, selections, amountheld, occheld, targetsmet, log)
+MarxanResults(summary, selections, amountheld, occheld, sepacheived, targetsmet,
+  mpm, log)
 }
 \arguments{
-\item{summary}{"data.frame" with summary information on solutions}
+\item{summary}{"data.frame" with summary information on solutions (output_sum.dat).}
 
-\item{selections}{"matrix" with binary selections}
+\item{selections}{"matrix" with binary selections (output_solutionsmatrix.csv).}
 
-\item{amountheld}{"matrix" with the amount held for each species in each solution}
+\item{amountheld}{"matrix" with the amount held for each species in each solution (collation of output_mv*.csv files).}
 
-\item{occheld}{"matrix" with the number of occurrences for each species in each solution}
+\item{occheld}{"matrix" with the number of occurrences for each species in each solution (collation of output_mv*.csv files).}
 
-\item{log}{"character" with Marxan log file}
+\item{sepacheived}{"matrix" indicating the separation achieved (collation of output_mv*.csv files).}
 
-\item{dir}{directory from which to load Marxan data}
+\item{targetsmet}{"matrix" indicating whether the targets have been met for each species in each solution (collation of output_mv*.csv files).}
 
-\item{best}{"integer" with index of best solution}
+\item{mpm}{"matrix" indicating minimum proportion met (MPM; collation of output_mv*.csv files).}
+
+\item{log}{"character" with Marxan log  file (otuput_log.dat).}
 }
 \value{
 MarxanResults object
 }
 \description{
-This function generates a MarxanResults object. Methods are provided to do this using a directory containing Marxan outputs or using objects already loaded into R.
+This function creates a new MarxanResults object.
+}
+\note{
+"integer" slot 'best' is automatically calculated from \code{summary}.
 }
 \seealso{
 \code{\link{MarxanResults-class}} \code{\link{read.MarxanResults}}

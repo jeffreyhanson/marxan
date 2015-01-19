@@ -1,59 +1,64 @@
 #' @include RcppExports.R marxan-internal.R misc.R zonalSum.R
 NULL
 
-#' Calculate Planning Units vs. Species Data
+#' Calculate planning units vs. species data
 #'
 #' This function calculates the sum of species values in each planning unit.
 #' Be aware that using polygons with overlaps will result in inaccuracies.
-#' By default all polygons will be treated as having seperate ids.
+#' By default all polygons will be treated as having separate ids.
 #' 
-#' @param x SpatialPolygons or SpatialPolygonsDataFrame object
-#' @param y RasterLayer, RasterStack, or RasterBrick
-#' @param speciesNames character vector of species names
-#' @param ncores Number of cores to use for processing
-#' @param gdal Logical. Should raster processing be performed using python gdal libraries?
-#' @param field character if not NULL and \code{x} is a SpatialPolygonsDataFrame object, the index or name of the column with planning unit ids
-#'
+#' @param x "SpatialPolygons" or "SpatialPolygonsDataFrame" object.
+#' @param y "RasterLayer", "RasterStack", or "RasterBrick" object.
+#' @param ids "integer" vector of ids. Defaults to indices of layers in the \code{y}. 
+#' @param ncores "integer" Number of cores to use for processing. Defaults to 1.
+#' @param gdal "logical" Should raster processing be performed using GDAL libraries? Defaults to \code{FALSE}.
+#' @param field "character" "integer" index or "character" name of column with planning unit ids. Valid only for "SpatialPolygonsDataFrame" objects. Default behaviour is to treat each polygon as a different planning unit.
+#' @param ... Not used.
 #' @return data.frame with sum of raster values in each polygon.
-#' @seealso \code{\link{is.gdalInstalled}}, \code{\link{zonalSum}}
+#' @seealso \code{\link{is.gdalInstalled}}, \code{\link{zonalSum}}, \url{http://www.gdal.org/}, \url{http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries}.
 #' @export
 #' @examples
 #' data(species, planningunits)
-#' calcPuVsSpeciesData(planningunits, species[[1]])
-#' calcPuVsSpeciesData(planningunits, species)
-calcPuVsSpeciesData <- function(x, y, speciesNames=names(y), ncores=1, gdal=FALSE, field=NULL) {
+#' puvspr1.dat<-calcPuVsSpeciesData(planningunits, species[[1]])
+#' puvspr2.dat<-calcPuVsSpeciesData(planningunits, species)
+calcPuVsSpeciesData<-function(x, ...) UseMethod("calcPuVsSpeciesData")
+
+#' @export
+#' @describeIn calcPuVsSpeciesData
+calcPuVsSpeciesData.SpatialPolygons<-function(x,y,ids=seq_len(nlayers(y)), ncores=1, gdal=FALSE, ...) {
 	# check for invalid inputs
-	stopifnot(inherits(x, "SpatialPolygons"))
-	if (!is.null(field) & !inherits(x, "SpatialPolygonsDataFrame"))
-		stop("argument to field must be null if argument to x is not SpatialPolygonsDataFrame")
-	stopifnot(inherits(y, c("RasterLayer", "RasterStack", "RasterBrick")))
-	if(inherits(y, "RasterLayer") & length(speciesNames)>1)
-		warning("y is a RasterLayer and multiple speciesNames provided, so only first name will be used.")
-	if (inherits(y, c("RasterLayer", "RasterStack"))) {
-		if (length(speciesNames)!=nlayers(y)) {
-			warning("The number of layers in y and the length of speciesNames is different, so speciesNames will be set as names(y).")
-			speciesNames=names(y)
-		}
-	}
+	stopifnot(inherits(y, "Raster"))
+	stopifnot(nlayers(y)!=length(ids))
+	return(
+		calcPuVsSpeciesData.SpatialPolygonsDataFrame(
+			x=SpatialPolygonsDataFrame(x@polygons, data=data.frame(id=seq_len(nrow(x@data)), row.names=laply(x@polygons, slot, name="ID"))),
+			y=y,
+			ids=ids,
+			ncores=ncores,
+			gdal=gdal,
+			field="id"
+		)
+	)
+}
+
+#' @export
+#' @describeIn calcPuVsSpeciesData
+calcPuVsSpeciesData.SpatialPolygonsDataFrame<-function(x,y,ids=seq_len(nlayers(y)), ncores=1, gdal=FALSE, field=NULL, ...) {
+	# check for invalid inputs
+	stopifnot(inherits(y, "Raster"))
+	stopifnot(nlayers(y)==length(ids))
 	# prepare attribute table
 	if (is.null(field)) {
-		if (inherits(x, "SpatialPolygonsDataFrame")) {
-			x@data<-data.frame(id=seq_len(nrow(x@data)), row.names=row.names(x@data))
-		} else {
-			x@data<-SpatialPolygonsDataFrame(x@polygons, data=data.frame(id=seq_len(nrow(x@data)), row.names=laply(x@polygons, slot, name="ID")))
-		}
+		x@data<-data.frame(id=seq_len(nrow(x@data)), row.names=row.names(x@data))
 	} else {
-		x<-SpatialPolygonsDataFrame(x, data=data.frame(id=x@data[[field]], row.names=row.names(x@data)))
+		x@data<-data.frame(id=x@data[[field]], row.names=row.names(x@data))
 	}
 	# generate raster layer with polygons
-	temprast=y
-	if (inherits(y, c("RasterBrick", "RasterStack")))
-		temprast=y[[1]]
 	if (gdal & is.gdalInstalled()) {
-		x<-rasterize.gdal(x, temprast, "id")
+		x<-rasterize.gdal(x, y[[1]], "id")
 	} else {
-		x<-rasterize(x, temprast, method="ngb")
+		x<-rasterize(x, y[[1]], method="ngb")
 	}
 	# main processing
-	return(zonalSum(x, y, speciesNames, ncores))
+	return(zonalSum(x, y, ids, ncores))
 }

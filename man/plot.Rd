@@ -12,32 +12,30 @@
 \title{Plot Marxan solutions}
 \usage{
 \S4method{plot}{MarxanData,character}(x, y, basemap = "none",
-  colramp = "BuGn", alpha = 1, grayscale = FALSE, xzoom = c(1, 1),
-  yzoom = c(1, 1), force_reset = FALSE)
+  colramp = "BuGn", alpha = 1, grayscale = FALSE, force_reset = FALSE)
 
 \S4method{plot}{MarxanSolved,character}(x, y, basemap = "none",
-  colramp = "BuGn", alpha = 1, grayscale = FALSE, xzoom = c(1, 1),
-  yzoom = c(1, 1), force_reset = FALSE)
+  colramp = "BuGn", alpha = 1, grayscale = FALSE, force_reset = FALSE)
 
 \S4method{plot}{MarxanSolved,numeric}(x, y, basemap = "none",
-  colramp = "Reds", lockedincol = "#000000FF", lockedoutcol = "#D7D7D7FF",
-  alpha = 1, grayscale = FALSE, xzoom = c(1, 1), yzoom = c(1, 1),
-  force_reset = FALSE)
+  colramp = "Greens", lockedincol = "#000000FF",
+  lockedoutcol = "#D7D7D7FF", alpha = ifelse(basemap == "none", 1, 0.7),
+  grayscale = FALSE, force_reset = FALSE)
 
 \S4method{plot}{MarxanSolved,missing}(x, y, basemap = "none",
   colramp = "PuBu", lockedincol = "#000000FF", lockedoutcol = "#D7D7D7FF",
-  alpha = 1, grayscale = FALSE, xzoom = c(1, 1), yzoom = c(1, 1),
+  alpha = ifelse(basemap == "none", 1, 0.7), grayscale = FALSE,
   force_reset = FALSE)
 
 \S4method{plot}{MarxanSolved,MarxanSolved}(x, y, i = NULL, j = i,
-  basemap = "none", colramp = "Spectral", xlockedincol = "#000000FF",
-  xlockedoutcol = "#D7D7D7FF", ylockedincol = "#FFFFFFFF",
-  ylockedoutcol = "#D7D7D7FF", alpha = 1, grayscale = FALSE,
-  xzoom = c(1, 1), yzoom = c(1, 1), force_reset = FALSE)
+  basemap = "none", colramp = ifelse(is.null(i), "RdYlBu", "Set1"),
+  xlockedincol = "#000000FF", xlockedoutcol = "#D7D7D7FF",
+  ylockedincol = "#FFFFFFFF", ylockedoutcol = "#D7D7D7FF",
+  alpha = ifelse(basemap == "none", 1, 0.7), grayscale = FALSE,
+  force_reset = FALSE)
 
 \S4method{plot}{MarxanUnsolved,character}(x, y, basemap = "none",
-  colramp = "BuGn", alpha = 1, grayscale = FALSE, xzoom = c(1, 1),
-  yzoom = c(1, 1), force_reset = FALSE)
+  colramp = "BuGn", alpha = 1, grayscale = FALSE, force_reset = FALSE)
 
 plot(x, y, ...)
 }
@@ -64,11 +62,11 @@ plot(x, y, ...)
 
 \item{grayscale}{"logical" should basemap be gray scale?}
 
+\item{force_reset}{"logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.}
+
 \item{xzoom}{"numeric" zoom the geoplot in or out along the x-axis by this percent.}
 
 \item{yzoom}{"numeric" zoom the geoplot in or out along the y-axis by this percent.}
-
-\item{force_reset}{"logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.}
 }
 \description{
 This function makes a geoplot displaying Marxan solutions.

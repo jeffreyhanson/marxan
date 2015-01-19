@@ -20,7 +20,11 @@ pu(id, cost = NA, status = NA)
 This function is used in the formula argument of the update function to change planning unit parameters of a "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 }
 \note{
-Set argument 'cost' or 'status' to NA (default) to keep the same.
+Only specified parameters are changed, all unspecific parameters will remain unchanged.
+}
+\examples{
+pu(1, cost=3)
+pu(1, status=1)
 }
 \seealso{
 \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{spp}}

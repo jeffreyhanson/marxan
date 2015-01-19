@@ -2,9 +2,9 @@
 % Please edit documentation in R/MarxanSolved.R
 \name{MarxanSolved}
 \alias{MarxanSolved}
-\title{Create new MarxanSolved object}
+\title{Create new "MarxanSolved" object}
 \usage{
-MarxanSolved(MarxanUnsolved, MarxanResults)
+MarxanSolved(unsolved, results)
 }
 \arguments{
 \item{unsolved}{"MarxanUnsolved" object.}
@@ -12,12 +12,12 @@ MarxanSolved(MarxanUnsolved, MarxanResults)
 \item{results}{"MarxanResults" object.}
 }
 \value{
-"MarxanUnsolved" object.
+"MarxanSolved" object.
 }
 \description{
-This function creates a MarxanSolved object using a "MarxanUnsolved" object and a "MarxanResults" object.
+This function creates a "MarxanSolved" object using a "MarxanUnsolved" object and a "MarxanResults" object.
 }
 \seealso{
-\code{\link{MarxanUnsolved-class}}, \code{\link{MarxanResults-class}}
+\code{\link{MarxanSolved-class}}, \code{\link{MarxanResults-class}}.
 }
 

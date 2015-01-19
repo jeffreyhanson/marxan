@@ -2,23 +2,33 @@
 % Please edit documentation in R/calcPuVsSpeciesData.R
 \name{calcPuVsSpeciesData}
 \alias{calcPuVsSpeciesData}
-\title{Calculate Planning Units vs. Species Data}
+\alias{calcPuVsSpeciesData.SpatialPolygons}
+\alias{calcPuVsSpeciesData.SpatialPolygonsDataFrame}
+\title{Calculate planning units vs. species data}
 \usage{
-calcPuVsSpeciesData(x, y, speciesNames = names(y), ncores = 1,
-  gdal = FALSE, field = NULL)
+calcPuVsSpeciesData(x, ...)
+
+\method{calcPuVsSpeciesData}{SpatialPolygons}(x, y, ids = seq_len(nlayers(y)),
+  ncores = 1, gdal = FALSE, ...)
+
+\method{calcPuVsSpeciesData}{SpatialPolygonsDataFrame}(x, y,
+  ids = seq_len(nlayers(y)), ncores = 1, gdal = FALSE, field = NULL,
+  ...)
 }
 \arguments{
-\item{x}{SpatialPolygons or SpatialPolygonsDataFrame object}
+\item{x}{"SpatialPolygons" or "SpatialPolygonsDataFrame" object.}
 
-\item{y}{RasterLayer, RasterStack, or RasterBrick}
+\item{...}{Not used.}
 
-\item{speciesNames}{character vector of species names}
+\item{y}{"RasterLayer", "RasterStack", or "RasterBrick" object.}
 
-\item{ncores}{Number of cores to use for processing}
+\item{ids}{"integer" vector of ids. Defaults to indices of layers in the \code{y}.}
 
-\item{gdal}{Logical. Should raster processing be performed using python gdal libraries?}
+\item{ncores}{"integer" Number of cores to use for processing. Defaults to 1.}
 
-\item{field}{character if not NULL and \code{x} is a SpatialPolygonsDataFrame object, the index or name of the column with planning unit ids}
+\item{gdal}{"logical" Should raster processing be performed using GDAL libraries? Defaults to \code{FALSE}.}
+
+\item{field}{"character" "integer" index or "character" name of column with planning unit ids. Valid only for "SpatialPolygonsDataFrame" objects. Default behaviour is to treat each polygon as a different planning unit.}
 }
 \value{
 data.frame with sum of raster values in each polygon.
@@ -26,14 +36,20 @@ data.frame with sum of raster values in each polygon.
 \description{
 This function calculates the sum of species values in each planning unit.
 Be aware that using polygons with overlaps will result in inaccuracies.
-By default all polygons will be treated as having seperate ids.
+By default all polygons will be treated as having separate ids.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{SpatialPolygons}: 
+
+\item \code{SpatialPolygonsDataFrame}: 
+}}
 \examples{
 data(species, planningunits)
-calcPuVsSpeciesData(planningunits, species[[1]])
-calcPuVsSpeciesData(planningunits, species)
+puvspr1.dat<-calcPuVsSpeciesData(planningunits, species[[1]])
+puvspr2.dat<-calcPuVsSpeciesData(planningunits, species)
 }
 \seealso{
-\code{\link{is.gdalInstalled}}, \code{\link{zonalSum}}
+\code{\link{is.gdalInstalled}}, \code{\link{zonalSum}}, \url{http://www.gdal.org/}, \url{http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries}.
 }
 

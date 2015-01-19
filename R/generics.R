@@ -16,24 +16,14 @@ NULL
 #' @note This function is used to solve a MarxanUnsolved object that has all of its inputs generated. The marxan function (without lower case 'm') provides a more general interface for generating inputs and outputs for Marxan.
 solve<-function(x, ...) {UseMethod('solve')}
 
-#' Extract solution selection
-#'
-#' Extract selections for a given solution from a "MarxanResults or "MarxanSolved" object.
-#'
-#' @param x "MarxanResults or "MarxanSolved" object.
-#' @param y 'best' to return selection for best solution, 'all' to return all solutions, or "integer" to return y'th solution.
-#' @return "matrix" or "numeric" vector with planning units statuses depending on arguments.
-#' @export
-#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
-selection<-function(x, ...) {UseMethod('selection')}
 
 #' Extract solution score
 #'
 #' Extract solution score from "MarxanResults" or "MarxanSolved" object.
 #'
 #' @param x "MarxanResults or "MarxanSolved" object.
-#' @param y 'best' to return best solution score, 'all' to return all scores, or "integer" to return score for y'th solution.
-#' @return "matrix" or "numeric" vector with solution scores depending on arguments.
+#' @param y "missing" to return all scores, "integer" 0 to return score for best solution, "integer" value greater than 0 for y'th solution score.
+#' @return "matrix" or "numeric" vector with solution score(s) depending on arguments.
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 score<-function(x, ...) {UseMethod('score')}
 
@@ -80,6 +70,7 @@ log<-function(x, ...) {UseMethod('log')}
 #' This function returns the amount held for each species in a solution.
 #'
 #' @param x "MarxanResults" or "MarxanSolved" object.
+#' @param y "missing" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for y'th solution value.
 #' @return "matrix" or "numeric" vector depending on arguments.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
@@ -91,6 +82,7 @@ amountheld<-function(x, ...) {UseMethod('amountheld')}
 #' This function returns the number of occurrences held for each species in a solution.
 #'
 #' @param x "MarxanResults" or "MarxanSolved" object.
+#' @param y "missing" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for y'th solution value.
 #' @return "matrix" or "numeric" vector depending on arguments.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
@@ -101,10 +93,47 @@ occheld<-function(x, ...) {UseMethod('occheld')}
 #' This function reports whether a solution has met the targets for each species in a solution.
 #'
 #' @param x "MarxanResults" or "MarxanSolved" object.
+#' @param y "missing" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for y'th solution value.
 #' @return "matrix" or "logical" vector depending on arguments.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 targetsmet<-function(x, ...) {UseMethod('targetsmet')}
+
+
+#' Extract solution selection
+#'
+#' Extract selections for a given solution from a "MarxanResults or "MarxanSolved" object.
+#'
+#' @param x "MarxanResults or "MarxanSolved" object.
+#' @param y "missing" to return all solution selections, "integer" 0 to return selection for best solution, "integer" value greater than 0 for y'th solution selection.
+#' @return "matrix" or "numeric" vector with planning units statuses depending on arguments.
+#' @export
+#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
+selection<-function(x, ...) {UseMethod('selection')}
+
+#' Extract minimum proportion met ratio
+#'
+#' Extract minimum proportion met (MPM) ratio from "MarxanResults" or "MarxanSolved" object.
+#'
+#' @param x "MarxanResults or "MarxanSolved" object.
+#' @param y "missing" to return all ratios, "integer" 0 to return ratios for best solution, "integer" value greater than 0 for y'th solution ratios.
+#' @return "matrix" or "numeric" vector with solution ratios depending on arguments.
+#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
+mpm<-function(x, ...) {UseMethod('mpm')}
+
+#' Extract separation achieved value
+#'
+#' Extract separation achieved value from "MarxanResults" or "MarxanSolved" object.
+#'
+#' @param x "MarxanResults or "MarxanSolved" object.
+#' @param y "missing" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for y'th solution values.
+#' @return "matrix" or "numeric" vector with values depending on arguments.
+#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
+sepacheived<-function(x, ...) {UseMethod('sepacheived')}
+
+
+
+
 
 #' Compare Marxan objects
 #'
@@ -121,14 +150,14 @@ setGeneric("is.comparable", function(x, y) standardGeneric("is.comparable"))
 #' This function runs an principle components analysis on Marxan solutions using various characteristics.
 #' Results cached to permit rapid display for plotting functions.
 #'
-#' @param x "MarxanSolved" object.
+#' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param var "character" should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param ... arguments to \code{\link[stats]{prcomp}}.
 #' @param force_reset "logical" should analysis be run even if it is stored in the cache?
 #' @return "prcomp" object with Euclidean distances between rotated data for ordination plots.
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
-pca<-function(x) {UseMethod("pca")}
+pca<-function(x, ...) {UseMethod("pca")}
 
 
 #' Dissimilarity matrix for Marxan solutions
@@ -136,14 +165,14 @@ pca<-function(x) {UseMethod("pca")}
 #' This function calculates a dissimilty matrix for Marxan solutions using various characteristics.
 #' Results cached to permit rapid display for plotting functions.
 #'
-#' @param x "MarxanSolved" object.
+#' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param var "character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param method "character" name of distance metric to use for calculating distance (see \code{\link[vegan]{vegdist}})
 #' @param force_reset "logical" should analysis be run even if it is stored in the cache?
 #' @return "dist"  with dissimilarity indices.
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
-dist<-function(x) {UseMethod("dist")}
+dist<-function(x,...) {UseMethod("dist")}
 dist.default<-stats::dist
 
 #' Metric Dimensional Scaling for Marxan Solutions
@@ -151,7 +180,7 @@ dist.default<-stats::dist
 #' This function runs an metric dimensional scaling (using \code{\link[vegan]{monoMDS}}) on Marxan solutions using various characteristics.
 #' Results cached to permit rapid display for plotting functions.
 #'
-#' @param x "MarxanSolved" object
+#' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param var "character" should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param method "character" name of distance metric to use for calculating distance (see \code{\link[vegan]{vegdist}}).
 #' @param ... additional arguments to \code{\link[vegan]{monoMDS}}.
@@ -166,7 +195,7 @@ mds=function(x, ...) UseMethod("mds")
 #' This function runs an hierarchical clustering on (using \code{\link[fastcluster]{hclust}}) on Marxan solutions using various characteristics.
 #' Results cached to permit rapid display for plotting functions.
 #'
-#' @param x "MarxanSolved" object
+#' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param type "character" use metric dimensional scaling ('mds'), or principle components analysis ('pca'), or distance matrix('dist') for analysis?
 #' @param  "character" should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param method "character" name of distance metric to use for calculating distance (see \code{\link[vegan]{vegdist}}).
@@ -183,7 +212,7 @@ hclust=function(x, ...) UseMethod("mds")
 #' Numbers indicate solution ids. The size of the number on your screen indicates relative solution quality ('score').
 #' Distance matrices and results from multivariate analyses are cached to permit rapid display.
 #'
-#' @param x "MarxanSolved" object
+#' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param type "character" use 'mds' or 'pca' for analysis?
 #' @param var "character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param nbest "integer" color the n best solutions in "red"
@@ -200,7 +229,7 @@ ordiplot=function(x, ...) UseMethod("ordiplot")
 #' Clustering can be applied to distances between raw data, or to results from dimensional reduction analysis (ie. MDS and PCA).
 #' Distance matrices and results from multivariate analyses are cached to permit rapid display.
 #'
-#' @param x "MarxanSolved" object.
+#' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param type "character" use 'nmds' or 'pca' or 'dist' for analysis?
 #' @param var "character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param nbest "integer" color the n best solutions in "red".
@@ -230,8 +259,9 @@ dendrogram=function(x, ...) UseMethod("dendrogram")
 #' }
 #' 
 #' @param x "MarxanResults" or "MarxanSolved".
-#' @param var "character" what variable should be used to compare solutions?
-#' @param nbest "integer" color the n best solutions in "red".
+#' @param var "character" What variable should be used to compare solutions?
+#' @param n "integer" Number of solutions to plot. Defaults to 50.
+#' @param nbest "integer" Color the n best solutions in "red".
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 dotchart=function(x, ...) UseMethod("dotchart")
@@ -240,8 +270,8 @@ dotchart=function(x, ...) UseMethod("dotchart")
 #'
 #' This function retrieves google map data for planning units. The google map data is cached to provide fast plotting capabilities.
 #'
-#' @param basemap "character" name of basemap to display. Valid names are "roadmap", "mobile", "satellite", "terrain", "hybrid", "mapmaker-roadmap", "mapmaker-hybrid".
-#' @param grayscale "logical" should basemap be gray scale?
+#' @param basemap "character" name of base map to display. Valid names are "roadmap", "mobile", "satellite", "terrain", "hybrid", "mapmaker-roadmap", "mapmaker-hybrid".
+#' @param grayscale "logical" should base map be gray scale?
 #' @param xzoom "numeric" zoom the geoplot in or out along the x-axis by this percent.
 #' @param yzoom "numeric" zoom the geoplot in or out along the y-axis by this percent.
 #' @param force_reset "logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.
@@ -292,7 +322,7 @@ setGeneric("plot", function(x,y, ...) standardGeneric("plot"))
 #' @return "MarxanSolved" or "MarxanUnsolved" object depending on solve argument.
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{marxan}}, \code{\link{opt}}, \code{\link{spp}}, \code{\link{pu}}
-update<-function(x, formula, solve, ...) UseMethod("update")
+update<-function(x, ...) UseMethod("update")
 
 #' Test if hash is cached in a Marxan object
 #'

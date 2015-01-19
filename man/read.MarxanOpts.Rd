@@ -2,12 +2,12 @@
 % Please edit documentation in R/MarxanOpts.R
 \name{read.MarxanOpts}
 \alias{read.MarxanOpts}
-\title{Read Marxan Input Parameters from Disk}
+\title{Read Marxan input parameters from disk}
 \usage{
 read.MarxanOpts(path)
 }
 \arguments{
-\item{path}{"character" directory path for location to save input parameters file}
+\item{path}{"character" directory path for location to save input parameters file.}
 }
 \description{
 This function reads Marxan parameter settings from an input file.
@@ -19,6 +19,6 @@ y<-read.MarxanData(file.path(tempdir(), 'input.dat'))
 stopifnot(identical(x,y))
 }
 \seealso{
-\code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{write.MarxanOpts}}
+\code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{write.MarxanOpts}}.
 }
 

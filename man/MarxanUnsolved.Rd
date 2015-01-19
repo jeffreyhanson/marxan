@@ -18,6 +18,6 @@ MarxanUnsolved(opts, data)
 This function creates a MarxanUnsolved object using MarxanOpts and MarxanData objects.
 }
 \seealso{
-\code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}
+\code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}.
 }
 

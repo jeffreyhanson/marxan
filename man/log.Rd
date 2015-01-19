@@ -4,7 +4,7 @@
 \alias{log}
 \alias{log.MarxanResults}
 \alias{log.MarxanSolved}
-\title{Log}
+\title{Names}
 \usage{
 \method{log}{MarxanResults}(x)
 
@@ -13,10 +13,12 @@
 log(x, ...)
 }
 \arguments{
+\item{x}{any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
+
 \item{x}{"MarxanResults" or "MarxanSolved" object.}
 }
 \description{
-This function returns the log file associated with running Marxan.
+This function returns the species names for a Marxan object.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -24,7 +26,15 @@ This function returns the log file associated with running Marxan.
 
 \item \code{MarxanSolved}: 
 }}
+\note{
+"MaranResults" objects do not store species names.
+}
 \seealso{
+\code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+Log
+
+This function returns the log file associated with running Marxan.
+
 \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 }
 

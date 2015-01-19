@@ -1,37 +1,37 @@
 #' @include marxan-internal.R
 NULL
 
-#' Zonal Sum
+#' Zonal sum
 #'
-#' This function calculates the zonal sum of SpatialPolygons in a RasterLayer, RasterStack, or RasterBrick.
+#' This function calculates the zonal sum of "SpatialPolygons" in a "Raster" object.
 #' For most cases it is expected to run faster than the zonal functon in the raster package.
 #' This function is useful for extracting the sum of raster values inside each planning unit.
 #' 
-#' @param x SpatialPolygons or SpatialPolygons object
-#' @param y RasterLayer, RasterStack, or RasterBrick
-#' @param speciesName character vector of species names
-#' @param ncores Number of cores to use for processing data.
-#'
-#' @return data.frame with sum of raster values in each polygon.
-#' @seealso \code{\link[raster]{zonal}}
+#' @param x "SpatialPolygons" or "SpatialPolygonsDataFrame" object.
+#' @param y "RasterLayer", "RasterStack", or "RasterBrick" object.
+#' @param ids "integer" vector of species ids in \code{y}. Defaults to indices of \code{y}.
+#' @param ncores "integer" Number of cores to use for processing data. Defaults to 1.
+#' @return "data.frame" with "integer" 'species', "integer" 'pu', and "numeric" 'amount' columns.
+#' @note This function is designed to be used to generate inputs for Marxan. The column names are appropriate for the 'puvspr.dat' file. Data is sorted by values in 'pu' column.
+#' @seealso \code{\link[raster]{zonal}}.
 #' @export
 #' @examples
 #' data(species, planningunits)
-#' purast<-rasterize(planningunits, species[[1]])
-#' zonalSum(purast, species[[1]])
-#' zonalSum(purast, species)
+#' rast<-rasterize(planningunits, species[[1]], 'sum')
+#' zonalSum(planningunitsraster, species[[1]])
+#' zonalSum(planningunitsraster, species)
 setGeneric("zonalSum", function(x, y, ...) standardGeneric("zonalSum"))
 
 #' @describeIn zonalSum
 #' @export
 setMethod(
 	"zonalSum",
-	signature(x="RasterLayer", y="RasterStackOrBrick"),
-	function(x, y, speciesNames=names(y), ncores=1) {
+	signature(x="RasterLayer", y="Raster"),
+	function(x, y, ids=names(y), ncores=1) {
 		if (canProcessInMemory(x,2)) {
-			return(rbind.fill(llply(seq_len(nlayers(y)), function(l) {
-					return(zonalSum.RasterLayerInMemory(x, y[[l]], speciesNames[l]))
-			})))
+			x<-rbind.fill(llply(seq_len(nlayers(y)), function(l) {
+					return(zonalSum.RasterLayerInMemory(x, y[[l]], ids[l]))
+			}))
 		} else {
 			bs<-blockSize(x)	
 			if (ncores>1) {
@@ -40,30 +40,11 @@ setMethod(
 					clusterExport(clust, c("bs", "x", "rcpp_groupsum"))
 					registerDoSNOW(clust)
 			}
-			# main processing
-			return(rbind.fill(llply(seq_len(nlayers(y)), function(l) {
-				return(zonalSum.RasterLayerNotInMemory(bs, x, y[[l]], speciesNames[l], registered=ncores>1))
-			})))
+			x<-rbind.fill(llply(seq_len(nlayers(y)), function(l) {
+				return(zonalSum.RasterLayerNotInMemory(bs, x, y[[l]], ids[l], registered=ncores>1))
+			}))
 		}
-	}
-)
-
-#' @describeIn zonalSum
-#' @export
-setMethod(
-	"zonalSum",
-	signature(x="RasterLayer", y="RasterLayer"),
-	function(x, y, speciesNames=names(y), ncores=1) {
-		if (canProcessInMemory(x,2)) {
-			return(zonalSum.RasterLayerInMemory(x, y, speciesNames))
-		} else {
-			bs<-blockSize(x)
-			if(ncores>1) {
-				clust<-makeCluster(ncores, type="SOCK")
-				clusterEvalQ(clust, {library(raster);library(Rcpp)})
-				registerDoSNOW(clust)
-			}
-			return(zonalSum.RasterLayerNotInMemory(bs, y, speciesNames, ncores, ncores>1))
-		}
+		# sort data and return
+		return(x[order(x$pu),])
 	}
 )

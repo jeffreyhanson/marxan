@@ -6,19 +6,19 @@
 \alias{score.MarxanSolved}
 \title{Extract solution score}
 \usage{
-\method{score}{MarxanResults}(x, y = "best")
+\method{score}{MarxanResults}(x, y = NULL)
 
-\method{score}{MarxanSolved}(x, y = "best")
+\method{score}{MarxanSolved}(x, y = NULL)
 
 score(x, ...)
 }
 \arguments{
 \item{x}{"MarxanResults or "MarxanSolved" object.}
 
-\item{y}{'best' to return best solution score, 'all' to return all scores, or "integer" to return score for y'th solution.}
+\item{y}{"missing" to return all scores, "integer" 0 to return score for best solution, "integer" value greater than 0 for y'th solution score.}
 }
 \value{
-"matrix" or "numeric" vector with solution scores depending on arguments.
+"matrix" or "numeric" vector with solution score(s) depending on arguments.
 }
 \description{
 Extract solution score from "MarxanResults" or "MarxanSolved" object.

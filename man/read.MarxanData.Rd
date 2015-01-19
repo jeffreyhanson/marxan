@@ -2,7 +2,7 @@
 % Please edit documentation in R/MarxanData.R
 \name{read.MarxanData}
 \alias{read.MarxanData}
-\title{Read Input Marxan Data from Disk}
+\title{Read Marxan input}
 \usage{
 read.MarxanData(path, skipchecks = FALSE)
 }
@@ -10,12 +10,12 @@ read.MarxanData(path, skipchecks = FALSE)
 \item{path}{"character" file path for input parameter file or directory containing Marxan files named 'spec.dat', 'pu.dat', 'bound.dat', 'puvspr.dat', and (optionally) 'puvspr_sporder.dat'.}
 }
 \value{
-MarxanData object
+"MarxanData" object
 }
 \description{
 This function loads Marxan input data from disk.
 }
 \seealso{
-\code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}
+\code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}.
 }
 

@@ -2,24 +2,26 @@
 % Please edit documentation in R/calcBoundaryData.R
 \name{calcBoundaryData}
 \alias{calcBoundaryData}
-\title{Calculate Boundary Data}
+\title{Calculate boundary data for planning units}
 \usage{
 calcBoundaryData(x, ...)
 }
 \arguments{
-\item{x}{PolySet, SpatialPolygons or SpatialPolyognsDataFrame.}
+\item{x}{"PolySet", "SpatialPolygons" or "SpatialPolyognsDataFrame" object.}
 
-\item{tolerance}{numeric to specify precision of vertices.}
+\item{...}{Not used.}
 
-\item{lengthFactor}{numeric to scale boundary lengths.}
+\item{tolerance}{"numeric" to specify precision of calculations (ie. how far apart do vertices have to be to be considered different).}
 
-\item{edgeFactor}{numeric to scale boundary lengths that do not have any neighbors.}
+\item{lengthFactor}{"numeric" to scale boundary lengths.}
+
+\item{edgeFactor}{"numeric" to scale boundary lengths for edges that do not have any neighbors, such as those that occur along the margins.}
 }
 \value{
-data.frame with columns 'id1', 'id2', and 'amount'.
+"data.frame" with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns.
 }
 \description{
-This function calculates boundary length data for PolySet, SpatialPolygons, and SpatialPolygonsDataFrame objects.
+This function calculates boundary length data for "PolySet", "SpatialPolygons", and "SpatialPolygonsDataFrame" objects.
 Be aware that this function is designed to be as fast as possible, as a result it depends on C++ code and if this
 function is used improperly, then it will crash R. Furthermore, multipart polygons with touching edges will likely result in inaccuracies.
 If argument set to SpatialPolygons or SpatialPolygonsDataFrame, this will be converted to PolySet before processing.
@@ -30,6 +32,6 @@ bound.dat <- calcBoundaryData(planningunits)
 summary(bound.dat)
 }
 \seealso{
-this function is based on the QMARXAN algorithm \code{\url{http://aproposinfosystems.com/products/qmarxan/}} for calculating boundary length.
+this function is based on the algorithm on by QMARXAN \url{http://aproposinfosystems.com/products/qmarxan/} for calculating boundary length.
 }
 

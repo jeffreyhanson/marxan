@@ -5,14 +5,15 @@ NULL
 #'
 #' This class is used to store Marxan input data.
 #'
-#' @slot polygons "PolySet" planning unit spatial data.
-#' @slot pu "data.frame" planning unit data; with 'id', 'cost', 'status' columns.
-#' @slot species "data.frame" with species data; with 'id', 'target', 'spf', and 'name' columns.
-#' @slot puvspecies "data.frame" with data on species density in each planning unit, with 'species', 'pu', and 'target' columns, ordered by 'pu'.
-#' @slot puvspecies_spo "data.frame" with data on species density in each planning unit; with 'species', 'pu', and 'target' columns, ordered by 'species'.
-#' @slot boundary "data.frame" with data on the shared boundary length of planning; with 'id1', 'id2', and 'amount' columns.
-#' @slot skipchecks "logical" skip data integrity checks? May improve speed for big data sets.
-#' @slot .cache "environment" used to store processing calculations
+#' @slot polygons "PolySet" planning unit spatial data or "NULL" if data not available.
+#' @slot pu "data.frame" planning unit data; with "integer" 'id', "numeric" 'cost', "integer" 'status' columns.
+#' @slot species "data.frame" with species data; with "integer" 'id', "numeric" 'target', "numeric" 'spf', and "character" 'name' columns.
+#' @slot puvspecies "data.frame" with data on species density in each planning unit, with "integer" 'species', "integer" 'pu', and "numeric" 'target' columns. This "data.frame" is sorted in order of 'pu' column.
+#' @slot puvspecies_spo "data.frame" with data in \code{puvspecies} ordered by 'species' column.
+#' @slot boundary "data.frame" with data on the shared boundary length of planning; with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns.
+#' @slot skipchecks "logical" Skip data integrity checks? May improve speed for big data sets.
+#' @slot .cache "environment" used to cache calculations.
+#' @seealso \code{\link[PBSmapping]{PolySet}}.
 #' @export
 setClass("MarxanData",
 	representation(
@@ -34,10 +35,10 @@ setClass("MarxanData",
 		expect_false(any(duplicated(object@pu$id)), info='argument to pu$id contains duplicates')
 		expect_is(object@pu$cost, "numeric", label='argument to pu$cost')
 		expect_true(all(object@pu$status %in% 0:3), info='argument to pu$status must only contain values in 0:3')
+
 		
 		# species
-		object@species$name<-as.character(object@species$name)
-		expect_named(object@species, c("id","spf","target","name"), label='argument to species')
+		expect_true(all(c("id","spf","target") %in% names(object@species)), label='argument to species')
 		expect_is(object@species$id, "integer", label='argument to species$id')
 		expect_false(any(is.na(object@species$id)), info='argument to species$id must not contain any NA values')
 		expect_false(any(duplicated(object@species$id)), info='argument to species$id contains duplicates')
@@ -45,8 +46,23 @@ setClass("MarxanData",
 		expect_false(any(is.na(object@species$spf)), info='argument to species$spf must not contain any NA values')
 		expect_is(object@species$target, "numeric", label='argument to species$target')
 		expect_false(any(is.na(object@species$target)), "numeric", info='argument to species$target must not contain any NA values')
-		expect_is(object@species$name, "character", label='argument to species$name')
-		expect_false(any(is.na(object@species$name)), info='argument to species$name must not contain any NA values')
+		if (!is.null(object@species$name)) {
+			object@species$name<-as.character(object@species$name)
+			expect_is(object@species$name, "character", label='argument to species$name')
+			expect_false(any(is.na(object@species$name)), info='argument to species$name must not contain any NA values')		
+		}
+		if (!is.null(object@species$targetocc)) {
+			expect_is(object@species$targetocc, "integer", label='argument to species$targetocc')
+			expect_false(any(is.na(object@species$targetocc)), info='argument to species$targetocc must not contain any NA values')
+		}
+		if (!is.null(object@species$sepnum)) {
+			expect_is(object@species$sepnum, "integer", label='argument to species$sepnum')
+			expect_false(any(is.na(object@species$sepnum)), info='argument to species$sepnum must not contain any NA values')
+		}
+		if (!is.null(object@species$sepdistance)) {
+			expect_is(object@species$sepdistance, "numeric", label='argument to species$sepdistance')
+			expect_false(any(is.na(object@species$sepdistance)), info='argument to species$sepdistance must not contain any NA values')
+		}
 		
 		# puvspecies
 		expect_named(object@puvspecies, c("species","pu","amount"), label='argument to puvspecies')
@@ -81,7 +97,13 @@ setClass("MarxanData",
 		expect_true(all(object@puvspecies$pu %in% object@pu$id), info='argument to puvspecies$pu must only contain values present in pu$id')
 		expect_true(all(object@puvspecies_spo$pu %in% object@pu$id), info='argument to puvspecies_spo$pu must only contain values present in pu$id')
 		expect_true(all(object@puvspecies$species %in% object@species$id), info='argument to puvspecies$species must only contain values present in species$id')			
-		expect_true(all(object@puvspecies_spo$species %in% object@species$id), info='argument to puvspecies_spo$species must only contain values present in species$id')			
+		expect_true(all(object@puvspecies_spo$species %in% object@species$id), info='argument to puvspecies_spo$species must only contain values present in species$id')
+		if (!is.null(object@species$sepdistance)) {
+			expect_is(object@pu$xloc, "numeric", label='argument to pu$xloc')
+			expect_false(any(is.na(object@pu$xloc)), info='argument to pu$xloc must not contain any NA values')				
+			expect_is(object@pu$yloc, "numeric", label='argument to pu$yloc')
+			expect_false(any(is.na(object@pu$yloc)), info='argument to pu$yloc must not contain any NA values')				
+		}
 		return(TRUE)
 	}
 )
@@ -97,26 +119,28 @@ setMethod(
 
 #' Create new MarxanData object
 #'
-#' This function creates a MarxanData using pre-processed data.
+#' This function creates a "MarxanData" object using pre-processed data.
 #'
-#' @param pu "data.frame" planning unit data; with columns 'id', 'cost', and 'status' columns.
-#' @param species species "data.frame" species data; with columns 'id', 'target', 'spf', and 'name' columns.
-#' @param puvspecies "data.frame" pu vs. species data, with 'species', 'pu', and 'amount' columns, sorted by 'pu'.
-#' @param boundary "data.frame" with shared boundary data; with "id1", "id2", and "boundary" columns.
-#' @param polygons "PolySet" with planning unit data or "NULL" if geoplotting capabilities are not required.
-#' @param puvspecies_spo "data.frame" with values in puvspecies sorted by species. Defaults to NULL so this is calculated automatically from argument to puvspecies.
-#' @param skipchecks "logical" skip data integrity checks? May improve speed for big data sets. Defaults to FALSE.
-#' @param .cache "environment" the cache used to store objects to speed up plottnig functions. Do not set this unless you know what you're doing.
+#' @param pu "data.frame" planning unit data; with "integer" 'id', "numeric" 'cost', "integer" 'status' columns.
+#' @param species "data.frame" with species data; with "integer" 'id', "numeric" 'target', "numeric" 'spf', and "character" 'name' columns.
+#' @param puvspecies "data.frame" with data on species density in each planning unit, with "integer" 'species', "integer" 'pu', and "numeric" 'target' columns. This "data.frame" is sorted in order of 'pu' column.
+#' @param boundary "data.frame" with data on the shared boundary length of planning; with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns.
+#' @param polygons "PolySet" planning unit spatial data. Defaults to \code{NULL} so that Marxan large problems can still be handled.
+#' @param puvspecies_spo "data.frame" with data in \code{puvspecies} ordered by 'species' column. Defaults to \code{NULL}, and will generate data from \code{puvspecies}.
+#' @param skipchecks "logical" Skip data integrity checks? May improve speed for big data sets. Defaults to \code{FALSE}.
+#' @param .cache "environment" used to cache calculations. Defaults to a new environment.
+#' @note Generally, users are not encouraged to change arguments to \code{.cache}.
 #' @return MarxanData object
-#' @seealso \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData-class}}
+#' @seealso \code{\link[PBSmapping]{PolySet}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData-class}}.
 #' @export
 #' @examples
-#' data(planningunits, species, speciesRanges)
+#' data(planningunits, species)
 #' x<-MarxanData(
 #' 	planningunits@@data,
-#' 	speciesTargets,
-#'  calcPuVsSpeciesData(planningunits, species),
-#'  calcBoundaryData(planningunits)
+#' 	data.frame(id=1L, target=12, spf=23, name='species1', stringsAsFactors=FALSE),
+#'  calcPuVsSpeciesData(planningunits, species[[1]]),
+#'  calcBoundaryData(planningunits),
+#'  SpatialPolygons2PolySet(planningunits)
 #' )
 MarxanData<-function(pu, species, puvspecies, boundary, polygons=NULL, puvspecies_spo=NULL, skipchecks=FALSE, .cache=new.env()) {
 	# convert factors to characters
@@ -134,25 +158,25 @@ MarxanData<-function(pu, species, puvspecies, boundary, polygons=NULL, puvspecie
 	return(new("MarxanData", polygons=polygons, pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo,skipchecks=skipchecks,boundary=boundary, .cache=.cache))
 }
 
-#' Read Input Marxan Data from Disk
+#' Read Marxan input
 #'
 #' This function loads Marxan input data from disk.
 #'
 #' @param path "character" file path for input parameter file or directory containing Marxan files named 'spec.dat', 'pu.dat', 'bound.dat', 'puvspr.dat', and (optionally) 'puvspr_sporder.dat'.
-#' @return MarxanData object
+#' @return "MarxanData" object
 #' @export
-#' @seealso \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}
+#' @seealso \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}.
 read.MarxanData<-function(path, skipchecks=FALSE) {
 	expect_true(file.exists(path), info="argument to path does not exist.")
 	if (nchar(tools::file_ext(path))>0) {
 		# load from input file
 		args<-readLines(path)
 		path<-parseArg("INPUTDIR",args)
-		pu.pth<-file.path(path,parseArg("PUNAME"))
-		species.pth<-file.path(path,parseArg("SPECNAME"))
-		puvspr.pth<-file.path(path,parseArg("PUVSPRNAME"))
-		puvspr_sporder.pth<-file.path(path,parseArg("MATRIXSPORDERNAME", error=FALSE))
-		bound.pth<-file.path(path,parseArg("BOUNDNAME"))
+		pu.pth<-file.path(path,parseArg("PUNAME",args))
+		species.pth<-file.path(path,parseArg("SPECNAME",args))
+		puvspr.pth<-file.path(path,parseArg("PUVSPRNAME",args))
+		puvspr_sporder.pth<-file.path(path,parseArg("MATRIXSPORDERNAME", args, error=FALSE))
+		bound.pth<-file.path(path,parseArg("BOUNDNAME",args))
 	} else {
 		# load from directory
 		pu.pth<-file.path(path,'pu.dat')
@@ -179,14 +203,14 @@ read.MarxanData<-function(path, skipchecks=FALSE) {
 	))
 }
 
-#' Write Input Marxan Data to Disk
+#' Write Marxan input data
 #'
-#' This function saves MarxanData objects to disk.
+#' This function saves "MarxanData" objects to disk.
 #'
-#' @param x "MarxanData" object to save
-#' @param dir "character" directory path for location to save data
+#' @param x "MarxanData" object to save.
+#' @param dir "character" directory path for location to save data.
 #' @export
-#' @seealso \code{\link{read.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}
+#' @seealso \code{\link{read.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}.
 write.MarxanData<-function(x, dir=getwd(), ...) {
 	write.table(x@species,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
 	write.table(x@puvspecies,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr.dat"))
@@ -195,30 +219,29 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 	write.table(x@pu,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"pu.dat"))
 }
 
-#' Format Data for Marxan
+#' Format data for Marxan
 #'
 #' This function prepares spatially explicit planning unit and species data for Marxan processing.
-#' By default, raw data can be provided which will processed for Marxan. However, if particular Marxan input file have
-#' already been generated, these can be supplied using the pu, species, puvspecies, or boundary arguments to avoid re-processing
-#' these outputs.
+#' By default, raw data can be provided which be used to generate all Marxan inputs from scratch. However, if particular Marxan input file have
+#' already been generated, these can be supplied to avoid re-processing data.
 #'
-#' @param polygons "SpatialPolygons" with planning unit data
-#' @param rasters "RasterLayer", "RasterStack", "RasterBrick" with species distribution data
-#' @param targets "numeric" or "character" vector with absolute or percent-based targets
-#' @param pu "data.frame" planning unit data; with columns "id", "cost", and "status" columns (optional)
-#' @param species "data.frame" species data; with columns "id", "target", "spf", and "name" columns (optional)
-#' @param puvspecies "data.frame" pu vs. species data; with "species", "pu", and "amount" columns (optional)
-#' @param boundary "data.frame" with shared boundary data; with "id1", "id2", and "boundary" columns (optional)
-#' @param verbose "logical" Should information on data pre-processing be displayed?
-#' @return MarxanData object
-#' @seealso \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}
+#' @param polygons "SpatialPolygons" with planning unit data.
+#' @param rasters "RasterLayer", "RasterStack", "RasterBrick" with species distribution data.
+#' @param targets "numeric" vector for targets for each species (eg. 12), or "character" vector with percent-based targets (eg. '12%'). Defaults to '20%' for each species.
+#' @param pu "data.frame" planning unit data; with "integer" 'id', "numeric" 'cost', "integer" 'status' columns. Default behaviour is to generate a table with all costs and statuses set to 1 and 0 (respectively).
+#' @param species "data.frame" with species data; with "integer" 'id', "numeric" 'target', "numeric" 'spf', and "character" 'name' columns. Default behaviour is to base targets on \code{target} argument, set 'spf' to 1, and set 'names' use names of layers in \code{rasters} argument.
+#' @param puvspecies "data.frame" pu vs. species data; with "species", "pu", and "amount" columns. Defaults to \code{NULL}, and will be calculated using \code{calcPuVsSpeciesData}.
+#' @param puvspecies_spo "data.frame" with data in \code{puvspecies} ordered by 'species' column. Defaults to \code{NULL}, and will generate data from \code{puvspecies}.
+#' @param boundary "data.frame" with data on the shared boundary length of planning; with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns. Default behaviour is to calculate this using \code{calcBoundaryData}.
+#' @param Additional arguments to \code{calcBoundaryData} and \code{calcPuVsSpeciesData}.
+#' @seealso \code{\link{MarxanData-class}}, , \code{\link{MarxanData}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}.
 #' @export
 #' @examples
-#' data(planningunits, species, speciesRanges)
-#' x<-MarxanData(planningunits, speciesRanges, targets="10%")
-#' y<-MarxanData(planningunits, speciesRanges, species=species)
+#' data(planningunits, species)
+#' x<-MarxanData(planningunits, rasters=species, targets="10%")
+#' y<-MarxanData(planningunits, rasters=species)
 #' stopifnot(identical(x,y))
-format.MarxanData<-function(polygons, rasters, targets="20%", spf=1, pu=NULL, species=NULL, puvspecies=NULL, boundary=NULL, ..., verbose=FALSE) {
+format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers(rasters)), sepdistance=rep(0, nlayers(rasters)), sepnum=rep(0,nlayers(rasters)), targetocc=rep(0,nlayers(rasters)), pu=NULL, species=NULL, puvspecies=NULL, puvspecies_spo=NULL, boundary=NULL, ..., verbose=FALSE) {
 	# init
 	.cache<-new.env()
 	# set polygons
@@ -231,11 +254,20 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=1, pu=NULL, sp
 	geoPolygons<-rcpp_Polygons2PolySet(geoPolygons@polygons)
 	# set pu
 	if (is.null(pu)) {
+		validNames<-c('id','cost','status','xloc','yloc')
 		if (inherits(polygons, "SpatialPolygonsDataFrame") & all(c('id','cost','status') %in% names(polygons@data))) {
-			pu<-polygons@data[,c('id','cost','status'),drop=FALSE]
+			pu<-polygons@data[,validNames[which(validNames %in% names(polygons@data))],drop=FALSE]
 		} else {
 			warning("argument to polygons@data does not have 'id', 'cost', and 'status' columns, creating default with equal costs and status=0")
 			pu<-data.frame(id=seq_along(polygons@polygons), cost=1, status=0)
+		}
+		# get xy coordinates 
+		if (any(sepdistance!=0)) {
+			if (!identical(polygons@proj4string, CRS('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')))
+				warning("argument to polygons is in WGS1984 CRS and is being used to calculate planning unit centroids for xloc/yloc values")
+			centroids<-gCentroid(polygons, byid=TRUE)
+			pu$xloc<-centroids@coords[,1]
+			pu$yloc<-centroids@coords[,2]
 		}
 	}
 	# cache max possible targets
@@ -252,8 +284,13 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=1, pu=NULL, sp
 			id=seq_along(names(rasters)),
 			target=targets,
 			spf=spf,
-			name=names(rasters)
+			name=names(rasters),
+			sepdistance=sepdistance,
+			sepnum=sepnum,
+			targetocc=targetocc
 		)
+		# remove unnecessary marxan columns
+		species<-species[,sapply(species[,5:7], function(x) return(all(x==0)))]
 	}
 	# set boundary
 	polyset<-rcpp_Polygons2PolySet(polygons@polygons)
@@ -276,8 +313,10 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=1, pu=NULL, sp
 			cat("Calculating species density in planning units.")
 		puvspecies<-calcPuVsSpeciesData(projPolygons, rasters, ...)
 	}
-	
-	return(MarxanData(pu=pu, species=species, puvspecies=puvspecies, boundary=boundary, polygons=polyset, .cache=.cache))
+	# set puvspecies_spo
+	if (is.null(puvspecies_spo))
+		puvspecies_spo<-puvspecies[order(puvspecies$species),]
+	return(MarxanData(pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo, boundary=boundary, polygons=polyset, .cache=.cache))
 }
 
 #' @describeIn print
@@ -301,18 +340,21 @@ print.MarxanData<-function(x, header=TRUE) {
 #' @export
 #' @describeIn names
 names.MarxanData<-function(x) {
-	return(x@species$names)
+	return(x@species$name)
 }
 
 #' @describeIn basemap
 #' @export
-basemap.MarxanData<-function(x, basemap="none", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
+basemap.MarxanData<-function(x, basemap="hybrid", grayscale=FALSE, force_reset=FALSE) {
+	callchar<-hashCall(match.call(), 1)
+	match.arg(basemap, c("roadmap", "mobile", "satellite", "terrain", "hybrid", "mapmaker-roadmap", "mapmaker-hybrid"))	
+	if (is.null(x@polygons))
+	stop("Marxan object is not associated with spatially explicit data for the planning units.")
 	# fetch data from google or cache
-	if (force_reset || !is.cached(x, google)) {
-			stop("Marxan object is not associated with spatially explicit data for the planning units.")
-		cache(x, deparse(c(basemap, range(x@polygons[["X"]])*xzoom, range(x@polygons[["Y"]])*yzoom, grayscale)), GetMap.bbox(range(x@polygons[["X"]])*xzoom, range(x@polygons[["Y"]])*yzoom, maptype=google, GRAYSCALE=grayscale))
+	if (force_reset || !is.cached(x, basemap)) {
+		cache(x, callchar, GetMap.bbox(range(x@polygons[["X"]]), range(x@polygons[["Y"]]), destfile=paste0(tempfile(),'.png'), maptype=basemap, GRAYSCALE=grayscale))
 	}
-	return(cache(deparse(c(basemap, range(x@polygons[["X"]])*xzoom, range(x@polygons[["Y"]])*yzoom, grayscale))))
+	return(cache(x, callchar))
 }
 
 #' @describeIn update
@@ -356,10 +398,13 @@ update.MarxanData<-function(x, formula, force_reset=TRUE) {
 #' @param name "character" new species name.
 #' @param spf "numeric" new species penalty factor.
 #' @param target "numeric" new target. 
-#' @note Set arguments 'name', 'spf', 'target' to NA (default) to keep the same.
+#' @note Only specified parameters are changed, all unspecific parameters will remain unchanged.
 #' @export
 #' @return "MarxanSpeciesOperation" object.
-#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{pu}}
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{pu}}.
+#' @examples
+#' spp(1, name='species1')
+#' spp(2, spf=5)
 spp<-function(x, name=NA, spf=NA, target=NA) {
 	if (is.na(name) & is.na(spf) & is.na(target))
 		stop("no arguments were specified to change values.")
@@ -385,10 +430,13 @@ spp<-function(x, name=NA, spf=NA, target=NA) {
 #' @param id "integer" id of the planning unit.
 #' @param cost "numeric" new cost value.
 #' @param status "numeric" new status value.
-#' @note Set argument 'cost' or 'status' to NA (default) to keep the same.
+#' @note Only specified parameters are changed, all unspecific parameters will remain unchanged.
 #' @export
 #' @return "MarxanPuOperation" object.
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{opt}}, \code{\link{spp}}
+#' @examples
+#' pu(1, cost=3)
+#' pu(1, status=1)
 pu<-function(id, cost=NA, status=NA) {
 	if (is.na(cost) & is.na(status))
 		stop("no arguments were supplied to change values.")
@@ -414,7 +462,7 @@ pu<-function(id, cost=NA, status=NA) {
 setMethod(
 	"plot", 
 	signature(x="MarxanData", y="character"),
-	function(x, y, basemap="none", colramp="BuGn", alpha=1, grayscale=FALSE, xzoom=c(1,1), yzoom=c(1,1), force_reset=FALSE) {
+	function(x, y, basemap="none", colramp="BuGn", alpha=1, grayscale=FALSE, force_reset=FALSE) {
 		# init
 		stopifnot(alpha<=1 & alpha>=0)
 		match.arg(y, c("sum", "rich", unique(x@y$name)))
@@ -422,7 +470,7 @@ setMethod(
 		stopifnot(inherits(x@polygons, "PolySet"))
 		# get basemap data
 		if (basemap!="none")
-			basemap<-basemap.MarxanData(x@data, basemap, alpha, grayscale, xzoom, yzoom, force_reset)
+			basemap<-basemap.MarxanData(x@data, basemap=basemap, grayscale=grayscale, force_reset=force_reset)
 		# get colours for planning units
 		values<-numeric(nrow(x@pu))
 		if (y=="all") {
@@ -462,7 +510,7 @@ setMethod(
 	f="is.cached", 
 	signature(x="MarxanData", name="character"), 
 	function(x,name) {
-		return(!is.null(x@.cache[[names]]))
+		return(!is.null(x@.cache[[name]]))
 	}
 )
 

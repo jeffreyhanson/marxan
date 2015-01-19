@@ -7,45 +7,42 @@
 \description{
 This class is used to store Marxan input parameters.
 }
-\details{
-General parameters
-}
 \section{Slots}{
 
 \describe{
-\item{\code{BLM}}{"numeric" boundary length modifier (default=1000000)}
+\item{\code{BLM}}{"numeric" Boundary length modifier. Defaults to 1000000.}
 
-\item{\code{PROP}}{"numeric" proportion of planning units in initial reserve system (default=-1)}
+\item{\code{PROP}}{"numeric" Proportion of planning units in initial reserve system. Defaults to -1.}
 
-\item{\code{NUMREPS}}{"integer" number of replicate runs (default=100)
-Annealing parameters}
+\item{\code{NUMREPS}}{"integer" Number of replicate runs. Defaults to 100.}
 
-\item{\code{NUMITNS}}{"integer" mumber of iterations for annealing (default=1000000)}
+\item{\code{NUMITNS}}{"integer" Number of iterations for annealing. Defaults to 1000000.}
 
-\item{\code{STARTTEMP}}{"numeric" initial temperature for annealing (default=-1)}
+\item{\code{STARTTEMP}}{"numeric" Initial temperature for annealing. Default to -1.}
 
-\item{\code{COOLFAC}}{"numeric" cooling factor for annealing (default=0)}
+\item{\code{COOLFAC}}{"numeric" Cooling factor for annealing. Defaults to 0.}
 
-\item{\code{NUMTEMP}}{"integer" number of temperature decreases for annealing (default=100000)
-Cost threshold}
+\item{\code{NUMTEMP}}{"integer" Number of temperature decreases for annealing. Defaults to 100000.}
 
-\item{\code{COSTTHRESH}}{"numeric" cost threshold (default=0)}
+\item{\code{COSTTHRESH}}{"numeric" Cost threshold. Defaults to 0.}
 
-\item{\code{THRESHPEN1}}{"numeric" size of cost threshold penalty (default=0.14)}
+\item{\code{THRESHPEN1}}{"numeric" Size of cost threshold penalty. Defaults to 0.14.}
 
-\item{\code{THRESHPEN2}}{"numeric" shape of cost threshold penalty (default=0)
-Program control}
+\item{\code{THRESHPEN2}}{"numeric" Shape of cost threshold penalty. Defaults to 0.}
 
-\item{\code{MISSLEVEL}}{"numeric" amount of target below which it is counted as 'missing' (default=1)}
+\item{\code{MISSLEVEL}}{"numeric" Amount of target below which it is counted as 'missing'. Defaults to 1.}
 
-\item{\code{ITIMPTYPE}}{"integer" iterative improvement type (default=1)}
+\item{\code{ITIMPTYPE}}{"integer" Iterative improvement type. Defaults to 1.}
 
-\item{\code{HEURTYPE}}{"integer" heuristic type (default=0)}
+\item{\code{HEURTYPE}}{"integer" Heuristic type. Defaults to 0.}
 
-\item{\code{CLUMPTYPE}}{"integer" clumping penalty type (default=0)}
+\item{\code{CLUMPTYPE}}{"integer" Clumping penalty type. Defaults to 0.}
 
-\item{\code{VERBOSITY}}{"integer" amount of output displayed on the program screen (default=3)}
+\item{\code{VERBOSITY}}{"integer" Amount of output displayed on the program screen. Defaults to 3.}
 
-\item{\code{NCORES}}{"integer "number of cores to use for processing (default=1)}
+\item{\code{NCORES}}{"integer" Number of cores to use for processing. Defaults to 1.}
 }}
+\note{
+This class was not called "MarxanPars" due to the inevitable conflicts with \code{\link[base]{par}}.
+}
 

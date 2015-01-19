@@ -5,30 +5,12 @@ NULL
 suppressWarnings(setOldClass("PolySet"))
 suppressWarnings(setClassUnion("PolySetOrNULL", c("PolySet", "NULL")))
 
-# setOldClass("RasterBrick")
-# setOldClass("RasterStack")
-# setOldClass(".RasterBrickSparse")
-suppressWarnings(setClassUnion("RasterStackOrBrick", c("RasterBrick", "RasterStack")))
-
 # misc hidden functions
 marxanURL="http://www.uq.edu.au/marxan/get-marxan-software"
 
-is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
 
-is.finite.numeric.wholenumber <- function(x) {
-	return(is.numeric(x) & !any(!is.finite(x)) & all(is.wholenumber(x)))
-}
-
-is.finite.numeric <- function(x) {
-	return(is.numeric(x) & !any(!is.finite(x)))
-}
-
-is.valid.character <- function(x) {
-	return(is.character(x) & all(!is.na(x)))
-}
-
-to.colors<-function(values, cols) {
-	return(rgb(colorRamp(cols)(rescale(values)), maxColorValue=255))
+asym.setequal <- function(x,y) {
+	return(length(setdiff(x,y))==0)
 }
 
 to.pretty.name<-function(x) {
@@ -53,16 +35,12 @@ parseArg<-function(name, args, error=TRUE) {
 	}
 }
 
-asym.setequal <- function(x,y) {
-	return(length(setdiff(x,y))==0)
-}
-
 
 
 ### pretty plotting functions
 prettyBiplot<-function(x,size,nbest,xlab,ylab,main) {
-	plot(xlim=range(x[,1]), ylim=range(x[,2]), main=main, xlab=xlab, ylab=ylab)
-	text(x=x[,1], y=y[,2], labels=seq_len(nrow(x)), col=replace(rep("black", nrow(x)), which(order(size,decreasing=TRUE)<=nbest), "red"), cex=size)
+	plot(1,1, xlim=range(x[,1]), ylim=range(x[,2]), main=main, xlab=xlab, ylab=ylab, type="n")
+	text(x=x[,1], y=x[,2], labels=seq_len(nrow(x)), col=replace(rep("black", nrow(x)), which(as.numeric(factor(size*-1))<=nbest), "red"), cex=size)
 }
 
 prettyPcaBiplot<-function(x, size, nbest, choices=1L:2L, scale=1, pc.biplot=FALSE, ...) {
@@ -134,8 +112,9 @@ prettyPcaBiplotSub<-function (x, y, size, nbest, var.axes = TRUE, col, cex = rep
     op <- par(pty = "s")
     if (!is.null(main)) 
         op <- c(op, par(mar = par("mar") + c(0, 0, 1, 0)))
-    plot(x, type = "n", xlim = xlim, ylim = ylim, col = col[1L], xlab = xlab, ylab = ylab, sub = sub, main = main, ...)
-    text(x, xlabs, cex = size, col = replace(rep("black", nrow(x)), which(order(size,decreasing=TRUE)<=nbest), "red"), ...)
+    plot(x, type = "n", xlim = xlim, ylim = ylim, col = col[1L], xlab = xlab, ylab = ylab, sub = sub, ...)
+	title(main, line=2.5)
+    text(x, xlabs, cex = size, col = replace(rep("black", nrow(x)),which(as.numeric(factor(size*-1))<=nbest), "red"), ...)
     par(new = TRUE)
     dev.hold()
     on.exit(dev.flush(), add = TRUE)
@@ -152,7 +131,7 @@ prettyPcaBiplotSub<-function (x, y, size, nbest, var.axes = TRUE, col, cex = rep
 }
 
 prettyDendrogram<-function(phy, scores, nbest=1, main) {
-	tipInd=which(rank(scores)<=nbest)
+	tipInd=which(as.numeric(factor(scores))<=nbest)
 	bestEdges=which.edge(phy, phy$tip.label[tipInd])
 	edge.cols=replace(rep("black", length(phy$edge)), bestEdges, "red")
 	edge.widths=replace(rep(1, length(phy$edge)), bestEdges, 2)
@@ -164,7 +143,7 @@ prettyDendrogram<-function(phy, scores, nbest=1, main) {
 prettyDotchart<-function (x, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"), 
     pch = 21, gpch = 21, bg = par("bg"), color = par("fg"), gcolor = par("fg"), 
     lcolor = "gray", xlim = range(x[is.finite(x)]), main = NULL, 
-    xlab = NULL, ylab = NULL, pt.cex, ...) 
+    xlab = NULL, ylab = NULL, pt.cex, lab.cex, ...) 
 {
     opar <- par("mai", "mar", "cex", "yaxs")
     on.exit(par(opar))
@@ -232,7 +211,7 @@ prettyDotchart<-function (x, labels = NULL, groups = NULL, gdata = NULL, cex = p
         loffset <- (linch + 0.1)/lheight
         labs <- labels[o]
         mtext(labs, side = 2, line = loffset, at = y, adj = 0, 
-            col = color, las = 2, cex = cex, ...)
+            col = color, las = 2, cex = lab.cex, ...)
     }
     abline(h = y, lty = "dotted", col = lcolor)
     points(x, y, pch = pch, col = color, bg = bg)
@@ -251,48 +230,73 @@ prettyDotchart<-function (x, labels = NULL, groups = NULL, gdata = NULL, cex = p
     }
     axis(1)
     box()
-    title(main = main, xlab = xlab, ylab = ylab, ...)
+    # title(main = main, xlab = xlab, ylab = ylab, ...)
+    title(main = main, xlab = xlab, ylab = ylab)
     invisible()
 }
 
-prettyGeoplot<-function(polygons, col, basemap, main, fun) {
-	par(oma=c(0,0,3,0))
-	mtext(side=3, line=0.5, cex=3, main)
-	if (is.list(basemap)) {
-		PlotPolysOnStaticMap(basemap, polygons, col=cols)
+prettyGeoplot<-function(polygons, col, basemap, main, fun, beside=TRUE) {
+	# make layout
+	par(mar=c(1,1,1,1),oma=c(0,0,0,0))
+	if (beside) {
+		layout(matrix(c(1,1,3,2),ncol=2,byrow=TRUE), widths=c(0.8,0.2), height=c(0.1,0.9))
 	} else {
-		plot(polygons, col=cols)
+		layout(matrix(c(1,3,2),ncol=1,byrow=TRUE), widths=c(1), height=c(0.1,0.8,0.1))
 	}
+	# make title
+	plot(1,1,type="n", xlim=c(-1,1), ylim=c(-1,1), axes=FALSE, xlab="", ylab="")
+	mtext(side=1, line=-1.5, main, cex=1.5)
+	# make legend
+	plot(1,1,type="n", xlim=c(-1,1), ylim=c(-1,1), axes=FALSE, xlab="", ylab="")
 	fun()
+	# make geoplot
+	if (is.list(basemap)) {
+		PlotOnStaticMap(basemap)
+		suppressWarnings(PlotPolysOnStaticMap(basemap, polygons, col=col, add=TRUE))
+	} else {
+		xdiff<-diff(range(polygons$X))
+		plotPolys(polygons, col=col, axes=FALSE, xlab="", ylab="")
+	}
 	return(invisible())
 }
 
+
 ### color function
-brewerCols<-function(values, pal, alpha=1) {
-	r<-colorRamp(brewer.pal(brewer.pal.info$maxcolors[which(rownames(brewer.pal.info)==pal)], pal), alpha=TRUE)(values)
-	r[,4]=rescale(alpha, from=c(0,1), to=c(0,255))
-	return(rgb(r, maxColorValue=255))
+brewerCols<-function(values, pal, alpha=1, n=NULL) {
+	if (is.null(n))
+		n<-brewer.pal.info$maxcolors[which(rownames(brewer.pal.info)==pal)]
+	suppressWarnings(r<-colorRamp(brewer.pal(n, pal), alpha=TRUE)(values))
+	return(rgb(r, maxColorValue=255, alpha=rescale(alpha, from=c(0,1), to=c(0,255))))
 }
 
 
 ### automated legend functions
-continuousLegend<-function(values, pal) {
+continuousLegend<-function(values, pal, posx, posy) {
 	return(
 		function() {
-			posx=c(0.3, 0.4)
-			posy=c(0.1, 0.9)
-			xdiff=diff(par()$usr[1:2])
-			ydiff=diff(par()$usr[3:4])
-			rect(xleft=par()$usr[1]+(xdiff*posx[1]), ybottom=par()$usr[3]+(ydiff*posy[1]), xright=par()$usr[1]+(xdiff*posx[2]), ytop=par()$usr[4]+(ydiff*posy[2]))
-			shape::colorlegend(zlim=range(values), col=brewerCols(seq(0,1,0.01), pal), zval=pretty(values), posx=posx, posy=posy, xpd=TRUE)
+			xdiff<-diff(par()$usr[1:2])
+			ydiff<-diff(par()$usr[3:4])
+			zvals<-pretty(values)
+			zvals<-zvals[which(zvals>min(values) & zvals<max(values))]
+			if (max(zvals)<1) {
+				digit<-2
+			} else {
+				digit<-1
+			}
+			# rect(xleft=par()$usr[1]+(xdiff*posx[1]), ybottom=par()$usr[3]+(ydiff*posy[1]), xright=par()$usr[1]+(xdiff*posx[2]), ytop=par()$usr[4]+(ydiff*posy[2]), xpd=TRUE)
+			shape::colorlegend(zlim=range(values), digit=digit, col=brewerCols(seq(0,1,0.01), pal), zval=zvals, posx=posx, posy=posy, xpd=TRUE)
 		}
 	)
 }
 
-categoricalLegend<-function(col,labels) {
+categoricalLegend<-function(col,labels, ncol=1) {
 	return(
 		function() {
-			legend(bg="white", legend=labels, fill=col)	
+			if (ncol==1) {
+				legend("top", bg="white", legend=labels, fill=col, bty="n", horiz=TRUE, cex=1.5)
+			} else {
+				legend(y=par()$usr[3]+(diff(par()$usr[3:4])*0.6), x=par()$usr[1]+(diff(par()$usr[1:2])*0.5), bg="white", legend=labels, fill=col, bty="n", ncol=ncol, cex=1.5, xjust=0.5, yjust=0.5, xpd=TRUE)
+			}
 		}
 	)
 }
@@ -341,11 +345,11 @@ updateOperation<-function(x, arg, value) {
 		if (!asym.setequal(splt[[1]][[2]],x@data@speciesDataFrame$id)) {
 			stop(paste(splt[[1]][[2]],"is not a valid planning unit id."))
 		}
-		if (!asym.setequal(splt[[1]][[3]],names(x@data@puDataFrame))) {
-			stop(paste(splt[[1]][[3]],"is not a valid column in puDataFrame"))
+		if (!asym.setequal(splt[[1]][[3]],names(x@data@pu))) {
+			stop(paste(splt[[1]][[3]],"is not a valid column in pu"))
 		}
 		# parse command
-		x@data@puDataFrame[which(x@data@puDataFrame$id==splt[[1]][[2]]),splt[[1]][[3]]]=value
+		x@data@puDataFrame[which(x@data@pu$id==splt[[1]][[2]]),splt[[1]][[3]]]=value
 	} else {
 		stop(paste(splt[[1]][[1]],"is not valid."))
 	}
@@ -369,10 +373,12 @@ zonalSum.RasterLayerNotInMemory <- function(bs, polys, rast, speciesName, ncores
 }
 
 hashCall<-function(expr, skipargs=c(), env=parent.frame()) {
-	for (i in seq_along(names(expr))[c(-1L, (skipargs*-1L)-1L)])
+	expr<-expr[c((skipargs*-1L)-1L)]
+	expr<-expr[which(names(expr)!="force_reset")]
+	for (i in seq_along(names(expr)))
 		if (inherits(expr[[i]], c("name")))
 			expr[[i]]=eval(expr[[i]], envir=env)
-	return(deparse(expr))
+	return(paste(deparse(expr), collapse=";"))
 }
 
 
@@ -383,6 +389,7 @@ pivot<-function(col, row, value) {
   row<-as.factor(row)
   mat<-array(dim = c(nlevels(row), nlevels(col)), dimnames = list(levels(row), levels(col)))
   mat[(as.integer(col) - 1L) * nlevels(row) + as.integer(row)] = value
-  mat
+  dimnames(mat)<-NULL
+  return(mat)
 }
 

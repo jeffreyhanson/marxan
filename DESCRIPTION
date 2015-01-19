@@ -29,6 +29,7 @@ Collate:
     'MarxanResults.R'
     'MarxanUnsolved.R'
     'MarxanSolved.R'
+    'Polygons2PolySet.R'
     'data.R'
     'marxan.R'
 Depends:

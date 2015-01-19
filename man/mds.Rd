@@ -15,7 +15,7 @@
 mds(x, ...)
 }
 \arguments{
-\item{x}{"MarxanSolved" object}
+\item{x}{"MarxanResults" or "MarxanSolved" object.}
 
 \item{var}{"character" should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?}
 

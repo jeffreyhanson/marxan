@@ -12,10 +12,10 @@
 \method{dist}{MarxanSolved}(x, var = "selections", method = "bray",
   force_reset = FALSE)
 
-dist(x)
+dist(x, ...)
 }
 \arguments{
-\item{x}{"MarxanSolved" object.}
+\item{x}{"MarxanResults" or "MarxanSolved" object.}
 
 \item{var}{"character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?}
 

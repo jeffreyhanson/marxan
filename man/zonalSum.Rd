@@ -3,48 +3,44 @@
 \docType{methods}
 \name{zonalSum}
 \alias{zonalSum}
-\alias{zonalSum,RasterLayer,RasterLayer-method}
-\alias{zonalSum,RasterLayer,RasterStackOrBrick-method}
-\title{Zonal Sum}
+\alias{zonalSum,RasterLayer,Raster-method}
+\title{Zonal sum}
 \usage{
 zonalSum(x, y, ...)
 
-\S4method{zonalSum}{RasterLayer,RasterStackOrBrick}(x, y,
-  speciesNames = names(y), ncores = 1)
-
-\S4method{zonalSum}{RasterLayer,RasterLayer}(x, y, speciesNames = names(y),
-  ncores = 1)
+\S4method{zonalSum}{RasterLayer,Raster}(x, y, ids = names(y), ncores = 1)
 }
 \arguments{
-\item{x}{SpatialPolygons or SpatialPolygons object}
+\item{x}{"SpatialPolygons" or "SpatialPolygonsDataFrame" object.}
 
-\item{y}{RasterLayer, RasterStack, or RasterBrick}
+\item{y}{"RasterLayer", "RasterStack", or "RasterBrick" object.}
 
-\item{ncores}{Number of cores to use for processing data.}
+\item{ids}{"integer" vector of species ids in \code{y}. Defaults to indices of \code{y}.}
 
-\item{speciesName}{character vector of species names}
+\item{ncores}{"integer" Number of cores to use for processing data. Defaults to 1.}
 }
 \value{
-data.frame with sum of raster values in each polygon.
+"data.frame" with "integer" 'species', "integer" 'pu', and "numeric" 'amount' columns.
 }
 \description{
-This function calculates the zonal sum of SpatialPolygons in a RasterLayer, RasterStack, or RasterBrick.
+This function calculates the zonal sum of "SpatialPolygons" in a "Raster" object.
 For most cases it is expected to run faster than the zonal functon in the raster package.
 This function is useful for extracting the sum of raster values inside each planning unit.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{x = RasterLayer,y = RasterStackOrBrick}: 
-
-\item \code{x = RasterLayer,y = RasterLayer}: 
+\item \code{x = RasterLayer,y = Raster}: 
 }}
+\note{
+This function is designed to be used to generate inputs for Marxan. The column names are appropriate for the 'puvspr.dat' file. Data is sorted by values in 'pu' column.
+}
 \examples{
 data(species, planningunits)
-purast<-rasterize(planningunits, species[[1]])
-zonalSum(purast, species[[1]])
-zonalSum(purast, species)
+rast<-rasterize(planningunits, species[[1]], 'sum')
+zonalSum(planningunitsraster, species[[1]])
+zonalSum(planningunitsraster, species)
 }
 \seealso{
-\code{\link[raster]{zonal}}
+\code{\link[raster]{zonal}}.
 }
 

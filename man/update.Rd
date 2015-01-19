@@ -18,7 +18,7 @@
 \method{update}{MarxanUnsolved}(x, formula, solve = TRUE,
   force_reset = TRUE)
 
-update(x, formula, evaluate)
+update(x, ...)
 }
 \arguments{
 \item{x}{"MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}

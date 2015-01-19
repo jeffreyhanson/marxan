@@ -2,45 +2,44 @@
 % Please edit documentation in R/MarxanOpts.R
 \name{MarxanOpts}
 \alias{MarxanOpts}
-\title{Create MarxanOpts object}
+\title{Create "MarxanOpts" object}
 \usage{
-MarxanOpts(...)
+MarxanOpts(..., ignore.extra = FALSE)
 }
 \arguments{
-\item{BLM}{"numeric" boundary length modifier (default=1000000)}
+\item{ignore.extra}{"logical" Should extra arguments be ignored? Defaults to \code{FALSE}.}
 
-\item{PROP}{"numeric" proportion of planning units in initial reserve system (default=-1)}
+\item{BLM}{"numeric" Boundary length modifier. Defaults to 1000000.}
 
-\item{NUMREPS}{"integer" number of replicate runs (default=100)
-Annealing parameters}
+\item{PROP}{"numeric" Proportion of planning units in initial reserve system. Defaults to -1.}
 
-\item{NUMITNS}{"integer" mumber of iterations for annealing (default=1000000)}
+\item{NUMREPS}{"integer" Number of replicate runs. Defaults to 100.}
 
-\item{STARTTEMP}{"numeric" initial temperature for annealing (default=-1)}
+\item{NUMITNS}{"integer" Number of iterations for annealing. Defaults to 1000000.}
 
-\item{COOLFAC}{"numeric" cooling factor for annealing (default=0)}
+\item{STARTTEMP}{"numeric" Initial temperature for annealing. Default to -1.}
 
-\item{NUMTEMP}{"integer" number of temperature decreases for annealing (default=100000)
-Cost threshold}
+\item{COOLFAC}{"numeric" Cooling factor for annealing. Defaults to 0.}
 
-\item{COSTTHRESH}{"numeric" cost threshold (default=0)}
+\item{NUMTEMP}{"integer" Number of temperature decreases for annealing. Defaults to 100000.}
 
-\item{THRESHPEN1}{"numeric" size of cost threshold penalty (default=0.14)}
+\item{COSTTHRESH}{"numeric" Cost threshold. Defaults to 0.}
 
-\item{THRESHPEN2}{"numeric" shape of cost threshold penalty (default=0)
-Program control}
+\item{THRESHPEN1}{"numeric" Size of cost threshold penalty. Defaults to 0.14.}
 
-\item{MISSLEVEL}{"numeric" amount of target below which it is counted as 'missing' (default=1)}
+\item{THRESHPEN2}{"numeric" Shape of cost threshold penalty. Defaults to 0.}
 
-\item{ITIMPTYPE}{"integer" iterative improvement type (default=1)}
+\item{MISSLEVEL}{"numeric" Amount of target below which it is counted as 'missing'. Defaults to 1.}
 
-\item{HEURTYPE}{"integer" heuristic type (default=0)}
+\item{ITIMPTYPE}{"integer" Iterative improvement type. Defaults to 1.}
 
-\item{CLUMPTYPE}{"integer" clumping penalty type (default=0)}
+\item{HEURTYPE}{"integer" Heuristic type. Defaults to 0.}
 
-\item{VERBOSITY}{"integer" amount of output displayed on the program screen (default=3)}
+\item{CLUMPTYPE}{"integer" Clumping penalty type. Defaults to 0.}
 
-\item{NCORES}{"integer "number of cores to use for processing (default=1)}
+\item{VERBOSITY}{"integer" Amount of output displayed on the program screen. Defaults to 3.}
+
+\item{NCORES}{"integer" Number of cores to use for processing. Defaults to 1.}
 }
 \value{
 "MarxanOpts" object
@@ -48,13 +47,10 @@ Program control}
 \description{
 This function creates a new MarxanOpts object.
 }
-\details{
-General parameters
-}
 \examples{
 x<-MarxanOpts(NCORES=4, NUMREPS=2, NUMITNS=5)
 }
 \seealso{
-\code{\link{MarxanOpts-class}},  \code{\link{read.MarxanOpts}}, \code{\link{write.MarxanOpts}}
+\code{\link{MarxanOpts-class}},  \code{\link{read.MarxanOpts}}, \code{\link{write.MarxanOpts}}.
 }
 

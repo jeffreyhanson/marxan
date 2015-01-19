@@ -2,19 +2,19 @@
 % Please edit documentation in R/MarxanData.R
 \name{write.MarxanData}
 \alias{write.MarxanData}
-\title{Write Input Marxan Data to Disk}
+\title{Write Marxan input data}
 \usage{
 write.MarxanData(x, dir = getwd(), ...)
 }
 \arguments{
-\item{x}{"MarxanData" object to save}
+\item{x}{"MarxanData" object to save.}
 
-\item{dir}{"character" directory path for location to save data}
+\item{dir}{"character" directory path for location to save data.}
 }
 \description{
-This function saves MarxanData objects to disk.
+This function saves "MarxanData" objects to disk.
 }
 \seealso{
-\code{\link{read.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}
+\code{\link{read.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}.
 }
 

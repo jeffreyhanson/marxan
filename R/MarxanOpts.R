@@ -5,26 +5,24 @@ NULL
 #'
 #' This class is used to store Marxan input parameters.
 #'
-#' General parameters
-#' @slot BLM "numeric" boundary length modifier (default=1000000)
-#' @slot PROP "numeric" proportion of planning units in initial reserve system (default=-1)
-#' @slot NUMREPS "integer" number of replicate runs (default=100)
-#' Annealing parameters
-#' @slot NUMITNS "integer" mumber of iterations for annealing (default=1000000)
-#' @slot STARTTEMP "numeric" initial temperature for annealing (default=-1)
-#' @slot COOLFAC "numeric" cooling factor for annealing (default=0)
-#' @slot NUMTEMP "integer" number of temperature decreases for annealing (default=100000)
-#' Cost threshold 
-#' @slot COSTTHRESH "numeric" cost threshold (default=0)
-#' @slot THRESHPEN1 "numeric" size of cost threshold penalty (default=0.14)
-#' @slot THRESHPEN2 "numeric" shape of cost threshold penalty (default=0)
-#' Program control
-#' @slot MISSLEVEL "numeric" amount of target below which it is counted as 'missing' (default=1)
-#' @slot ITIMPTYPE "integer" iterative improvement type (default=1)
-#' @slot HEURTYPE "integer" heuristic type (default=0)
-#' @slot CLUMPTYPE "integer" clumping penalty type (default=0)
-#' @slot VERBOSITY "integer" amount of output displayed on the program screen (default=3)
-#' @slot NCORES "integer "number of cores to use for processing (default=1)
+#' @slot BLM "numeric" Boundary length modifier. Defaults to 1000000.
+#' @slot PROP "numeric" Proportion of planning units in initial reserve system. Defaults to -1.
+#' @slot NUMREPS "integer" Number of replicate runs. Defaults to 100.
+#' @slot NUMITNS "integer" Number of iterations for annealing. Defaults to 1000000.
+#' @slot STARTTEMP "numeric" Initial temperature for annealing. Default to -1.
+#' @slot COOLFAC "numeric" Cooling factor for annealing. Defaults to 0.
+#' @slot NUMTEMP "integer" Number of temperature decreases for annealing. Defaults to 100000.
+#' @slot COSTTHRESH "numeric" Cost threshold. Defaults to 0.
+#' @slot THRESHPEN1 "numeric" Size of cost threshold penalty. Defaults to 0.14.
+#' @slot THRESHPEN2 "numeric" Shape of cost threshold penalty. Defaults to 0.
+#' @slot MISSLEVEL "numeric" Amount of target below which it is counted as 'missing'. Defaults to 1.
+#' @slot ITIMPTYPE "integer" Iterative improvement type. Defaults to 1.
+#' @slot HEURTYPE "integer" Heuristic type. Defaults to 0.
+#' @slot CLUMPTYPE "integer" Clumping penalty type. Defaults to 0.
+#' @slot VERBOSITY "integer" Amount of output displayed on the program screen. Defaults to 3.
+#' @slot NCORES "integer" Number of cores to use for processing. Defaults to 1.
+
+#' @note This class was not called "MarxanPars" due to the inevitable conflicts with \code{\link[base]{par}}.
 #' @export
 setClass("MarxanOpts",
 	representation(
@@ -68,54 +66,59 @@ setClass("MarxanOpts",
 		ITIMPTYPE=1,
 		HEURTYPE=0,
 		CLUMPTYPE=0,
-		VERBOSITY=3,
+		VERBOSITY=0,
 		NCORES=1
 	)
 )
 
-#' Create MarxanOpts object
+#' Create "MarxanOpts" object
 #'
 #' This function creates a new MarxanOpts object.
 #'
-#' General parameters
-#' @param BLM "numeric" boundary length modifier (default=1000000)
-#' @param PROP "numeric" proportion of planning units in initial reserve system (default=-1)
-#' @param NUMREPS "integer" number of replicate runs (default=100)
-#' Annealing parameters
-#' @param NUMITNS "integer" mumber of iterations for annealing (default=1000000)
-#' @param STARTTEMP "numeric" initial temperature for annealing (default=-1)
-#' @param COOLFAC "numeric" cooling factor for annealing (default=0)
-#' @param NUMTEMP "integer" number of temperature decreases for annealing (default=100000)
-#' Cost threshold 
-#' @param COSTTHRESH "numeric" cost threshold (default=0)
-#' @param THRESHPEN1 "numeric" size of cost threshold penalty (default=0.14)
-#' @param THRESHPEN2 "numeric" shape of cost threshold penalty (default=0)
-#' Program control
-#' @param MISSLEVEL "numeric" amount of target below which it is counted as 'missing' (default=1)
-#' @param ITIMPTYPE "integer" iterative improvement type (default=1)
-#' @param HEURTYPE "integer" heuristic type (default=0)
-#' @param CLUMPTYPE "integer" clumping penalty type (default=0)
-#' @param VERBOSITY "integer" amount of output displayed on the program screen (default=3)
-#' @param NCORES "integer "number of cores to use for processing (default=1)
+#' @param BLM "numeric" Boundary length modifier. Defaults to 1000000.
+#' @param PROP "numeric" Proportion of planning units in initial reserve system. Defaults to -1.
+#' @param NUMREPS "integer" Number of replicate runs. Defaults to 100.
+#' @param NUMITNS "integer" Number of iterations for annealing. Defaults to 1000000.
+#' @param STARTTEMP "numeric" Initial temperature for annealing. Default to -1.
+#' @param COOLFAC "numeric" Cooling factor for annealing. Defaults to 0.
+#' @param NUMTEMP "integer" Number of temperature decreases for annealing. Defaults to 100000.
+#' @param COSTTHRESH "numeric" Cost threshold. Defaults to 0.
+#' @param THRESHPEN1 "numeric" Size of cost threshold penalty. Defaults to 0.14.
+#' @param THRESHPEN2 "numeric" Shape of cost threshold penalty. Defaults to 0.
+#' @param MISSLEVEL "numeric" Amount of target below which it is counted as 'missing'. Defaults to 1.
+#' @param ITIMPTYPE "integer" Iterative improvement type. Defaults to 1.
+#' @param HEURTYPE "integer" Heuristic type. Defaults to 0.
+#' @param CLUMPTYPE "integer" Clumping penalty type. Defaults to 0.
+#' @param VERBOSITY "integer" Amount of output displayed on the program screen. Defaults to 3.
+#' @param NCORES "integer" Number of cores to use for processing. Defaults to 1.
+#' @param ignore.extra "logical" Should extra arguments be ignored? Defaults to \code{FALSE}.
 #' @return "MarxanOpts" object
-#' @seealso \code{\link{MarxanOpts-class}},  \code{\link{read.MarxanOpts}}, \code{\link{write.MarxanOpts}}
+#' @seealso \code{\link{MarxanOpts-class}},  \code{\link{read.MarxanOpts}}, \code{\link{write.MarxanOpts}}.
 #' @export
 #' @examples
 #' x<-MarxanOpts(NCORES=4, NUMREPS=2, NUMITNS=5)
-MarxanOpts<-function(...) {
+MarxanOpts<-function(..., ignore.extra=FALSE) {
 	x<-new('MarxanOpts')
 	args<-as.list(substitute(list(...)))[c(-1L)]
+	extra<-which(!names(args) %in% names(getSlots("MarxanOpts")))
+	if (length(extra)>0) {		
+		if (ignore.extra) {
+			args<-args[-extra]
+		} else {
+			stop("These are not valid or changeable Marxan parameters: ",paste(names(extra), collapse=","))
+		}
+	}
 	for (i in seq_along(args))
 		slot(x, names(args))=args[[i]]
 	return(x)
 }
 
-#' Read Marxan Input Parameters from Disk
+#' Read Marxan input parameters from disk
 #'
 #' This function reads Marxan parameter settings from an input file.
 #'
-#' @param path "character" directory path for location to save input parameters file
-#' @seealso \code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{write.MarxanOpts}}
+#' @param path "character" directory path for location to save input parameters file.
+#' @seealso \code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{write.MarxanOpts}}.
 #' @export
 #' @examples
 #' x<-MarxanOpts()
@@ -138,10 +141,10 @@ read.MarxanOpts<-function(path) {
 #'
 #' This function writes Marxan parameter settings to a file.
 #'
-#' @param dir "character" directory path for location to save input parameters file
-#' @param outputdir "character" directory path for location where Marxan input data files are saved
-#' @param seed "integer" seed for random number generation in Marxan
-#' @seealso \code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{read.MarxanOpts}}
+#' @param dir "character" directory path for location to save input parameters file.
+#' @param outputdir "character" directory path for location where Marxan input data files are saved.
+#' @param seed "integer" seed for random number generation in Marxan.
+#' @seealso \code{\link{MarxanOpts-class}},  \code{\link{MarxanOpts}}, \code{\link{read.MarxanOpts}}.
 #' @export
 #' @examples
 #' x<-MarxanOpts()
@@ -237,13 +240,16 @@ update.MarxanOpts<-function(x, formula) {
 
 #' Update Marxan input parameters
 #'
-#' This function is used in the formula argument of the update function to change input parameters of a "MarxanOpts", "MarxanUnsolved", or "MarxanSolved" object.
+#' This function is used in the formula argument of the update function to change input parameters of a "MarxanOpts" object.
 #'
 #' @param name "character" name of parameter to change.
 #' @param value "numeric" new value.
 #' @return "MarxanOptsOperation" object.
 #' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}} \code{\link{update}}, \code{\link{spp}}, \code{\link{pu}}
+#' @examples
+#' opt(BLM=90)
+#' opt(PROP=0.7, NUMITNS=100)
 opt<-function(...) {
 	args<-unlist(as.list(substitute(list(...)))[c(-1L)])
 	match.arg(names(args), names(getSlots("MarxanOpts")))

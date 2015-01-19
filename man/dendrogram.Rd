@@ -15,7 +15,7 @@
 dendrogram(x, ...)
 }
 \arguments{
-\item{x}{"MarxanSolved" object.}
+\item{x}{"MarxanResults" or "MarxanSolved" object.}
 
 \item{type}{"character" use 'nmds' or 'pca' or 'dist' for analysis?}
 

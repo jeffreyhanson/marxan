@@ -6,7 +6,7 @@
 \alias{dotchart.MarxanSolved}
 \title{Dot chart of Marxan solutions}
 \usage{
-\method{dotchart}{MarxanResults}(x, var = "score", nbest = 1)
+\method{dotchart}{MarxanResults}(x, var = "score", nbest = 1, n = 50)
 
 \method{dotchart}{MarxanSolved}(x, var = "score", nbest = 1)
 
@@ -15,9 +15,11 @@ dotchart(x, ...)
 \arguments{
 \item{x}{"MarxanResults" or "MarxanSolved".}
 
-\item{var}{"character" what variable should be used to compare solutions?}
+\item{var}{"character" What variable should be used to compare solutions?}
 
-\item{nbest}{"integer" color the n best solutions in "red".}
+\item{nbest}{"integer" Color the n best solutions in "red".}
+
+\item{n}{"integer" Number of solutions to plot. Defaults to 50.}
 }
 \description{
 This function makes a dot chart to visualise differences between Marxan solutions using summary variables. Size of dots indicate overall solution quality (ie. 'score').
