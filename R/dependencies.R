@@ -21,6 +21,7 @@
 #' @importFrom plyr llply
 #' @importFrom plyr laply
 #' @importFrom plyr alply
+#' @importFrom plyr aaply
 #' @importFrom plyr ldply
 #' @importFrom plyr rbind.fill
 

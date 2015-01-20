@@ -65,7 +65,7 @@ is.marxanInstalled<-function(verbose=FALSE) {
 		if (file.exists(options()$marxanExecutablePath))
 			cat('marxan R package successfully installed\n')
 	} else {
-		cat('marxan R package cannot find Marxan executable files. Installation incomplete.\n')
+		cat('marxan R package cannot find Marxan executable files.\n')
 	}
 	return(invisible())
 }
