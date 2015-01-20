@@ -66,7 +66,8 @@ plot(results, 0)
 # make a geoplot of the second solution
 plot(results, 2)
 
-# make a geoplot of planning unit selection frequencies, use slightly transparent colors and google map background
+# make a geoplot of planning unit selection frequencies, 
+# and slightly transparent colors with google map base map
 plot(results, basemap='hybrid', alpha=0.7)
 ```
 
@@ -86,13 +87,16 @@ How can we visualise the variation in the solutions? Are most of them the same b
 Fortunately, statisticians solved this problem a long time ago. We can use dimension reducing techniques to find commonalities in the solutions, and reduce variation in the solutions to a manageable number of dimensions. 
 
 ```
-# dendrogram showing differences between solutions based on which planning units were selected (using Bray-Curtis distances by default)
+# dendrogram showing differences between solutions based on which planning units 
+# were selected (using Bray-Curtis distances by default)
 dendrogram(results, type='dist', var='selections')
 
-# ordination plot showing differences between solutions based on the number of units occupied by each species (also using Euclidean distances)
+# ordination plot showing differences between solutions based on the number of units
+# occupied by each species (also using Euclidean distances)
 ordiplot(results, type='mds', var='occhheld', method='euclidean')
 
-# ordination plot showing differences between solutions based on the amount held by each species (using a principle compoenents analysis)
+# ordination plot showing differences between solutions based on the amount held 
+# by each species (using a principle compoenents analysis)
 ordiplot(results, type='pca', var='amountheld')
 ```
 
@@ -102,7 +106,8 @@ Ok, so looking at these solutions we might decide that we need to change a few p
 # change boundary length and rerun
 results2<-update(results, ~opt(BLM=100))
 
-# change the species penalty factor for species 1, lock out planning unit 1, and  reduce the BLM again
+# change the species penalty factor for species 1, lock out planning unit 1,
+# and reduce the BLM again
 results3<-update(results2, ~opt(BLM=100) + spp(1, spf=3) + opt(BLM=70))
 
 ```
@@ -113,7 +118,8 @@ Finally, we can compare the solutions in different runs
 # geoplot showing different in selection frequencies in the 'results' and 'results2' objects
 plot(results, results2)
 
-# geoplot showing differences between the best solution in 'results2' and the third solution in 'results3'
+# geoplot showing differences between the best solution in 'results2' and 
+# the third solution in 'results3'
 plot(results2, results3, i=0, j=3
 ````
 
