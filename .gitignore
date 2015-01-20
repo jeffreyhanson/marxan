@@ -62,12 +62,5 @@ src-i386
 admin
 .dll
 .o
-
-
-# ========================
-# Github stuff
-# ========================
-.gitattributes
-.gitignore
 .Rhistory
 
