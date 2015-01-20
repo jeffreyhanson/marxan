@@ -12,9 +12,9 @@ NULL
 #' @param clean "logical" delete files once processing completed?
 #' @param force_reset "logical" should Marxan solutions be recalculated even if "MarxanSolved" object supplied?
 #' @return Marxan object
-#' @export
 #' @note This function is used to solve a MarxanUnsolved object that has all of its inputs generated. The marxan function (without lower case 'm') provides a more general interface for generating inputs and outputs for Marxan.
-solve<-function(x, ...) {UseMethod('solve')}
+#' @name solve
+NULL
 
 #' Extract solution score
 #'
@@ -117,7 +117,8 @@ inistatus<-function(x, ...) {UseMethod('inistatus')}
 #' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #' @note This generic method does not work on "MaranOpts" or "MaranResults" objects because they do not store this information.
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
-"names"
+#' @name names
+NULL
 
 #' Log
 #'
@@ -128,6 +129,8 @@ inistatus<-function(x, ...) {UseMethod('inistatus')}
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 log<-function(x, ...) {UseMethod('log')}
 
+#' @export
+log.default<-base::log
 
 #' Extract amount held for a solution
 #'
@@ -396,7 +399,6 @@ basemap<-function(x, ...) {UseMethod("basemap")}
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{basemap}} \code{\link{marxan}}, \code{\link{dendrogram}}, \code{\link{dotchart}}, \code{\link{ordiplot}}, \code{\link{spplot}}
 setGeneric("plot")
 
-
 #' Update Marxan inputs
 #'
 #' This function lets you update Marxan objects to obtain a new object with altered inputs. This is particularly useful if you want to rerun a Marxan
@@ -407,9 +409,9 @@ setGeneric("plot")
 #' @param formula "formula" with update commands (see examples).
 #' @param evaluate "logical" should solutions be generated for the new object?
 #' @return "MarxanSolved" or "MarxanUnsolved" object depending on solve argument.
-#' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{marxan}}, \code{\link{opt}}, \code{\link{spp}}, \code{\link{pu}}
-update<-function(x, ...) UseMethod("update")
+#' @name update
+NULL
 
 #' Test if hash is cached in a Marxan object
 #'

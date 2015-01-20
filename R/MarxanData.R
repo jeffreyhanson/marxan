@@ -349,8 +349,9 @@ basemap.MarxanData<-function(x, basemap="hybrid", grayscale=FALSE, force_reset=F
 	return(cache(x, callchar))
 }
 
-#' @describeIn update
+
 #' @export
+#' @rdname update
 update.MarxanData<-function(x, formula, force_reset=TRUE) {
 	if (force_reset)
 		x@.cache<-new.env()

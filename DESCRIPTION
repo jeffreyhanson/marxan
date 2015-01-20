@@ -37,9 +37,7 @@ Depends:
     R (>= 3.1),
     sp,
     rgdal,
-    raster,
-    PBSmapping,
-    data.table
+    raster
 Imports:
     Rcpp (>= 0.11.3),
     plyr,
@@ -49,7 +47,8 @@ Imports:
     fastcluster,
     PBSmapping,
     RgoogleMaps,
-    testthat
+    testthat,
+    data.table
 LinkingTo: Rcpp
 Suggests:
     testthat

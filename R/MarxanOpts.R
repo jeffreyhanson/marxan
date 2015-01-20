@@ -226,8 +226,8 @@ setMethod(
 )
 
 
-#' @describeIn update
 #' @export
+#' @rdname update
 update.MarxanOpts<-function(x, formula) {
 	ops<-llply(as.list(attr(terms(formula),"variables"))[-1L], eval)
 	findInvalidMarxanOperations(ops)

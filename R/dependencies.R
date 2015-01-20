@@ -29,6 +29,7 @@
 #' @importFrom data.table setkey
 #' @importFrom data.table setkeyv
 #' @importFrom data.table setnames
+#' @importFrom data.table fread
 
 #' @importFrom testthat expect_named
 #' @importFrom testthat expect_is

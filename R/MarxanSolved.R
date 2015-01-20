@@ -169,8 +169,8 @@ spplot.MarxanSolved<-function(x, y, var='amount', basemap="none", colramp="YlOrR
 }
 
 
-#' @describeIn update
 #' @export
+#' @rdname update
 update.MarxanSolved<-function(x, formula, evaluate=TRUE, force_reset=TRUE) {
 	return(update.MarxanUnsolved(MarxanUnsolved(x@opts, x@data), formula, evaluate, force_reset))
 }
@@ -424,13 +424,13 @@ write.MarxanSolved<-function(x, dir=getwd()) {
 
 
 #' @export
-#' @describeIn names
+#' @rdname names
 names.MarxanSolved<-function(x) {
 	return(names.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn names
+#' @rdname names
 `names<-.MarxanSolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.character(value) & !any(is.na(value)))
 	x@data@species$name<-value

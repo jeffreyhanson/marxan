@@ -21,8 +21,6 @@
 \method{names}{MarxanUnsolved}(x)
 
 \method{names}{MarxanUnsolved}(x) <- value
-
-names()
 }
 \arguments{
 \item{x}{any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
@@ -35,14 +33,6 @@ This function returns or assigns the species names for a Marxan object.
 \item \code{MarxanData}: 
 
 \item \code{MarxanData}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanUnsolved}: 
-
-\item \code{MarxanUnsolved}: 
 }}
 \note{
 This generic method does not work on "MaranOpts" or "MaranResults" objects because they do not store this information.

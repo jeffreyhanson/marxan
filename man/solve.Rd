@@ -11,8 +11,6 @@
 
 \method{solve}{MarxanUnsolved}(x, wd = tempdir(), seeds = sample.int(n =
   10000L, size = x@opts@NCORES), clean = TRUE, verbose = TRUE)
-
-solve(x, ...)
 }
 \arguments{
 \item{x}{"MarxanUnsolved" or "MarxanSolved" object.}

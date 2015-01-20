@@ -8,17 +8,13 @@
 \alias{update.MarxanUnsolved}
 \title{Update Marxan inputs}
 \usage{
-\method{update}{MarxanData}(x, formula, force_reset = TRUE)
+update.MarxanData(x, formula, force_reset = TRUE)
 
-\method{update}{MarxanOpts}(x, formula)
+update.MarxanOpts(x, formula)
 
-\method{update}{MarxanSolved}(x, formula, evaluate = TRUE,
-  force_reset = TRUE)
+update.MarxanSolved(x, formula, evaluate = TRUE, force_reset = TRUE)
 
-\method{update}{MarxanUnsolved}(x, formula, solve = TRUE,
-  force_reset = TRUE)
-
-update(x, ...)
+update.MarxanUnsolved(x, formula, solve = TRUE, force_reset = TRUE)
 }
 \arguments{
 \item{x}{"MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
@@ -35,16 +31,6 @@ This function lets you update Marxan objects to obtain a new object with altered
 analysis but after changing a few parameters. For example, you might decide that you need to rerun a Marxan analysis with a higher number of iterations, or with a different
 boundary length modifier. In effect, this lets you take an existing "MarxanUnsolved"/"MarxanSolved" object, change specific inputs, and run a Marxan analysis using the tweaked inputs.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanData}: 
-
-\item \code{MarxanOpts}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanUnsolved}: 
-}}
 \seealso{
 \code{\link{MarxanSolved-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{marxan}}, \code{\link{opt}}, \code{\link{spp}}, \code{\link{pu}}
 }
