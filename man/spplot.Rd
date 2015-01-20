@@ -11,13 +11,13 @@
   colramp = "YlOrRd", alpha = ifelse(basemap == "none", 1, 0.7),
   grayscale = FALSE, force_reset = FALSE)
 
-\method{spplot}{MarxanSolved}(x, y, basemap = "none", colramp = "YlOrRd",
-  alpha = ifelse(basemap == "none", 1, 0.7), grayscale = FALSE,
-  force_reset = FALSE)
+\method{spplot}{MarxanSolved}(x, y, var = "amount", basemap = "none",
+  colramp = "YlOrRd", alpha = ifelse(basemap == "none", 1, 0.7),
+  grayscale = FALSE, force_reset = FALSE)
 
-\method{spplot}{MarxanUnsolved}(x, y, basemap = "none", colramp = "YlOrRd",
-  alpha = ifelse(basemap == "none", 1, 0.7), grayscale = FALSE,
-  force_reset = FALSE)
+\method{spplot}{MarxanUnsolved}(x, y, var = "amount", basemap = "none",
+  colramp = "YlOrRd", alpha = ifelse(basemap == "none", 1, 0.7),
+  grayscale = FALSE, force_reset = FALSE)
 
 spplot(x, ...)
 }
