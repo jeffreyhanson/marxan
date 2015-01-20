@@ -101,6 +101,13 @@ basemap.MarxanUnsolved<-function(x, basemap="none", grayscale=FALSE, force_reset
 	return(basemap.MarxanData(x@data, basemap, grayscale, force_reset))
 }
 
+#' @describeIn spplot
+#' @export
+spplot.MarxanUnsolved<-function(x, y, basemap="none", colramp="YlOrRd", alpha=ifelse(basemap=="none", 1, 0.7), grayscale=FALSE, force_reset=FALSE) {
+	return(spplot.MarxanData(x@data, y, basemap, colramp, alpha, grayscale, force_reset))
+}
+
+
 #' @describeIn update
 #' @export
 update.MarxanUnsolved<-function(x, formula, solve=TRUE, force_reset=TRUE) {

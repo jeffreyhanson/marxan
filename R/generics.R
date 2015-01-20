@@ -255,6 +255,33 @@ hclust<-function(x, ...) UseMethod("mds")
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
 ordiplot<-function(x, ...) UseMethod("ordiplot")
 
+#' Plot species distribution in planning units
+#'
+#' This function plots the density of species in planning units in "Marxan" objects.
+#'
+#' @param x "MarxanData", "MarxanUnsolved", "MarxanSolved" object.
+#' @param y "character" name of species, or "integer" species id.
+#' @param basemap "character" name of google base map. Defaults to "none".
+#' @param colramp "character" name of color ramp. See color palettes available in \code{\link[RColorBrewer]{brewer.pal.ino}}
+#' @param alpha "numeric" between 0 and 1 describing how transparent the colors should be. Defaults to 1 if \code{basemap}='none', otherwise defaults to 0.7.
+#' @param grayscale "logical" Shoould be basemap be gray scaled?
+#' @param force_reset "logical" should base map image be downloaded even if it is stored in the cache?
+#' @export
+#' @seealso \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanData-class}}, \code{\link[RgoogleMaps]{GetMap}}, \code{\link[RgoogleMaps]{PlotOnStaticMap}}
+spplot<-function(x, ...) UseMethod("spplot")
+
+#' @param var "character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
+#' @param nbest "integer" color the n best solutions in "red"
+#' @param ... arguments to \code{\link[vegan]{monoMDS}}, \code{\link[stats]{prcomp}}, \code{\link{mds.MarxanResults}}, and \code{\link{pca.MarxanResults}}. For instance, to use euclidean distances, use dist='euclidean'.
+#' @param force_reset "logical" should analysis be rerun even if it is stored in the cache?
+#' @return "prcomp" or "monoMDS" object.
+#' @export
+#' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
+ordiplot<-function(x, ...) UseMethod("ordiplot")
+
+
+
+
 #' Dendrogram of Marxan solutions
 #'
 #' This function makes a dendrogram to visualise differences between Marxan solutions using hierarchical clustering using various characteristics. 
@@ -298,7 +325,7 @@ dendrogram<-function(x, ...) UseMethod("dendrogram")
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 dotchart<-function(x, ...) UseMethod("dotchart")
-dotchart.default<-base::dotchart
+dotchart.default<-graphics::dotchart
 
 #' Basemap 
 #'

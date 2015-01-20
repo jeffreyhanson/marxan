@@ -44,7 +44,14 @@ test_that("MarxanData methods don't work", {
 		targets=100,
 		spf=2
 	)
+	# spplots
+	spplot(md3, 'layer')
+	spplot(md3, 'layer', var='occ')
+	spplot(md3, 1, var='amount', basemap='hybrid')
+
+	# update and solve
 	md3<-update(md2,~pu(5,status=3))
+
 	# tests
 	expect_equal(md1@pu,md2@pu)
 	expect_equal(md3@pu,md2@pu)

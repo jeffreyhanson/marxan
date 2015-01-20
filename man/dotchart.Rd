@@ -8,7 +8,7 @@
 \usage{
 \method{dotchart}{MarxanResults}(x, var = "score", nbest = 1, n = 50)
 
-\method{dotchart}{MarxanSolved}(x, var = "score", nbest = 1)
+\method{dotchart}{MarxanSolved}(x, var = "score", nbest = 1, n = 50)
 
 dotchart(x, ...)
 }

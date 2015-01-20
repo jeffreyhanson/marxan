@@ -448,6 +448,52 @@ pu<-function(id, cost=NA, status=NA) {
 }
 
 
+#' @describeIn spplot
+#' @export
+spplot.MarxanData<-function(x, y, var='amount', basemap="none", colramp="YlOrRd", alpha=ifelse(basemap=="none", 1, 0.7), grayscale=FALSE, force_reset=FALSE) {
+	# data checks
+	if (!inherits(x@polygons, "PolySet"))
+		stop("Spatial data for planning units not present in object")
+	stopifnot()
+	match.arg(var, c('amount','occ'))
+	# pre-processing
+	if (inherits(y, "character")) {
+		if (y=="all") {
+			y<-unique(x@species$id)
+		} else {
+			match.arg(y, x@species$name)
+			y<-x@species$id[match(y, x@species$name)]
+		}
+	} else {
+		stopifnot(y %in% x@species$id)
+	}
+	# get basemap
+	if (basemap!="none")
+		basemap<-basemap.MarxanData(x, basemap, grayscale, force_reset)
+	# main processing
+	rows<-which(x@puvspecies$species %in% y)
+	pus<-x@puvspecies$pu[rows]
+	if (var=='occ') {
+		values<-rep(1, length(rows))
+	} else {
+		values<-x@puvspecies$amount[rows]
+	}
+	values<-rcpp_groupsum(pus, values)
+	if (length(unique(values))>1) {
+		cols<-brewerCols(rescale(values, to=c(0,1)), colramp, alpha)
+	} else {
+		cols<-brewerCols(rep(values[1], length(values)), colramp, alpha)
+		values<-c(0,values[1])
+	}
+	prettyGeoplot(
+		x@polygons,
+		cols,
+		basemap,
+		paste0("Species ", ifelse(y=='occ', 'occupancy', 'amount'), " in planning units"),
+		continuousLegend(values,colramp,posx=c(0.3, 0.4),posy=c(0.1, 0.9)),
+		beside=TRUE
+	)
+}
 
 #' @describeIn plot
 #' @export
