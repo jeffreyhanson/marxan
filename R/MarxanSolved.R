@@ -55,13 +55,11 @@ score.MarxanSolved<-function(x, y=NULL) {
 	return(score.MarxanResults(x@results, y))
 }
 
-#' @describeIn summary
 #' @export
 summary.MarxanSolved<-function(x) {
 	return(summary.MarxanResults(x@results))
 }
 
-#' @describeIn print
 #' @export
 print.MarxanSolved<-function(x) {
 	cat("MarxanSolved object.\n")
@@ -70,19 +68,14 @@ print.MarxanSolved<-function(x) {
 	print.MarxanResults(x@results, FALSE)
 }
 
-#' @export
-# setMethod(
-	# 'show',
-	# 'MarxanSolved',
-	# function(x, ...)
-		# print.MarxanSolved(x, ...)
-# )
+# ' @export
+setMethod(
+	'show',
+	'MarxanSolved',
+	function(object)
+		print.MarxanSolved(object)
+)
 
-#' @export
-#' @describeIn names
-names.MarxanSolved<-function(x) {
-	return(names(x@data))
-}
 
 #' @describeIn log
 #' @export
@@ -298,9 +291,9 @@ setMethod(
 				
 			cols2<-brewerCols(seq(0,1,0.25),colramp,alpha,n=4)
 			cols[which(x@results@selections[i,]==1 & x@results@selections[j,]==0)]<-cols2[1]
-			cols[which(x@results@selections[i,]==1 & x@results@selections[j,]==1)]<-cols2[2]
-			cols[which(x@results@selections[i,]==0 & x@results@selections[j,]==0)]<-cols2[3]
-			cols[which(x@results@selections[i,]==0 & x@results@selections[j,]==1)]<-cols2[4]
+			cols[which(x@results@selections[i,]==0 & x@results@selections[j,]==1)]<-cols2[2]
+			cols[which(x@results@selections[i,]==1 & x@results@selections[j,]==1)]<-cols2[3]
+			cols[which(x@results@selections[i,]==0 & x@results@selections[j,]==0)]<-cols2[4]
 			j<<-environment()
 			prettyGeoplot(
 				x@data@polygons,
@@ -309,7 +302,7 @@ setMethod(
 				paste0("Difference in solutions ",i,ifelse(i==x@results@best, " (best)", ""), " and ",j, ifelse(j==y@results@best, " (best)", "")),
 				categoricalLegend(
 					c(cols2,xlockedincol,ylockedincol,xlockedoutcol,ylockedoutcol),
-					c("x=1 & y=0", "x=1 & y=1", "x=0 & y=0", "x=0 & y=1", "x=locked in", "y=locked in", "x=locked out", "y=locked out"),
+					c("Selected in X",  "Selected in Y", "Both Selected", "Neither Selected", "Locked In X", "Locked In Y", "Locked Out X", "Locked Out Y"),
 					ncol=4
 				),
 				beside=FALSE
@@ -421,4 +414,91 @@ write.MarxanSolved<-function(x, dir=getwd()) {
 		)
 	}
 }
+
+
+#' @export
+names.MarxanSolved<-function(x) {
+	return(names.MarxanData(x@data))
+}
+
+#' @export
+`names<-.MarxanSolved`<-function(x,value) {
+	names(x@data)<-value
+}
+
+
+#' @export
+#' @describeIn spfs
+spfs.MarxanSolved<-function(x) {
+	return(spfs.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn spfs
+`spfs<-.MarxanSolved`<-function(x,value) {
+	spfs(x@data)<-value
+}
+
+#' @export
+#' @describeIn targets
+targets.MarxanSolved<-function(x) {
+	return(targets.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn targets
+`targets<-.MarxanSolved`<-function(x,value) {
+	targets(x@data)<-value
+}
+
+#' @export
+#' @describeIn sppids
+sppids.MarxanSolved<-function(x) {
+	return(sppids.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn sppids
+`sppids<-.MarxanSolved`<-function(x,value) {
+	sppids(x@data)<-value
+}
+
+#' @export
+#' @describeIn puids
+puids.MarxanSolved<-function(x) {
+	return(puids.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn puids
+`puids<-.MarxanSolved`<-function(x,value) {
+	puids(x@data)<-value
+}
+
+
+#' @export
+#' @describeIn costs
+costs.MarxanSolved<-function(x) {
+	return(costs.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn costs
+`costs<-.MarxanSolved`<-function(x,value) {
+	costs(x@data)<-value
+}
+
+
+#' @export
+#' @describeIn inistatus
+inistatus.MarxanSolved<-function(x) {
+	return(inistatus.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn inistatus
+`inistatus<-.MarxanSolved`<-function(x,value) {
+	inistatus(x@data)<-value
+}
+
 

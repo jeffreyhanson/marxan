@@ -27,33 +27,69 @@ solve<-function(x, ...) {UseMethod('solve')}
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 score<-function(x, ...) {UseMethod('score')}
 
-#' Summary
+#' Species penalty factors
 #'
-#' This function returns the summary table output by Marxan.
-#'
-#' @param x "MarxanSolved" or "MarxanResults" object.
-#' @export
-#' @return "data.frame" with solution information.
-#' @seealso \code{\link{MarxanSolved-class}}, \code{\link{MarxanResults}}, \code{\link{marxan}}
-summary<-function(x, ...) {UseMethod('summary')}
-
-#' Print
-#'
-#' This function returns information about a Marxan object.
-#'
-#' @param x any "MarxanOpts", "MarxanData", "MarxanResults", "MarxanUnsolved", or "MarxanSolved" object.
-#' 
-#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanResults-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}, 
-print<-function(x, ...) {UseMethod('print')}
-
-#' Names
-#'
-#' This function returns the species names for a Marxan object.
+#' This function returns or assigns the species penalty factors for a Marxan object.
 #'
 #' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
-#' @note "MaranResults" objects do not store species names.
+#' @note This generic method does not work on "MaranResults" objects because they do not store this information.
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
-# names<-function(x, ...) {UseMethod('names')}
+spfs<-function(x, ...) {UseMethod('spfs')}
+`spfs<-`<-function(x, ...) {UseMethod('spfs<-')}
+
+#' Targets
+#'
+#' This function returns or assigns the species penalty factors for a Marxan object.
+#'
+#' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+targets<-function(x, ...) {UseMethod('targets')}
+`targets<-`<-function(x, ...) {UseMethod('targets<-')}
+
+
+#' Species identifiers
+#'
+#' This function returns or assigns the species ids for a Marxan object.
+#'
+#' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+sppids<-function(x, ...) {UseMethod('sppids')}
+`sppids<-`<-function(x, ...) {UseMethod('sppids<-')}
+
+
+#' Planning unit identifiers
+#'
+#' This function returns or assigns the planning unit ids for a Marxan object.
+#'
+#' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+puids<-function(x, ...) {UseMethod('puids')}
+`puids<-`<-function(x, ...) {UseMethod('puids<-')}
+
+
+#' Planning unit costs
+#'
+#' This function returns or assigns the planing unit costs for a Marxan object.
+#'
+#' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+costs<-function(x, ...) {UseMethod('costs')}
+`costs<-`<-function(x, ...) {UseMethod('costs<-')}
+
+#' Planning unit initial status
+#'
+#' This function returns or assigns the planing unit initial statuses for a Marxan object.
+#'
+#' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+inistatus<-function(x, ...) {UseMethod('inistatus')}
+`inistatus<-`<-function(x, ...) {UseMethod('inistatus<-')}
+
 
 #' Log
 #'
@@ -131,10 +167,6 @@ mpm<-function(x, ...) {UseMethod('mpm')}
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 sepacheived<-function(x, ...) {UseMethod('sepacheived')}
 
-
-
-
-
 #' Compare Marxan objects
 #'
 #' This function checks objects to see if they share the same input data.
@@ -188,7 +220,7 @@ dist.default<-stats::dist
 #' @return "monoMDS" object.
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
-mds=function(x, ...) UseMethod("mds")
+mds<-function(x, ...) UseMethod("mds")
 
 #' Hierarchical Clustering for Marxan Solutions
 #'
@@ -204,7 +236,7 @@ mds=function(x, ...) UseMethod("mds")
 #' @return "hclust" object with an extra element named "phylo" that stores a "phylo" representation for pretty plotting.
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
-hclust=function(x, ...) UseMethod("mds")
+hclust<-function(x, ...) UseMethod("mds")
 
 #' Ordination plot of Marxan solutions
 #'
@@ -221,7 +253,7 @@ hclust=function(x, ...) UseMethod("mds")
 #' @return "prcomp" or "monoMDS" object.
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
-ordiplot=function(x, ...) UseMethod("ordiplot")
+ordiplot<-function(x, ...) UseMethod("ordiplot")
 
 #' Dendrogram of Marxan solutions
 #'
@@ -238,33 +270,35 @@ ordiplot=function(x, ...) UseMethod("ordiplot")
 #' @return "prcomp" or "monoMDS" object.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
-dendrogram=function(x, ...) UseMethod("dendrogram")
+dendrogram<-function(x, ...) UseMethod("dendrogram")
 
 #' Dot chart of Marxan solutions
 #'
 #' This function makes a dot chart to visualise differences between Marxan solutions using summary variables. Size of dots indicate overall solution quality (ie. 'score').
-#' Supported summary variables are:
-#' \tabular{rrr} {
-#' 	short name \tab full name \tab Description\cr
-#' 	'score' \tab 'Score' \tab quality of solution.\cr
-#' 	'cost' \tab 'Cost' \tab total cost of solution.\cr
-#' 	'npu' \tab 'Planning_Units' \tab number of planning units selected in prioritisation.\cr
-#' 	'con' \tab 'Connectivity' \tab sum boundary length of all edges in selected planning units' that have neighbours.\cr
-#' 	'confrac' \tab 'Connectivity_In_Fraction' \tab connectivity efficiency relative to total boundary length.\cr
-#' 	'conin' \tab 'Connectivity_In' \tab sum boundary length of edges belonging to selected planning units' that have neighbours.\cr
-#' 	'conout' \tab 'Connectivity_Out' \tab sum boundary length of edges belonging to selected planning units' that have neighbours.\cr
-#'  'penalty' \tab 'Penalty' \tab total species penalty.\cr
-#'  'shortfall' \tab 'Shortfall' \tab total shortfall for species targets.\cr
-#'  'mv' \tab 'Missing_Values' \tab number of species that do not have their targets met.\cr
-#' }
+
 #' 
 #' @param x "MarxanResults" or "MarxanSolved".
 #' @param var "character" What variable should be used to compare solutions?
 #' @param n "integer" Number of solutions to plot. Defaults to 50.
 #' @param nbest "integer" Color the n best solutions in "red".
+#' @note Supported summary variables are:
+#' \tabular{ccl}{
+#' 	Short name \tab Full name \tab Description\cr
+#' 	'score' \tab 'Score' \tab Quality of solution.\cr
+#' 	'cost' \tab 'Cost' \tab Total cost of solution.\cr
+#' 	'npu' \tab 'Planning_Units' \tab Number of planning units selected in prioritisation.\cr
+#' 	'con' \tab 'Connectivity' \tab Sum boundary length of all edges in selected planning units' that have neighbours.\cr
+#' 	'confrac' \tab 'Connectivity_In_Fraction' \tab Connectivity efficiency relative to total boundary length.\cr
+#' 	'conin' \tab 'Connectivity_In' \tab Sum boundary length of edges belonging to selected planning units' that have neighbours.\cr
+#' 	'conout' \tab 'Connectivity_Out' \tab Sum boundary length of edges belonging to selected planning units' that have neighbours.\cr
+#'  'penalty' \tab 'Penalty' \tab Total species penalty.\cr
+#'  'shortfall' \tab 'Shortfall' \tab Total shortfall for species targets.\cr
+#'  'mv' \tab 'Missing_Values' \tab Number of species that do not have their targets met.\cr
+#' }
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
-dotchart=function(x, ...) UseMethod("dotchart")
+dotchart<-function(x, ...) UseMethod("dotchart")
+dotchart.default<-base::dotchart
 
 #' Basemap 
 #'
@@ -279,7 +313,6 @@ dotchart=function(x, ...) UseMethod("dotchart")
 #' @export
 #' @seealso \cite{\link[RgoogleMaps]{GetMap.bbox}}, \cite{\link{plot}}
 basemap<-function(x, ...) {UseMethod("basemap")}
-
 
 #' Plot Marxan solutions
 #'
@@ -309,7 +342,6 @@ basemap<-function(x, ...) {UseMethod("basemap")}
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{basemap}} \code{\link{marxan}}, \code{\link{dendrogram}}, \code{\link{dotchart}}, \code{\link{ordiplot}}
 setGeneric("plot", function(x,y, ...) standardGeneric("plot"))
 
-
 #' Update Marxan inputs
 #'
 #' This function lets you update Marxan objects to obtain a new object with altered inputs. This is particularly useful if you want to rerun a Marxan
@@ -327,18 +359,6 @@ update<-function(x, ...) UseMethod("update")
 #' Test if hash is cached in a Marxan object
 #'
 #' Tests if hash is cached in Marxan object.
-#' 
-#' @param x "MarxanData" or "MarxanResults" object
-#' @param name "character" hash.
-#' @note caches are implemented using environments, the hash is used as the name of the object in the environment.
-#' @return "logical" Is it cached?
-#' @keywords internal
-setGeneric("is.cached", function(x,name) standardGeneric("is.cached"))
-
-
-#' Test if hash already assigned to an object in a cache
-#'
-#' Tests if hash is cached in Marxan object. Hashes are generated using function calls.
 #' 
 #' @param x "MarxanData" or "MarxanResults" object
 #' @param name "character" hash.

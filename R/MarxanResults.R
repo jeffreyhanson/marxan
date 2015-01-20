@@ -138,13 +138,11 @@ score.MarxanResults<-function(x, y=NULL) {
 	return(x@summary$Score[y])
 }
 
-#' @describeIn summary
 #' @export
 summary.MarxanResults<-function(x) {
 	return(x@results@summary)
 }
 
-#' @describeIn print
 #' @export
 print.MarxanResults<-function(x, header=TRUE) {
 	if (header)
@@ -153,12 +151,12 @@ print.MarxanResults<-function(x, header=TRUE) {
 }
 
 #' @export
-# setMethod(
-	# 'show',
-	# 'MarxanResults',
-	# function(x, ...)
-		# print.MarxanResults(x, ...)
-# )
+setMethod(
+	'show',
+	'MarxanResults',
+	function(object)
+		print.MarxanResults(object)
+)
 
 
 #' @describeIn log

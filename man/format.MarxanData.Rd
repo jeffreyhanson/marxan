@@ -15,7 +15,7 @@
 
 \item{rasters}{"RasterLayer", "RasterStack", "RasterBrick" with species distribution data.}
 
-\item{targets}{"numeric" vector for targets for each species (eg. 12), or "character" vector with percent-based targets (eg. '12%'). Defaults to '20%' for each species.}
+\item{targets}{"numeric" vector for targets for each species (eg. 12), or "character" vector with percent-based targets (eg. '12\%'). Defaults to '20\%' for each species.}
 
 \item{pu}{"data.frame" planning unit data; with "integer" 'id', "numeric" 'cost', "integer" 'status' columns. Default behaviour is to generate a table with all costs and statuses set to 1 and 0 (respectively).}
 
@@ -36,11 +36,11 @@ already been generated, these can be supplied to avoid re-processing data.
 }
 \examples{
 data(planningunits, species)
-x<-MarxanData(planningunits, rasters=species, targets="10\%")
+x<-MarxanData(planningunits, rasters=species, targets="10\\\%")
 y<-MarxanData(planningunits, rasters=species)
 stopifnot(identical(x,y))
 }
 \seealso{
-\code{\link{MarxanData-class}}, , \code{\link{MarxanData}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}.
+\code{\link{MarxanData-class}}, \code{\link{MarxanData}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}.
 }
 

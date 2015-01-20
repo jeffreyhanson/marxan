@@ -36,7 +36,6 @@ setClass("MarxanData",
 		expect_is(object@pu$cost, "numeric", label='argument to pu$cost')
 		expect_true(all(object@pu$status %in% 0:3), info='argument to pu$status must only contain values in 0:3')
 
-		
 		# species
 		expect_true(all(c("id","spf","target") %in% names(object@species)), label='argument to species')
 		expect_is(object@species$id, "integer", label='argument to species$id')
@@ -49,7 +48,7 @@ setClass("MarxanData",
 		if (!is.null(object@species$name)) {
 			object@species$name<-as.character(object@species$name)
 			expect_is(object@species$name, "character", label='argument to species$name')
-			expect_false(any(is.na(object@species$name)), info='argument to species$name must not contain any NA values')		
+			expect_false(any(is.na(object@species$name)), info='argument to species$name must not contain any NA values')
 		}
 		if (!is.null(object@species$targetocc)) {
 			expect_is(object@species$targetocc, "integer", label='argument to species$targetocc')
@@ -319,7 +318,6 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 	return(MarxanData(pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo, boundary=boundary, polygons=polyset, .cache=.cache))
 }
 
-#' @describeIn print
 #' @export
 print.MarxanData<-function(x, header=TRUE) {
 	if (header)
@@ -329,19 +327,13 @@ print.MarxanData<-function(x, header=TRUE) {
 }
 
 #' @export
-# setMethod(
-	# 'show',
-	# signature(x='MarxanData'),
-	# function(x)
-		# print.MarxanData(x)
-# )
+setMethod(
+	'show',
+	signature(object='MarxanData'),
+	function(object)
+		print.MarxanData(object)
+)
 
-
-#' @export
-#' @describeIn names
-names.MarxanData<-function(x) {
-	return(x@species$name)
-}
 
 #' @describeIn basemap
 #' @export
@@ -548,3 +540,99 @@ setMethod(
 		)
 	}
 )
+
+
+#' @export
+names.MarxanData<-function(x) {
+	return(x@species$name)
+}
+
+#' @export
+`names<-.MarxanData`<-function(x,value) {
+	stopifnot(length(value)==nrow(x@species) & !any(is.na(value)))
+	x@species$name<-value
+}
+
+#' @export
+#' @describeIn spfs
+spfs.MarxanData<-function(x) {
+	return(x@species$spfs)
+}
+
+#' @export
+#' @describeIn spfs
+`spfs<-.MarxanData`<-function(x,value) {
+	stopifnot(length(value)==nrow(x@species) & is.numeric(value) & !any(is.na(value)))
+	x@species$spfs<-value
+}
+
+#' @export
+#' @describeIn targets
+targets.MarxanData<-function(x) {
+	return(x@species$targets)
+}
+
+#' @export
+#' @describeIn targets
+`targets<-.MarxanData`<-function(x, value) {
+	stopifnot(length(value)==nrow(x@species) & is.numeric(value) & !any(is.na(value)))
+	x@species$targets<-value
+}
+
+#' @export
+#' @describeIn sppids
+sppids.MarxanData<-function(x) {
+	return(x@species$id)
+}
+
+#' @export
+#' @describeIn sppids
+`sppids<-.MarxanData`<-function(x, value) {
+	stopifnot(length(value)==nrow(x@species) & is.integer(value) & !any(is.na(value)))
+	x@species$id<-value
+}
+
+#' @export
+#' @describeIn puids
+puids.MarxanData<-function(x) {
+	return(x@pu$ids)
+}
+
+#' @export
+#' @describeIn puids
+`puids<-.MarxanData`<-function(x, value) {
+	stopifnot(length(value)==nrow(x@pu) & is.integer(value) & !any(is.na(value)))
+	x@pu$ids<-value
+}
+
+#' @export
+#' @describeIn costs
+costs.MarxanData<-function(x) {
+	return(x@pu$costs)
+}
+
+#' @export
+#' @describeIn costs
+`costs<-.MarxanData`<-function(x, value) {
+	stopifnot(length(value)==nrow(x@pu) & is.numeric(value) & !any(is.na(value)))
+	x@pu$costs<-value
+}
+
+
+#' @export
+#' @describeIn inistatus
+inistatus.MarxanData<-function(x) {
+	return(x@pu$status)
+}
+
+#' @export
+#' @describeIn inistatus
+`inistatus<-.MarxanData`<-function(x,value) {
+	stopifnot(length(value)==nrow(x@pu) & is.numeric(value) & !any(is.na(value)))	
+	x@pu$status<-value
+}
+
+
+
+
+

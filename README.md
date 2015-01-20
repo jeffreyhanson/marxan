@@ -61,24 +61,24 @@ Ok, so apparently it worked, but how can we visualise the solutions?
 
 ```
 # make a geoplot of the best solution
-plot(ms, 0)
+plot(results, 0)
 
 # make a geoplot of the second solution
-plot(ms, 2)
+plot(results, 2)
 
 # make a geoplot of planning unit selection frequencies
-plot(ms)
+plot(results)
 ```
 
 We have one hundred solutions. How can we see how they all compare? We could make dot charts.
 
 ```
 # make dotchart of showing the solution scores of the best 50 solutions
-dotchart(ms, var='score')
+dotchart(results, var='score')
 
 
 # make dotchart of connectivity, showing best 20 solutions with best 5 five colored in red
-dotchart(ms, var='score', nbest=5, n=20)
+dotchart(results, var='score', nbest=5, n=20)
 ```
 
 How can we visualise the variation in the solutions? Are most of them the same but with a few small differences, or do the solutions tend to fall into one or two main groups?
@@ -87,34 +87,34 @@ Fortunately, statisticians solved this problem a long time ago. We can use dimen
 
 ```
 # dendrogram showing differences between solutions based on which planning units were selected (using Bray-Curtis distances by default)
-dendrogram(ms, type='dist', var='selections')
+dendrogram(results, type='dist', var='selections')
 
 # ordination plot showing differences between solutions based on the number of units occupied by each species (also using Euclidean distances)
-ordiplot(ms, type='mds', var='occhheld', method='euclidean')
+ordiplot(results, type='mds', var='occhheld', method='euclidean')
 
 # ordination plot showing differences between solutions based on the amount held by each species (using a principle compoenents analysis)
-ordiplot(ms, type='pca', var='amountheld')
+ordiplot(results, type='pca', var='amountheld')
 ```
 
-Ok, so looking at these solutions we might decide that we need to change a few parameters and rerun Marxan. We can do this--efficiently--by 'updating' our 'ms' Marxan object and storing the results in a new objects.
+Ok, so looking at these solutions we might decide that we need to change a few parameters and rerun Marxan. We can do this--efficiently--by 'updating' our 'results' Marxan object and storing the results in a new objects.
 
 ```
 # change boundary length and rerun
-ms2<-update(ms, ~opt(BLM=100))
+results2<-update(results, ~opt(BLM=100))
 
 # change the species penalty factor for species 1, lock out planning unit 1, and  reduce the BLM again
-ms3<-update(ms2, ~opt(BLM=100) + spp(1, spf=3) + opt(BLM=70))
+results3<-update(results2, ~opt(BLM=100) + spp(1, spf=3) + opt(BLM=70))
 
 ```
 
 Finally, we can compare the solutions in different runs
 
 ```
-# geoplot showing different in selection frequencies
-plot(ms, ms2)
+# geoplot showing different in selection frequencies in the 'results' and 'results2' objects
+plot(results, results2)
 
-# geoplot showing differences between the best solution in 'ms2' and the third solution in 'ms3'
-plot(ms2, ms3, i=0, j=3
+# geoplot showing differences between the best solution in 'results2' and the third solution in 'results3'
+plot(results2, results3, i=0, j=3
 ````
 
 

@@ -12,27 +12,17 @@
 \S4method{is.cached}{MarxanResults,character}(x, name)
 
 is.cached(x, name)
-
-is.cached(x, name)
 }
 \arguments{
-\item{x}{"MarxanData" or "MarxanResults" object}
-
-\item{name}{"character" hash.}
-
 \item{x}{"MarxanData" or "MarxanResults" object}
 
 \item{name}{"character" hash.}
 }
 \value{
 "logical" Is it cached?
-
-"logical" Is it cached?
 }
 \description{
 Tests if hash is cached in Marxan object.
-
-Tests if hash is cached in Marxan object. Hashes are generated using function calls.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -41,8 +31,6 @@ Tests if hash is cached in Marxan object. Hashes are generated using function ca
 \item \code{x = MarxanResults,name = character}: 
 }}
 \note{
-caches are implemented using environments, the hash is used as the name of the object in the environment.
-
 caches are implemented using environments, the hash is used as the name of the object in the environment.
 }
 \keyword{internal}

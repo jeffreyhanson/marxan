@@ -211,7 +211,6 @@ VERBOSITY ',x@VERBOSITY,'
 	)
 }
 
-#' @describeIn print
 #' @export
 print.MarxanOpts<-function(x, header=TRUE) {
 	if (header)
@@ -219,12 +218,12 @@ print.MarxanOpts<-function(x, header=TRUE) {
 }
 
 #' @export
-# setMethod(
-	# 'show',
-	# 'MarxanOpts',
-	# function(x, ...)
-		# print.MarxanOpts(x, ...)
-# )
+setMethod(
+	'show',
+	'MarxanOpts',
+	function(object)
+		print.MarxanOpts(object)
+)
 
 
 #' @describeIn update

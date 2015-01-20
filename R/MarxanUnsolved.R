@@ -79,7 +79,6 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 	return(x)
 }
 
-#' @describeIn print
 #' @export
 print.MarxanUnsolved=function(x) {
 	cat("MarxanUnsolved object.\n")
@@ -88,18 +87,12 @@ print.MarxanUnsolved=function(x) {
 }
 
 #' @export
-# setMethod(
-	# 'show',
-	# 'MarxanUnsolved',
-	# function(x, ...)
-		# print.MarxanUnsolved(x, ...)
-# )
-
-#' @export
-#' @describeIn names
-names.MarxanUnsolved<-function(x) {
-	return(names(x@data))
-}
+setMethod(
+	'show',
+	'MarxanUnsolved',
+	function(object)
+		print.MarxanUnsolved(object)
+)
 
 
 #' @describeIn basemap
@@ -160,5 +153,91 @@ read.MarxanUnsolved<-function(path, skipchecks=FALSE) {
 write.MarxanUnsolved<-function(x, dir=getwd()) {
 	write.MarxanData(x@data, dir)
 	write.MarxanOpts(x@opts, dir)
+}
+
+
+#' @export
+names.MarxanUnsolved<-function(x) {
+	return(names.MarxanData(x@data))
+}
+
+#' @export
+`names<-.MarxanUnsolved`<-function(x,value) {
+	names(x@data)<-value
+}
+
+
+#' @export
+#' @describeIn spfs
+spfs.MarxanUnsolved<-function(x) {
+	return(spfs.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn spfs
+`spfs<-.MarxanUnsolved`<-function(x,value) {
+	spfs(x@data)<-value
+}
+
+#' @export
+#' @describeIn targets
+targets.MarxanUnsolved<-function(x) {
+	return(targets.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn targets
+`targets<-.MarxanUnsolved`<-function(x,value) {
+	targets(x@data)<-value
+}
+
+#' @export
+#' @describeIn sppids
+sppids.MarxanUnsolved<-function(x) {
+	return(sppids.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn sppids
+`sppids<-.MarxanUnsolved`<-function(x,value) {
+	sppids(x@data)<-value
+}
+
+#' @export
+#' @describeIn puids
+puids.MarxanUnsolved<-function(x) {
+	return(puids.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn puids
+`puids<-.MarxanUnsolved`<-function(x,value) {
+	puids(x@data)<-value
+}
+
+
+#' @export
+#' @describeIn costs
+costs.MarxanUnsolved<-function(x) {
+	return(costs.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn costs
+`costs<-.MarxanUnsolved`<-function(x,value) {
+	costs(x@data)<-value
+}
+
+
+#' @export
+#' @describeIn inistatus
+inistatus.MarxanUnsolved<-function(x) {
+	return(inistatus.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn inistatus
+`inistatus<-.MarxanUnsolved`<-function(x,value) {
+	inistatus(x@data)<-value
 }
 
