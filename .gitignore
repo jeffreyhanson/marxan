@@ -64,3 +64,10 @@ admin
 .o
 .Rhistory
 
+
+# ========================
+# Github stuff
+# ========================
+.gitattributes
+.gitignore
+
