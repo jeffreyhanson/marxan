@@ -11,8 +11,7 @@ To install this package, execute the following commands in R:
 
 if (!require('devtools'))
 	install.packages('devtools', repo='http://cran.rstudio.com', dep=TRUE)
-library(devtools)
-install_github('paleo13/marxan')
+devtools:::install_github('paleo13/marxan')
 
 ```
 
@@ -22,21 +21,23 @@ Next, download the [Marxan software](http://www.uq.edu.au/marxan/marxan-software
 system.file("bin", package="marxan")
 ```
 
-Finally, verify that R can find these files with:
+Finally,let's verify that R can find these files:
 
 ```
-findMarxanExecutablePath()
-is.marxanInstalled(verbose=TRUE)
+marxan:::findMarxanExecutablePath()
+marxan:::is.marxanInstalled(verbose=TRUE)
 ```
 
 If everything works, you should see the message 'marxan R package successfully installed'. If not, try repeating the above steps. Failing that, [lodge an issue](https://github.com/paleo13/marxan/issues).
 
 ##### Quick start guide
 
-First, let's load some example data.
+First, let's load the 'marxan' R package and some example data.
 
 ```
-# load data
+# load marxan R package
+library(marxan)
+# load example data
 data(planningunits, species)
 ```
 
@@ -93,7 +94,7 @@ dendrogram(results, type='dist', var='selections')
 
 # ordination plot showing differences between solutions based on the number of units
 # occupied by each species (also using Euclidean distances)
-ordiplot(results, type='mds', var='occhheld', method='euclidean')
+ordiplot(results, type='mds', var='occheld', method='euclidean')
 
 # ordination plot showing differences between solutions based on the amount held 
 # by each species (using a principle compoenents analysis)
@@ -108,7 +109,7 @@ results2<-update(results, ~opt(BLM=100))
 
 # change the species penalty factor for species 1, lock out planning unit 1,
 # and reduce the BLM again
-results3<-update(results2, ~opt(BLM=100) + spp(1, spf=3) + opt(BLM=70))
+results3<-update(results2, ~spp(1, spf=20, target=200) + opt(BLM=70))
 
 ```
 
@@ -120,7 +121,7 @@ plot(results, results2)
 
 # geoplot showing differences between the best solution in 'results2' and 
 # the third solution in 'results3'
-plot(results2, results3, i=0, j=3
+plot(results2, results3, i=0, j=3)
 ````
 
 

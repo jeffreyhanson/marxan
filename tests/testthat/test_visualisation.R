@@ -11,21 +11,14 @@ test_that("Marxan visualisation methods don't work", {
 	polys<-rasterToPolygons(template, n=4, dissolve=TRUE)	
 	species<-stack(llply(1:10, function(x) {setValues(template, round(runif(ncell(template))))}))
 	# generate base objects
-	md<-MarxanData(
-		pu=data.frame(
-			id=seq_len(nrow(polys@data)),
-			cost=100,
-			status=0
-		),
-		species=data.frame(id=seq_along(names(species)), spf=1, target=1, name=names(species)),
-		puvspecies=calcPuVsSpeciesData(polys,species),
-		boundary=calcBoundaryData(polys),
-		polygons=SpatialPolygons2PolySet(polys)
+	md<-format.MarxanData(
+		polygons=polys,
+		rasters=species
 	)
 	mo<-MarxanOpts(NUMITNS=10)
 	# generate unsolved object
 	mu<-MarxanUnsolved(mo, md)
-	ms<-solve(mu)
+	ms<-solve(mu, clean=F)
 	ms2<-update(ms, ~opt(BLM=200))
 	## stats functions
 	# distances

@@ -26,82 +26,85 @@ setClass("MarxanData",
 		skipchecks="logical",
 		.cache="environment"
 	),
-	validity<-function(object) {	
-		if (!skipchecks)
-		### check column names of inputs		
-		# pu
-		expect_named(object@pu, c("id","cost","status"), label='argument to pu')
-		expect_is(object@pu$id, "integer", label='argument to pu$id')
-		expect_false(any(duplicated(object@pu$id)), info='argument to pu$id contains duplicates')
-		expect_is(object@pu$cost, "numeric", label='argument to pu$cost')
-		expect_true(all(object@pu$status %in% 0:3), info='argument to pu$status must only contain values in 0:3')
+	validity=function(object) {
+		if (!object@skipchecks) {
+			### check column names of inputs		
+			# pu
+			expect_named(object@pu, c("id","cost","status"), label='argument to pu')
+			expect_is(object@pu$id, "integer", label='argument to pu$id')
+			expect_false(any(duplicated(object@pu$id)), info='argument to pu$id contains duplicates')
+			expect_is(object@pu$cost, "numeric", label='argument to pu$cost')
+			expect_true(all(object@pu$status %in% 0:3), info='argument to pu$status must only contain values in 0:3')
 
-		# species
-		expect_true(all(c("id","spf","target") %in% names(object@species)), label='argument to species')
-		expect_is(object@species$id, "integer", label='argument to species$id')
-		expect_false(any(is.na(object@species$id)), info='argument to species$id must not contain any NA values')
-		expect_false(any(duplicated(object@species$id)), info='argument to species$id contains duplicates')
-		expect_is(object@species$spf, "numeric", label='argument to species$spf')
-		expect_false(any(is.na(object@species$spf)), info='argument to species$spf must not contain any NA values')
-		expect_is(object@species$target, "numeric", label='argument to species$target')
-		expect_false(any(is.na(object@species$target)), "numeric", info='argument to species$target must not contain any NA values')
-		if (!is.null(object@species$name)) {
-			object@species$name<-as.character(object@species$name)
-			expect_is(object@species$name, "character", label='argument to species$name')
-			expect_false(any(is.na(object@species$name)), info='argument to species$name must not contain any NA values')
-		}
-		if (!is.null(object@species$targetocc)) {
-			expect_is(object@species$targetocc, "integer", label='argument to species$targetocc')
-			expect_false(any(is.na(object@species$targetocc)), info='argument to species$targetocc must not contain any NA values')
-		}
-		if (!is.null(object@species$sepnum)) {
-			expect_is(object@species$sepnum, "integer", label='argument to species$sepnum')
-			expect_false(any(is.na(object@species$sepnum)), info='argument to species$sepnum must not contain any NA values')
-		}
-		if (!is.null(object@species$sepdistance)) {
-			expect_is(object@species$sepdistance, "numeric", label='argument to species$sepdistance')
-			expect_false(any(is.na(object@species$sepdistance)), info='argument to species$sepdistance must not contain any NA values')
-		}
-		
-		# puvspecies
-		expect_named(object@puvspecies, c("species","pu","amount"), label='argument to puvspecies')
-		expect_is(object@puvspecies$species, "integer", label='argument to puvspecies$species')
-		expect_false(any(is.na(object@puvspecies$species)), info='argument to puvspecies$species must not contain any NA values')
-		expect_is(object@puvspecies$pu, "integer", label='argument to puvspecies$pu')
-		expect_false(any(is.na(object@puvspecies$pu)), info='argument to puvspecies$pu must not contain any NA values')
-		expect_is(object@puvspecies$amount, "numeric", label='argument to puvspecies$amount')
-		expect_false(any(is.na(object@puvspecies$amount)), info='argument to puvspecies$amount must not contain any NA values')
+			# species
+			if (is.factor(object@species$target))
+				object@species$target<-as.character(object@species$target)
+			expect_true(all(c("id","spf","target") %in% names(object@species)), label='argument to species')
+			expect_is(object@species$id, "integer", label='argument to species$id')
+			expect_false(any(is.na(object@species$id)), info='argument to species$id must not contain any NA values')
+			expect_false(any(duplicated(object@species$id)), info='argument to species$id contains duplicates')
+			expect_is(object@species$spf, "numeric", label='argument to species$spf')
+			expect_false(any(is.na(object@species$spf)), info='argument to species$spf must not contain any NA values')
+			expect_true(inherits(object@species$target, c("numeric","character")), info='argument to species$target must be "character" or "numeric"')
+			expect_false(any(is.na(object@species$target)), info='argument to species$target must not contain any NA values')
+			if (!is.null(object@species$name)) {
+				object@species$name<-as.character(object@species$name)
+				expect_is(object@species$name, "character", label='argument to species$name')
+				expect_false(any(is.na(object@species$name)), info='argument to species$name must not contain any NA values')
+			}
+			if (!is.null(object@species$targetocc)) {
+				expect_is(object@species$targetocc, "integer", label='argument to species$targetocc')
+				expect_false(any(is.na(object@species$targetocc)), info='argument to species$targetocc must not contain any NA values')
+			}
+			if (!is.null(object@species$sepnum)) {
+				expect_is(object@species$sepnum, "integer", label='argument to species$sepnum')
+				expect_false(any(is.na(object@species$sepnum)), info='argument to species$sepnum must not contain any NA values')
+			}
+			if (!is.null(object@species$sepdistance)) {
+				expect_is(object@species$sepdistance, "numeric", label='argument to species$sepdistance')
+				expect_false(any(is.na(object@species$sepdistance)), info='argument to species$sepdistance must not contain any NA values')
+			}
+			
+			# puvspecies
+			expect_named(object@puvspecies, c("species","pu","amount"), label='argument to puvspecies')
+			expect_is(object@puvspecies$species, "integer", label='argument to puvspecies$species')
+			expect_false(any(is.na(object@puvspecies$species)), info='argument to puvspecies$species must not contain any NA values')
+			expect_is(object@puvspecies$pu, "integer", label='argument to puvspecies$pu')
+			expect_false(any(is.na(object@puvspecies$pu)), info='argument to puvspecies$pu must not contain any NA values')
+			expect_is(object@puvspecies$amount, "numeric", label='argument to puvspecies$amount')
+			expect_false(any(is.na(object@puvspecies$amount)), info='argument to puvspecies$amount must not contain any NA values')
 
-		# puvspecies_spo
-		expect_named(object@puvspecies_spo, c("species","pu","amount"), label='argument to puvspecies_spo')
-		expect_is(object@puvspecies_spo$species, "integer", label='argument to puvspecies_spo$species')
-		expect_false(any(is.na(object@puvspecies_spo$species)), info='argument to puvspecies_spo$species must not contain any NA values')
-		expect_is(object@puvspecies_spo$pu, "integer", label='argument to puvspecies_spo$pu')
-		expect_false(any(is.na(object@puvspecies_spo$pu)), info='argument to puvspecies_spo$pu must not contain any NA values')
-		expect_is(object@puvspecies_spo$amount, "numeric", label='argument to puvspecies_spo$amount')
-		expect_false(any(is.na(object@puvspecies_spo$amount)), info='argument to puvspecies_spo$amount must not contain any NA values')
+			# puvspecies_spo
+			expect_named(object@puvspecies_spo, c("species","pu","amount"), label='argument to puvspecies_spo')
+			expect_is(object@puvspecies_spo$species, "integer", label='argument to puvspecies_spo$species')
+			expect_false(any(is.na(object@puvspecies_spo$species)), info='argument to puvspecies_spo$species must not contain any NA values')
+			expect_is(object@puvspecies_spo$pu, "integer", label='argument to puvspecies_spo$pu')
+			expect_false(any(is.na(object@puvspecies_spo$pu)), info='argument to puvspecies_spo$pu must not contain any NA values')
+			expect_is(object@puvspecies_spo$amount, "numeric", label='argument to puvspecies_spo$amount')
+			expect_false(any(is.na(object@puvspecies_spo$amount)), info='argument to puvspecies_spo$amount must not contain any NA values')
 
-		# boundary
-		expect_named(object@boundary, c("id1","id2","boundary"), label='argument to boundary')
-		expect_is(object@boundary$id1, "integer", label='argument to boundary$id1')
-		expect_false(any(is.na(object@boundary$id1)), info='argument to boundary$id1 must not contain any NA values')
-		expect_is(object@boundary$id2, "integer", label='argument to boundary$id2')
-		expect_false(any(is.na(object@boundary$id2)), info='argument to boundary$id2 must not contain any NA values')
-		expect_is(object@boundary$boundary, "numeric", label='argument to boundary$boundary')
-		expect_false(any(is.na(object@boundary$boundary)), "numeric", info='argument to boundary$boundary must not contain any NA values')
-		
-		# cross table dependencies
-		expect_true(all(object@boundary$id1 %in% object@pu$id), info='argument to boundary$id1 must only contain values present in pu$id')
-		expect_true(all(object@boundary$id2 %in% object@pu$id), info='argument to boundary$id2 must only contain values present in pu$id')
-		expect_true(all(object@puvspecies$pu %in% object@pu$id), info='argument to puvspecies$pu must only contain values present in pu$id')
-		expect_true(all(object@puvspecies_spo$pu %in% object@pu$id), info='argument to puvspecies_spo$pu must only contain values present in pu$id')
-		expect_true(all(object@puvspecies$species %in% object@species$id), info='argument to puvspecies$species must only contain values present in species$id')			
-		expect_true(all(object@puvspecies_spo$species %in% object@species$id), info='argument to puvspecies_spo$species must only contain values present in species$id')
-		if (!is.null(object@species$sepdistance)) {
-			expect_is(object@pu$xloc, "numeric", label='argument to pu$xloc')
-			expect_false(any(is.na(object@pu$xloc)), info='argument to pu$xloc must not contain any NA values')				
-			expect_is(object@pu$yloc, "numeric", label='argument to pu$yloc')
-			expect_false(any(is.na(object@pu$yloc)), info='argument to pu$yloc must not contain any NA values')				
+			# boundary
+			expect_named(object@boundary, c("id1","id2","boundary"), label='argument to boundary')
+			expect_is(object@boundary$id1, "integer", label='argument to boundary$id1')
+			expect_false(any(is.na(object@boundary$id1)), info='argument to boundary$id1 must not contain any NA values')
+			expect_is(object@boundary$id2, "integer", label='argument to boundary$id2')
+			expect_false(any(is.na(object@boundary$id2)), info='argument to boundary$id2 must not contain any NA values')
+			expect_is(object@boundary$boundary, "numeric", label='argument to boundary$boundary')
+			expect_false(any(is.na(object@boundary$boundary)), "numeric", info='argument to boundary$boundary must not contain any NA values')
+			
+			# cross table dependencies
+			expect_true(all(object@boundary$id1 %in% object@pu$id), info='argument to boundary$id1 must only contain values present in pu$id')
+			expect_true(all(object@boundary$id2 %in% object@pu$id), info='argument to boundary$id2 must only contain values present in pu$id')
+			expect_true(all(object@puvspecies$pu %in% object@pu$id), info='argument to puvspecies$pu must only contain values present in pu$id')
+			expect_true(all(object@puvspecies_spo$pu %in% object@pu$id), info='argument to puvspecies_spo$pu must only contain values present in pu$id')
+			expect_true(all(object@puvspecies$species %in% object@species$id), info='argument to puvspecies$species must only contain values present in species$id')			
+			expect_true(all(object@puvspecies_spo$species %in% object@species$id), info='argument to puvspecies_spo$species must only contain values present in species$id')
+			if (!is.null(object@species$sepdistance)) {
+				expect_is(object@pu$xloc, "numeric", label='argument to pu$xloc')
+				expect_false(any(is.na(object@pu$xloc)), info='argument to pu$xloc must not contain any NA values')				
+				expect_is(object@pu$yloc, "numeric", label='argument to pu$yloc')
+				expect_false(any(is.na(object@pu$yloc)), info='argument to pu$yloc must not contain any NA values')				
+			}
 		}
 		return(TRUE)
 	}
@@ -154,7 +157,11 @@ MarxanData<-function(pu, species, puvspecies, boundary, polygons=NULL, puvspecie
 	# create df sorted by species
 	if (is.null(puvspecies_spo))
 		puvspecies_spo<-puvspecies[order(puvspecies$species),]
-	return(new("MarxanData", polygons=polygons, pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo,skipchecks=skipchecks,boundary=boundary, .cache=.cache))
+	# make md
+	md<-new("MarxanData", polygons=polygons, pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo,skipchecks=skipchecks,boundary=boundary, .cache=.cache)
+	# test for validity
+	validObject(md, test=FALSE)
+	return(md)
 }
 
 #' Read Marxan input
@@ -211,7 +218,14 @@ read.MarxanData<-function(path, skipchecks=FALSE) {
 #' @export
 #' @seealso \code{\link{read.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}.
 write.MarxanData<-function(x, dir=getwd(), ...) {
-	write.table(x@species,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
+	tmp<-x@species
+	if (is.character(x@species$target)) {
+		ids<-x@species$id[grep('%', x@species$target)]
+		if (!is.cached(x, 'speciesMaxTargets'))
+			stop('Maximum possible targets have not been cached; percent targets cannot be used')
+		tmp$target<-cache(x, 'speciesMaxTargets')[ids]*(as.numeric(gsub('%', '', x@species$target[ids], fixed=TRUE))/100)
+	}
+	write.table(tmp,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
 	write.table(x@puvspecies,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr.dat"))
 	write.table(x@puvspecies_spo,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr_sporder.dat"))
 	write.table(x@boundary,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"bound.dat"))
@@ -240,7 +254,7 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 #' x<-MarxanData(planningunits, rasters=species, targets="10\%")
 #' y<-MarxanData(planningunits, rasters=species)
 #' stopifnot(identical(x,y))
-format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers(rasters)), sepdistance=rep(0, nlayers(rasters)), sepnum=rep(0,nlayers(rasters)), targetocc=rep(0,nlayers(rasters)), pu=NULL, species=NULL, puvspecies=NULL, puvspecies_spo=NULL, boundary=NULL, ..., verbose=FALSE) {
+format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers(rasters)), sepdistance=rep(0, nlayers(rasters)), sepnum=rep(0L,nlayers(rasters)), targetocc=rep(0L,nlayers(rasters)), pu=NULL, species=NULL, puvspecies=NULL, puvspecies_spo=NULL, boundary=NULL, ..., verbose=FALSE) {
 	# init
 	.cache<-new.env()
 	# set polygons
@@ -286,11 +300,19 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 			name=names(rasters),
 			sepdistance=sepdistance,
 			sepnum=sepnum,
-			targetocc=targetocc
+			targetocc=targetocc,
+			stringsAsFactors=FALSE
 		)
 		# remove unnecessary marxan columns
 		species<-species[,sapply(species[,5:7], function(x) return(all(x==0)))]
 	}
+	if (all(species$sepdistance==0))
+		species<-species[,which(names(species)!='sepdistance')]
+	if (all(species$sepnum==0L))
+		species<-species[,which(names(species)!='sepnum')]
+	if (all(species$targetocc==0L))
+		species<-species[,which(names(species)!='targetocc')]
+
 	# set boundary
 	polyset<-rcpp_Polygons2PolySet(polygons@polygons)
 	if (is.null(boundary)) {

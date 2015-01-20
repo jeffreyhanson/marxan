@@ -122,7 +122,7 @@ findMarxanExecutablePath=function() {
 	}
 	# check that path is valid
 	if (length(path)!=1 || !file.exists(path))
-		stop(paste0("Marxan executable files not found.\nDownload marxan from ",marxanURL," and copy the files into:\n", system.file("bin", package="marxan")))
+		stop(paste0("Marxan executable files not found.\nDownload marxan from ",marxanURL,",\nand copy the files into: ", system.file("bin", package="marxan")))
 	options(marxanExecutablePath=path)
 }
 
