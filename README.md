@@ -66,8 +66,8 @@ plot(results, 0)
 # make a geoplot of the second solution
 plot(results, 2)
 
-# make a geoplot of planning unit selection frequencies
-plot(results)
+# make a geoplot of planning unit selection frequencies, use slightly transparent colors and google map background
+plot(results, basemap='hybrid', alpha=0.7)
 ```
 
 We have one hundred solutions. How can we see how they all compare? We could make dot charts.
@@ -81,7 +81,7 @@ dotchart(results, var='score')
 dotchart(results, var='score', nbest=5, n=20)
 ```
 
-How can we visualise the variation in the solutions? Are most of them the same but with a few small differences, or do the solutions tend to fall into one or two main groups?
+How can we visualise the variation in the solutions? Are most of them the same but with a few small differences, or do the solutions tend to fall into two or three main groups?
 
 Fortunately, statisticians solved this problem a long time ago. We can use dimension reducing techniques to find commonalities in the solutions, and reduce variation in the solutions to a manageable number of dimensions. 
 
