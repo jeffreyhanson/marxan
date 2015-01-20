@@ -29,7 +29,7 @@ findMarxanExecutablePath()
 is.marxanInstalled(verbose=TRUE)
 ```
 
-If everything works, you should see the message 'marxan R package successfully installed'. If not, try repeating the above steps. Failing that, lodge an issue [here](https://github.com/paleo13/marxan/issues).
+If everything works, you should see the message 'marxan R package successfully installed'. If not, try repeating the above steps. Failing that, [lodge an issue](https://github.com/paleo13/marxan/issues).
 
 ##### Quick start guide
 
