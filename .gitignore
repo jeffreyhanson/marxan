@@ -60,4 +60,14 @@ MarOpt_v243_Linux64
 src-x64
 src-i386
 admin
+.dll
+.o
+
+
+# ========================
+# Github stuff
+# ========================
+.gitattributes
+.gitignore
+.Rhistory
 

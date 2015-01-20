@@ -16,7 +16,6 @@ NULL
 #' @note This function is used to solve a MarxanUnsolved object that has all of its inputs generated. The marxan function (without lower case 'm') provides a more general interface for generating inputs and outputs for Marxan.
 solve<-function(x, ...) {UseMethod('solve')}
 
-
 #' Extract solution score
 #'
 #' Extract solution score from "MarxanResults" or "MarxanSolved" object.
@@ -25,6 +24,7 @@ solve<-function(x, ...) {UseMethod('solve')}
 #' @param y "missing" to return all scores, "integer" 0 to return score for best solution, "integer" value greater than 0 for y'th solution score.
 #' @return "matrix" or "numeric" vector with solution score(s) depending on arguments.
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
+#' @export
 score<-function(x, ...) {UseMethod('score')}
 
 #' Species penalty factors
@@ -33,8 +33,11 @@ score<-function(x, ...) {UseMethod('score')}
 #'
 #' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 spfs<-function(x, ...) {UseMethod('spfs')}
+
+#' @export
 `spfs<-`<-function(x, ...) {UseMethod('spfs<-')}
 
 #' Targets
@@ -43,8 +46,12 @@ spfs<-function(x, ...) {UseMethod('spfs')}
 #'
 #' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 targets<-function(x, ...) {UseMethod('targets')}
+
+
+#' @export
 `targets<-`<-function(x, ...) {UseMethod('targets<-')}
 
 
@@ -54,8 +61,12 @@ targets<-function(x, ...) {UseMethod('targets')}
 #'
 #' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 sppids<-function(x, ...) {UseMethod('sppids')}
+
+
+#' @export
 `sppids<-`<-function(x, ...) {UseMethod('sppids<-')}
 
 
@@ -65,8 +76,11 @@ sppids<-function(x, ...) {UseMethod('sppids')}
 #'
 #' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 puids<-function(x, ...) {UseMethod('puids')}
+
+#' @export
 `puids<-`<-function(x, ...) {UseMethod('puids<-')}
 
 
@@ -76,20 +90,34 @@ puids<-function(x, ...) {UseMethod('puids')}
 #'
 #' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 costs<-function(x, ...) {UseMethod('costs')}
+
+#' @export
 `costs<-`<-function(x, ...) {UseMethod('costs<-')}
 
 #' Planning unit initial status
 #'
 #' This function returns or assigns the planing unit initial statuses for a Marxan object.
 #'
-#' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
-#' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @note This generic method does not work on "MaranOpts" or "MaranResults" objects because they do not store this information.
+#' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 inistatus<-function(x, ...) {UseMethod('inistatus')}
-`inistatus<-`<-function(x, ...) {UseMethod('inistatus<-')}
 
+#' @export
+`inistatus<-`<-function(object,value) {UseMethod('inistatus<-')}
+
+#' Species names
+#'
+#' This function returns or assigns the species names for a Marxan object.
+#'
+#' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @note This generic method does not work on "MaranOpts" or "MaranResults" objects because they do not store this information.
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+"names"
 
 #' Log
 #'
@@ -154,6 +182,7 @@ selection<-function(x, ...) {UseMethod('selection')}
 #' @param x "MarxanResults or "MarxanSolved" object.
 #' @param y "missing" to return all ratios, "integer" 0 to return ratios for best solution, "integer" value greater than 0 for y'th solution ratios.
 #' @return "matrix" or "numeric" vector with solution ratios depending on arguments.
+#' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 mpm<-function(x, ...) {UseMethod('mpm')}
 
@@ -164,6 +193,7 @@ mpm<-function(x, ...) {UseMethod('mpm')}
 #' @param x "MarxanResults or "MarxanSolved" object.
 #' @param y "missing" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for y'th solution values.
 #' @return "matrix" or "numeric" vector with values depending on arguments.
+#' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 sepacheived<-function(x, ...) {UseMethod('sepacheived')}
 
@@ -236,7 +266,7 @@ mds<-function(x, ...) UseMethod("mds")
 #' @return "hclust" object with an extra element named "phylo" that stores a "phylo" representation for pretty plotting.
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
-hclust<-function(x, ...) UseMethod("mds")
+hclust<-function(x, ...) UseMethod("hclust")
 
 #' Ordination plot of Marxan solutions
 #'
@@ -291,7 +321,6 @@ dendrogram<-function(x, ...) UseMethod("dendrogram")
 #' Dot chart of Marxan solutions
 #'
 #' This function makes a dot chart to visualise differences between Marxan solutions using summary variables. Size of dots indicate overall solution quality (ie. 'score').
-
 #' 
 #' @param x "MarxanResults" or "MarxanSolved".
 #' @param var "character" What variable should be used to compare solutions?
@@ -353,10 +382,11 @@ basemap<-function(x, ...) {UseMethod("basemap")}
 #' @param xzoom "numeric" zoom the geoplot in or out along the x-axis by this percent.
 #' @param yzoom "numeric" zoom the geoplot in or out along the y-axis by this percent.
 #' @param force_reset "logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.
-#' @note This function will return an error if spatial polygons were not supplied during the construction of the Marxan object. Furthermore, "MarxanData" and "MarxanUnsolved" objects can only be used to display species densities.
+#' @note This function will return an error if spatial polygons were not supplied during the construction of the Marxan object.
 #' @export
-#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{basemap}} \code{\link{marxan}}, \code{\link{dendrogram}}, \code{\link{dotchart}}, \code{\link{ordiplot}}
-setGeneric("plot", function(x,y, ...) standardGeneric("plot"))
+#' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{basemap}} \code{\link{marxan}}, \code{\link{dendrogram}}, \code{\link{dotchart}}, \code{\link{ordiplot}}, \code{\link{spplot}}
+setGeneric("plot")
+
 
 #' Update Marxan inputs
 #'

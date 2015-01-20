@@ -103,8 +103,8 @@ basemap.MarxanUnsolved<-function(x, basemap="none", grayscale=FALSE, force_reset
 
 #' @describeIn spplot
 #' @export
-spplot.MarxanUnsolved<-function(x, y, basemap="none", colramp="YlOrRd", alpha=ifelse(basemap=="none", 1, 0.7), grayscale=FALSE, force_reset=FALSE) {
-	return(spplot.MarxanData(x@data, y, basemap, colramp, alpha, grayscale, force_reset))
+spplot.MarxanUnsolved<-function(x, y, var='amount', basemap="none", colramp="YlOrRd", alpha=ifelse(basemap=="none", 1, 0.7), grayscale=FALSE, force_reset=FALSE) {
+	return(spplot.MarxanData(x@data, y, var, basemap, colramp, alpha, grayscale, force_reset))
 }
 
 
@@ -163,14 +163,19 @@ write.MarxanUnsolved<-function(x, dir=getwd()) {
 }
 
 
+
 #' @export
+#' @describeIn names
 names.MarxanUnsolved<-function(x) {
 	return(names.MarxanData(x@data))
 }
 
 #' @export
+#' @describeIn names
 `names<-.MarxanUnsolved`<-function(x,value) {
-	names(x@data)<-value
+	stopifnot(length(value)==nrow(x@data@species) & is.character(value) & !any(is.na(value)))
+	x@data@species$name<-value
+	return(x)
 }
 
 
@@ -183,7 +188,9 @@ spfs.MarxanUnsolved<-function(x) {
 #' @export
 #' @describeIn spfs
 `spfs<-.MarxanUnsolved`<-function(x,value) {
-	spfs(x@data)<-value
+	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
+	x@data@species$spf<-value
+	return(x)
 }
 
 #' @export
@@ -195,7 +202,9 @@ targets.MarxanUnsolved<-function(x) {
 #' @export
 #' @describeIn targets
 `targets<-.MarxanUnsolved`<-function(x,value) {
-	targets(x@data)<-value
+	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
+	x@data@species$target<-value
+	return(x)
 }
 
 #' @export
@@ -207,7 +216,9 @@ sppids.MarxanUnsolved<-function(x) {
 #' @export
 #' @describeIn sppids
 `sppids<-.MarxanUnsolved`<-function(x,value) {
-	sppids(x@data)<-value
+	stopifnot(length(value)==nrow(x@data@species) & is.integer(value) & !any(is.na(value)))
+	x@data@species$id<-value
+	return(x)
 }
 
 #' @export
@@ -219,7 +230,9 @@ puids.MarxanUnsolved<-function(x) {
 #' @export
 #' @describeIn puids
 `puids<-.MarxanUnsolved`<-function(x,value) {
-	puids(x@data)<-value
+	stopifnot(length(value)==nrow(x@data@pu) & is.integer(value) & !any(is.na(value)))
+	x@data@pu$id<-value
+	return(x)
 }
 
 
@@ -232,7 +245,9 @@ costs.MarxanUnsolved<-function(x) {
 #' @export
 #' @describeIn costs
 `costs<-.MarxanUnsolved`<-function(x,value) {
-	costs(x@data)<-value
+	stopifnot(length(value)==nrow(x@data@pu) & is.numeric(value) & !any(is.na(value)))
+	x@data@pu$costs<-value
+	return(x)
 }
 
 
@@ -245,6 +260,8 @@ inistatus.MarxanUnsolved<-function(x) {
 #' @export
 #' @describeIn inistatus
 `inistatus<-.MarxanUnsolved`<-function(x,value) {
-	inistatus(x@data)<-value
+	stopifnot(length(value)==nrow(x@data@pu) & is.numeric(value) & !any(is.na(value)))	
+	x@data@pu$status<-value
+	return(x)
 }
 

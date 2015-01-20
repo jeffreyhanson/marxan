@@ -39,6 +39,7 @@ parseArg<-function(name, args, error=TRUE) {
 
 ### pretty plotting functions
 prettyBiplot<-function(x,size,nbest,xlab,ylab,main) {
+	par()
 	plot(1,1, xlim=range(x[,1]), ylim=range(x[,2]), main=main, xlab=xlab, ylab=ylab, type="n")
 	text(x=x[,1], y=x[,2], labels=seq_len(nrow(x)), col=replace(rep("black", nrow(x)), which(as.numeric(factor(size*-1))<=nbest), "red"), cex=size)
 }
@@ -237,6 +238,7 @@ prettyDotchart<-function (x, labels = NULL, groups = NULL, gdata = NULL, cex = p
 
 prettyGeoplot<-function(polygons, col, basemap, main, fun, beside=TRUE) {
 	# make layout
+	defpar<-par(no.readonly = TRUE)
 	par(mar=c(1,1,1,1),oma=c(0,0,0,0))
 	if (beside) {
 		layout(matrix(c(1,1,3,2),ncol=2,byrow=TRUE), widths=c(0.8,0.2), height=c(0.1,0.9))
@@ -257,6 +259,7 @@ prettyGeoplot<-function(polygons, col, basemap, main, fun, beside=TRUE) {
 		xdiff<-diff(range(polygons$X))
 		plotPolys(polygons, col=col, axes=FALSE, xlab="", ylab="")
 	}
+	par(defpar)
 	return(invisible())
 }
 

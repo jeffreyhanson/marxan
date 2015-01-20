@@ -454,7 +454,6 @@ spplot.MarxanData<-function(x, y, var='amount', basemap="none", colramp="YlOrRd"
 	# data checks
 	if (!inherits(x@polygons, "PolySet"))
 		stop("Spatial data for planning units not present in object")
-	stopifnot()
 	match.arg(var, c('amount','occ'))
 	# pre-processing
 	if (inherits(y, "character")) {
@@ -485,6 +484,7 @@ spplot.MarxanData<-function(x, y, var='amount', basemap="none", colramp="YlOrRd"
 		cols<-brewerCols(rep(values[1], length(values)), colramp, alpha)
 		values<-c(0,values[1])
 	}
+	plot(1,1)
 	prettyGeoplot(
 		x@polygons,
 		cols,
@@ -587,16 +587,18 @@ setMethod(
 	}
 )
 
-
 #' @export
+#' @describeIn names
 names.MarxanData<-function(x) {
 	return(x@species$name)
 }
 
 #' @export
+#' @describeIn names
 `names<-.MarxanData`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@species) & !any(is.na(value)))
+	stopifnot(length(value)==nrow(x@species) & is.character(value) & !any(is.na(value)))
 	x@species$name<-value
+	return(x)
 }
 
 #' @export
@@ -609,20 +611,22 @@ spfs.MarxanData<-function(x) {
 #' @describeIn spfs
 `spfs<-.MarxanData`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@species) & is.numeric(value) & !any(is.na(value)))
-	x@species$spfs<-value
+	x@species$spf<-value
+	return(x)
 }
 
 #' @export
 #' @describeIn targets
 targets.MarxanData<-function(x) {
-	return(x@species$targets)
+	return(x@species$target)
 }
 
 #' @export
 #' @describeIn targets
 `targets<-.MarxanData`<-function(x, value) {
 	stopifnot(length(value)==nrow(x@species) & is.numeric(value) & !any(is.na(value)))
-	x@species$targets<-value
+	x@species$target<-value
+	return(x)
 }
 
 #' @export
@@ -636,6 +640,7 @@ sppids.MarxanData<-function(x) {
 `sppids<-.MarxanData`<-function(x, value) {
 	stopifnot(length(value)==nrow(x@species) & is.integer(value) & !any(is.na(value)))
 	x@species$id<-value
+	return(x)
 }
 
 #' @export
@@ -648,7 +653,8 @@ puids.MarxanData<-function(x) {
 #' @describeIn puids
 `puids<-.MarxanData`<-function(x, value) {
 	stopifnot(length(value)==nrow(x@pu) & is.integer(value) & !any(is.na(value)))
-	x@pu$ids<-value
+	x@pu$id<-value
+	return(x)
 }
 
 #' @export
@@ -662,6 +668,7 @@ costs.MarxanData<-function(x) {
 `costs<-.MarxanData`<-function(x, value) {
 	stopifnot(length(value)==nrow(x@pu) & is.numeric(value) & !any(is.na(value)))
 	x@pu$costs<-value
+	return(x)
 }
 
 
@@ -674,8 +681,9 @@ inistatus.MarxanData<-function(x) {
 #' @export
 #' @describeIn inistatus
 `inistatus<-.MarxanData`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@pu) & is.numeric(value) & !any(is.na(value)))	
+	stopifnot(length(value)==nrow(x@pu) & is.integer(value) & !any(is.na(value)))	
 	x@pu$status<-value
+	return(x)
 }
 
 

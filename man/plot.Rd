@@ -86,9 +86,9 @@ This function makes a geoplot displaying Marxan solutions.
 \item \code{x = MarxanUnsolved,y = character}: 
 }}
 \note{
-This function will return an error if spatial polygons were not supplied during the construction of the Marxan object. Furthermore, "MarxanData" and "MarxanUnsolved" objects can only be used to display species densities.
+This function will return an error if spatial polygons were not supplied during the construction of the Marxan object.
 }
 \seealso{
-\code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{basemap}} \code{\link{marxan}}, \code{\link{dendrogram}}, \code{\link{dotchart}}, \code{\link{ordiplot}}
+\code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{basemap}} \code{\link{marxan}}, \code{\link{dendrogram}}, \code{\link{dotchart}}, \code{\link{ordiplot}}, \code{\link{spplot}}
 }
 
