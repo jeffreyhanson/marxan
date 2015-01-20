@@ -343,7 +343,7 @@ basemap.MarxanData<-function(x, basemap="hybrid", grayscale=FALSE, force_reset=F
 	if (is.null(x@polygons))
 	stop("Marxan object is not associated with spatially explicit data for the planning units.")
 	# fetch data from google or cache
-	if (force_reset || !is.cached(x, basemap)) {
+	if (force_reset || !is.cached(x, callchar)) {
 		cache(x, callchar, GetMap.bbox(range(x@polygons[["X"]]), range(x@polygons[["Y"]]), destfile=paste0(tempfile(),'.png'), maptype=basemap, GRAYSCALE=grayscale))
 	}
 	return(cache(x, callchar))
