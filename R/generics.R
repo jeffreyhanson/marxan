@@ -235,6 +235,8 @@ pca<-function(x, ...) {UseMethod("pca")}
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
 dist<-function(x,...) {UseMethod("dist")}
+
+#' @export
 dist.default<-stats::dist
 
 #' Metric Dimensional Scaling for Marxan Solutions
@@ -267,6 +269,11 @@ mds<-function(x, ...) UseMethod("mds")
 #' @export
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
 hclust<-function(x, ...) UseMethod("hclust")
+
+#' @export
+hclust.default<-function(x, ...) {
+	stats::hclust(d=x, ...)
+}
 
 #' Ordination plot of Marxan solutions
 #'
@@ -343,6 +350,8 @@ dendrogram<-function(x, ...) UseMethod("dendrogram")
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 dotchart<-function(x, ...) UseMethod("dotchart")
+
+#' @export
 dotchart.default<-graphics::dotchart
 
 #' Basemap 
