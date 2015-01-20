@@ -152,8 +152,8 @@ dendrogram.MarxanSolved<-function(x, type='mds', var='selections', nbest=1, ...,
 
 #' @describeIn dotchart
 #' @export
-dotchart.MarxanSolved<-function(x, var="score", nbest=1) {
-	dotchart.MarxanResults(x@results, var, nbest)
+dotchart.MarxanSolved<-function(x, var="score", nbest=1, n=50) {
+	dotchart.MarxanResults(x@results, var, nbest, n)
 }
 
 #' @describeIn basemap
