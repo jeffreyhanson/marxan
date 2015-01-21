@@ -1,7 +1,7 @@
 Package: marxan
 Type: Package
-Title: Reserve selection using Marxan
-Version: 0.0.0
+Title: Decision support tools for reserve selection in R using Marxan
+Version: 1.0.0
 Date: 2015-01-12
 Author: Jeffrey O. Hanson <jeffrey.hanson@uqconnect.edu.au>, Matthew E. Watts
     <m.watts@uq.edu.au>

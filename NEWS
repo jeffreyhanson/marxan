@@ -1,3 +1,9 @@
+marxan 1.0.0
+--------
+* First major release.
+* Everything documented.
+* All functions pass tests. 
+
 marxan 0.0.0
 --------
 * All functions exist
