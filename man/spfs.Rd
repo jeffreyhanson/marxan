@@ -25,10 +25,10 @@
 spfs(x, ...)
 }
 \arguments{
-\item{x}{any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
+\item{x}{any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
 }
 \description{
-This function returns or assigns the species penalty factors for a Marxan object.
+This function returns or assigns the species penalty factors for speces in a Marxan object.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -48,6 +48,6 @@ This function returns or assigns the species penalty factors for a Marxan object
 This generic method does not work on "MaranResults" objects because they do not store this information.
 }
 \seealso{
-\code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+\code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 }
 

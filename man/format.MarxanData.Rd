@@ -6,7 +6,7 @@
 \usage{
 \method{format}{MarxanData}(polygons, rasters, targets = "20\%",
   spf = rep(1, nlayers(rasters)), sepdistance = rep(0, nlayers(rasters)),
-  sepnum = rep(0, nlayers(rasters)), targetocc = rep(0, nlayers(rasters)),
+  sepnum = rep(0L, nlayers(rasters)), targetocc = rep(0L, nlayers(rasters)),
   pu = NULL, species = NULL, puvspecies = NULL, puvspecies_spo = NULL,
   boundary = NULL, ..., verbose = FALSE)
 }

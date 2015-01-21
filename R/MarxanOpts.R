@@ -5,22 +5,22 @@ NULL
 #'
 #' This class is used to store Marxan input parameters.
 #'
-#' @slot BLM "numeric" Boundary length modifier. Defaults to 1000000.
-#' @slot PROP "numeric" Proportion of planning units in initial reserve system. Defaults to -1.
-#' @slot NUMREPS "integer" Number of replicate runs. Defaults to 100.
-#' @slot NUMITNS "integer" Number of iterations for annealing. Defaults to 1000000.
+#' @slot BLM "numeric" Boundary length modifier. Defaults to 100.
+#' @slot PROP "numeric" Proportion of planning units in initial reserve system. Defaults to 0.
+#' @slot NUMREPS "integer" Number of replicate runs. Defaults to 100L.
+#' @slot NUMITNS "integer" Number of iterations for annealing. Defaults to 1000000L.
 #' @slot STARTTEMP "numeric" Initial temperature for annealing. Default to -1.
 #' @slot COOLFAC "numeric" Cooling factor for annealing. Defaults to 0.
-#' @slot NUMTEMP "integer" Number of temperature decreases for annealing. Defaults to 100000.
+#' @slot NUMTEMP "integer" Number of temperature decreases for annealing. Defaults to 10000L.
 #' @slot COSTTHRESH "numeric" Cost threshold. Defaults to 0.
-#' @slot THRESHPEN1 "numeric" Size of cost threshold penalty. Defaults to 0.14.
+#' @slot THRESHPEN1 "numeric" Size of cost threshold penalty. Defaults to 0.
 #' @slot THRESHPEN2 "numeric" Shape of cost threshold penalty. Defaults to 0.
 #' @slot MISSLEVEL "numeric" Amount of target below which it is counted as 'missing'. Defaults to 1.
-#' @slot ITIMPTYPE "integer" Iterative improvement type. Defaults to 1.
-#' @slot HEURTYPE "integer" Heuristic type. Defaults to 0.
-#' @slot CLUMPTYPE "integer" Clumping penalty type. Defaults to 0.
-#' @slot VERBOSITY "integer" Amount of output displayed on the program screen. Defaults to 3.
-#' @slot NCORES "integer" Number of cores to use for processing. Defaults to 1.
+#' @slot ITIMPTYPE "integer" Iterative improvement type. Defaults to 1L.
+#' @slot HEURTYPE "integer" Heuristic type. Defaults to 1L.
+#' @slot CLUMPTYPE "integer" Clumping penalty type. Defaults to 0L.
+#' @slot VERBOSITY "integer" Amount of output displayed on the program screen. Defaults to 1L.
+#' @slot NCORES "integer" Number of cores to use for processing. Defaults to 1L.
 
 #' @note This class was not called "MarxanPars" due to the inevitable conflicts with \code{\link[base]{par}}.
 #' @export
@@ -28,47 +28,53 @@ setClass("MarxanOpts",
 	representation(
 		BLM="numeric",
 		PROP="numeric",
-		NUMREPS="numeric",
+		NUMREPS="integer",
 
-		NUMITNS="numeric",
+		NUMITNS="integer",
 		STARTTEMP="numeric",
 		COOLFAC="numeric",
-		NUMTEMP="numeric",
+		NUMTEMP="integer",
 		
 		COSTTHRESH="numeric",
 		THRESHPEN1="numeric",
 		THRESHPEN2="numeric",
 
 		MISSLEVEL="numeric",
-		ITIMPTYPE="numeric",
-		HEURTYPE="numeric",
-		CLUMPTYPE="numeric",
-		VERBOSITY="numeric",
+		ITIMPTYPE="integer",
+		HEURTYPE="integer",
+		CLUMPTYPE="integer",
+		VERBOSITY="integer",
 		
-		NCORES="numeric"
+		NCORES="integer"
 
 	),
 	prototype=list(
 		BLM=100,
-		PROP=0.5,
-		NUMREPS=100,
+		PROP=0,
+		NUMREPS=100L,
 	
-		NUMITNS=10,
+		NUMITNS=1000000L,
 		STARTTEMP=-1,
 		COOLFAC=0,
-		NUMTEMP=10,
+		NUMTEMP=10000L,
 			
 		COSTTHRESH=0,
-		THRESHPEN1=0.14,
+		THRESHPEN1=0,
 		THRESHPEN2=0,
 
 		MISSLEVEL=1,
-		ITIMPTYPE=1,
-		HEURTYPE=0,
-		CLUMPTYPE=0,
-		VERBOSITY=0,
-		NCORES=1
-	)
+		ITIMPTYPE=1L,
+		HEURTYPE=1L,
+		CLUMPTYPE=0L,
+		VERBOSITY=1L,
+		NCORES=1L
+	),
+	validity=function(object) {
+		expect_true(object@PROP <= 1 & object@PROP >= 0, info="opts@PROP must be a numeric between 0 and 1")
+		expect_true(object@ITIMPTYPE <= 3L & object@ITIMPTYPE >= 0L, info="opts@ITIMPTYPE must be an integer between 0 and 3")
+		expect_true(object@HEURTYPE <= 7L & object@HEURTYPE >= 0L, info="opts@ITIMPTYPE must be an integer between 0 and 7")
+		expect_true(object@VERBOSITY <= 3L & object@VERBOSITY >= 0L, info="opts@VERBOSITY must be an integer between 0 and 3")
+	}
 )
 
 #' Create "MarxanOpts" object
@@ -108,8 +114,9 @@ MarxanOpts<-function(..., ignore.extra=FALSE) {
 			stop("These are not valid or changeable Marxan parameters: ",paste(names(extra), collapse=","))
 		}
 	}
-	for (i in seq_along(args))
-		slot(x, names(args))=args[[i]]
+	for (i in seq_along(args)) {
+		slot(x, names(args)[[i]])=args[[i]]
+	}
 	return(x)
 }
 
@@ -251,7 +258,7 @@ update.MarxanOpts<-function(x, formula) {
 #' opt(PROP=0.7, NUMITNS=100)
 opt<-function(...) {
 	args<-unlist(as.list(substitute(list(...)))[c(-1L)])
-	match.arg(names(args), names(getSlots("MarxanOpts")))
+	llply(names(args), match.arg, names(getSlots("MarxanOpts")))
 	return(
 		structure(
 			list(names(args),args),

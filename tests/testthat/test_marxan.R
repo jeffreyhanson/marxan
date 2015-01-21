@@ -11,7 +11,7 @@ test_that("main marxan function doesn't work", {
 	polys<-rasterToPolygons(template, n=4, dissolve=TRUE)	
 	species<-setValues(template, round(runif(ncell(template))))
 	# marxan function
-	ms1<-marxan(polys, species)
-	ms2<-marxan(polys, species, species=data.frame(id=1L, spf=5, target=30, name='species1'))
-	ms3<-marxan(polys, species, species=data.frame(id=1L, spf=90, target=12, name='species1'), PROP=0.9)
+	ms1<-marxan(polys, species, NUMITNS=8L, NUMTEMP=4L)
+	ms2<-marxan(polys, species, species=data.frame(id=1L, spf=5, target=30, name='species1'), NUMITNS=8L, NUMTEMP=4L)
+	ms3<-marxan(polys, species, species=data.frame(id=1L, spf=90, target=12, name='species1'), PROP=0.9, NUMITNS=8L, NUMTEMP=4L)
 })

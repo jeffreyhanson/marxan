@@ -50,7 +50,7 @@ test_that("MarxanData methods don't work", {
 	spplot(md3, 1, var='amount', basemap='hybrid')
 
 	# update and solve
-	md3<-update(md2,~pu(5,status=3))
+	md3<-update(md2,~pu(5,status=3) + opt(NUMITNS=10L, NUMTEMP=10L))
 
 	# tests
 	expect_equal(md1@pu,md2@pu)
@@ -86,12 +86,12 @@ test_that("MarxanUnsolved methods don't work", {
 		puvspecies=calcPuVsSpeciesData(polys,species, id=1L),
 		boundary=calcBoundaryData(polys)
 	)
-	md2<-update(md1,~spp(1,spf=5) + pu(3, cost=2))
+	md2<-update(md1,~spp(1,spf=5) + pu(3, cost=2) +  opt(NUMITNS=10L, NUMTEMP=10L))
 	mo1<-MarxanOpts()
-	mo2<-MarxanOpts(NUMITNS=10)
+	mo2<-MarxanOpts(NUMITNS=10L, NUMTEMP=8L)
 	# generate objects
 	mu1<-MarxanUnsolved(mo1, md1)
-	mu1<-update(mu1, ~opt(NUMITNS=10) + spp(1,spf=5) + pu(3, cost=2), FALSE)
+	mu1<-update(mu1, ~opt(NUMITNS=10L) + spp(1,spf=5) + pu(3, cost=2), FALSE)
 	mu2<-MarxanUnsolved(mo2, md2)
 	# equality tests
 	expect_equal(mu1@data@pu,mu2@data@pu)
@@ -117,7 +117,7 @@ test_that("MarxanUnsolved methods don't work", {
 		puvspecies=calcPuVsSpeciesData(polys,species, id=1L),
 		boundary=calcBoundaryData(polys)
 	)
-	mo<-MarxanOpts(NUMITNS=10)
+	mo<-MarxanOpts(NUMITNS=8L, NUMTEMP=4L)
 	# generate unsolved object
 	mu<-MarxanUnsolved(mo, md)
 	# try getter methods
@@ -127,7 +127,7 @@ test_that("MarxanUnsolved methods don't work", {
 	findMarxanExecutablePath()
 	is.marxanInstalled()
 	# try solving it using update function and with paralleling
-	ms<-update(mu, ~opt(BLM=101) + pu(5, cost=30) + spp(1, spf=10) + opt(NCORES=2))
+	ms<-update(mu, ~opt(BLM=101) + pu(5, cost=30) + spp(1, spf=10) + opt(NCORES=2L))
 	# try results getters
 	expect_identical(score(ms, 1), score(ms@results, 1))
 	expect_identical(score(ms, 0), score(ms@results, 0))

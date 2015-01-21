@@ -15,10 +15,10 @@ test_that("Marxan visualisation methods don't work", {
 		polygons=polys,
 		rasters=species
 	)
-	mo<-MarxanOpts(NUMITNS=10)
+	mo<-MarxanOpts(NUMITNS=10L, NUMTEMP=4L)
 	# generate unsolved object
 	mu<-MarxanUnsolved(mo, md)
-	ms<-solve(mu, clean=F)
+	ms<-solve(mu, clean=TRUE)
 	ms2<-update(ms, ~opt(BLM=200))
 	## stats functions
 	# distances

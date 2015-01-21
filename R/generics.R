@@ -29,12 +29,12 @@ score<-function(x, ...) {UseMethod('score')}
 
 #' Species penalty factors
 #'
-#' This function returns or assigns the species penalty factors for a Marxan object.
+#' This function returns or assigns the species penalty factors for speces in a Marxan object.
 #'
-#' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
 #' @export
-#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+#' @seealso \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 spfs<-function(x, ...) {UseMethod('spfs')}
 
 #' @export
@@ -42,9 +42,9 @@ spfs<-function(x, ...) {UseMethod('spfs')}
 
 #' Targets
 #'
-#' This function returns or assigns the species penalty factors for a Marxan object.
+#' This function returns or assigns the targets for species in a Marxan object.
 #'
-#' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
 #' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
@@ -53,6 +53,20 @@ targets<-function(x, ...) {UseMethod('targets')}
 
 #' @export
 `targets<-`<-function(x, ...) {UseMethod('targets<-')}
+
+
+#' Maximum Targets
+#'
+#' This function returns or assigns the maximum targets for species in a Marxan object. Maximum targets are necessary for setting percent based targets.
+#'
+#' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @note This generic method does not work on "MaranResults" objects because they do not store this information.
+#' @export
+#' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
+maxtargets<-function(x, ...) {UseMethod('targets')}
+
+#' @export
+`maxtargets<-`<-function(x, ...) {UseMethod('targets<-')}
 
 
 #' Species identifiers

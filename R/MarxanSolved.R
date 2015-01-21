@@ -467,6 +467,20 @@ targets.MarxanSolved<-function(x) {
 }
 
 #' @export
+#' @describeIn maxtargets
+maxtargets.MarxanSolved<-function(x) {
+	return(maxtargets.MarxanData(x@data))
+}
+
+#' @export
+#' @describeIn targets
+`maxtargets<-.MarxanSolved`<-function(x,value) {
+	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
+	x@data@species$maxtargets<-value
+	return(x)
+}
+
+#' @export
 #' @describeIn sppids
 sppids.MarxanSolved<-function(x) {
 	return(sppids.MarxanData(x@data))

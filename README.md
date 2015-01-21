@@ -54,8 +54,11 @@ plot(species)
 Now, let's make some reserve systems.
 
 ```
-# format data and run marxan
-results<-marxan(planningunits, species)
+# format data, and run marxan with a (ridiculously) small number of iterations to it doesn't take long to run
+# note the L letters next to the numbers used to set NUMITNS and NUMTEMP:
+# these tell R that you mean the integer 10 and not a decimal place number 10,
+# these L characters need to be after numbers when specifying integer parameters.
+results<-marxan(planningunits, species, NUMITNS=10L, NUMTEMP=8L)
 ```
 
 Ok, so apparently it worked, but how can we visualise the solutions?

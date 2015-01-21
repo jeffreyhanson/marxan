@@ -221,9 +221,9 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 	tmp<-x@species
 	if (is.character(x@species$target)) {
 		ids<-x@species$id[grep('%', x@species$target)]
-		if (!is.cached(x, 'speciesMaxTargets'))
-			stop('Maximum possible targets have not been cached; percent targets cannot be used')
-		tmp$target<-cache(x, 'speciesMaxTargets')[ids]*(as.numeric(gsub('%', '', x@species$target[ids], fixed=TRUE))/100)
+		if (is.null(x@species$maxtarget))
+			stop('Maximum targets have not been stored and so percent targets cannot be used,\nuse function maxtargets to set maximum targets')
+		tmp$target<-x@species$maxtarget*(as.numeric(gsub('%', '', x@species$target[ids], fixed=TRUE))/100)
 	}
 	write.table(tmp,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
 	write.table(x@puvspecies,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr.dat"))
@@ -283,14 +283,6 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 			pu$yloc<-centroids@coords[,2]
 		}
 	}
-	# cache max possible targets
-	if (inherits(rasters, c('RasterLayer','RasterStack', 'RasterBrick'))) {
-		if (verbose)
-			cat("Caching raster data to for percent-based targets.\n")
-		tmp<-cellStats(rasters,'sum')
-		names(tmp)<-names(rasters)
-		.cache$speciesMaxTargets=tmp
-	}
 	# set species
 	if (is.null(species)) {
 		species<-data.frame(
@@ -312,7 +304,11 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 		species<-species[,which(names(species)!='sepnum')]
 	if (all(species$targetocc==0L))
 		species<-species[,which(names(species)!='targetocc')]
-
+	if (inherits(rasters, c('RasterLayer','RasterStack', 'RasterBrick'))) {
+		if (verbose)
+			cat("Storing maximum target data for percent-based targets.\n")
+		species$maxtargets<-c(cellStats(rasters,'sum'))
+	}
 	# set boundary
 	polyset<-rcpp_Polygons2PolySet(polygons@polygons)
 	if (is.null(boundary)) {
@@ -651,6 +647,21 @@ targets.MarxanData<-function(x) {
 	x@species$target<-value
 	return(x)
 }
+
+#' @export
+#' @describeIn maxtargets
+targets.MarxanData<-function(x) {
+	return(x@species$maxtarget)
+}
+
+#' @export
+#' @describeIn maxtargets
+`targets<-.MarxanData`<-function(x, value) {
+	stopifnot(length(value)==nrow(x@species) & is.numeric(value) & !any(is.na(value)))
+	x@species$maxtarget<-value
+	return(x)
+}
+
 
 #' @export
 #' @describeIn sppids
