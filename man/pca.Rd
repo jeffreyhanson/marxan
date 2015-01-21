@@ -28,12 +28,6 @@ pca(x, ...)
 This function runs an principle components analysis on Marxan solutions using various characteristics.
 Results cached to permit rapid display for plotting functions.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
 }

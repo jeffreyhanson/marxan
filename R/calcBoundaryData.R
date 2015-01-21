@@ -12,7 +12,7 @@ NULL
 #' @param tolerance "numeric" to specify precision of calculations (ie. how far apart do vertices have to be to be considered different).
 #' @param lengthFactor "numeric" to scale boundary lengths.
 #' @param edgeFactor "numeric" to scale boundary lengths for edges that do not have any neighbors, such as those that occur along the margins.
-#' @param ... Not used.
+#' @param ... not used.
 #' @return "data.frame" with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns.
 #' @seealso this function is based on the algorithm on by QMARXAN \url{http://aproposinfosystems.com/products/qmarxan/} for calculating boundary length.
 #' @export
@@ -22,7 +22,8 @@ NULL
 #' summary(bound.dat)
 calcBoundaryData<-function(x,...) UseMethod("calcBoundaryData")
 
-#' describeIn calcBoundaryData
+#' @rdname calcBoundaryData
+#' @inheritParams calcBoundaryData
 #' @export
 calcBoundaryData.PolySet<-function(x, tolerance=0.001, lengthFactor=1.0, edgeFactor=1.0, ...) {
 	ret<-rcpp_calcBoundaryDF(x, tolerance=tolerance, lengthFactor=lengthFactor, edgeFactor=edgeFactor)
@@ -34,7 +35,8 @@ calcBoundaryData.PolySet<-function(x, tolerance=0.001, lengthFactor=1.0, edgeFac
 }
 
 
-#' describeIn calcBoundaryData
+#' @rdname calcBoundaryData
+#' @inheritParams calcBoundaryData
 #' @export
 calcBoundaryData.SpatialPolygons<-function(x, tolerance=0.001, lengthFactor=1.0, edgeFactor=1.0, ...) {
 	return(calcBoundaryData(rcpp_Polygons2PolySet(x@polygons), tolerance=tolerance, lengthFactor=lengthFactor, edgeFactor=edgeFactor))

@@ -16,9 +16,9 @@ setClass("MarxanUnsolved",
 	)
 )
 
-#' Create a new MarxanUnsolved object
+#' Create a new "MarxanUnsolved" object
 #'
-#' This function creates a MarxanUnsolved object using MarxanOpts and MarxanData objects.
+#' This function creates a "MarxanUnsolved" object using "MarxanOpts" and "MarxanData" objects.
 #'
 #' @param opts "MarxanOpts" object.
 #' @param data "MarxanData" object.
@@ -29,7 +29,8 @@ MarxanUnsolved<-function(opts, data) {
 	return(new("MarxanUnsolved", opts=opts, data=data))
 }
 
-#' @describeIn solve
+#' @rdname solve
+#' @inheritParams solve
 #' @export
 solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, verbose=TRUE) {
 	# check that Marxan is installed properly
@@ -95,13 +96,14 @@ setMethod(
 )
 
 
-#' @describeIn basemap
+#' @rdname basemap
 #' @export
 basemap.MarxanUnsolved<-function(x, basemap="none", grayscale=FALSE, force_reset=FALSE) {
 	return(basemap.MarxanData(x@data, basemap, grayscale, force_reset))
 }
 
-#' @describeIn spplot
+#' @rdname spplot
+#' @inheritParams spplot
 #' @export
 spplot.MarxanUnsolved<-function(x, y, var='amount', basemap="none", colramp="YlOrRd", alpha=ifelse(basemap=="none", 1, 0.7), grayscale=FALSE, force_reset=FALSE) {
 	return(spplot.MarxanData(x@data, y, var, basemap, colramp, alpha, grayscale, force_reset))
@@ -120,23 +122,13 @@ update.MarxanUnsolved<-function(x, formula, solve=TRUE, force_reset=TRUE) {
 	return(m)
 }
 
-#' @describeIn plot
-#' @export
-setMethod(
-	"plot", 
-	signature(x="MarxanUnsolved", y="character"),
-	function(x, y, basemap="none", colramp="BuGn", alpha=1, grayscale=FALSE, force_reset=FALSE) {
-		plot(x@data, y, basemap, colramp, alpha, grayscale, force_reset=force_reset)
-	}
-)
-
 
 #' Read Marxan input data and parameters
 #'
 #' This function saves "MarxanUnsolved" objects to disk.
 #'
 #' @param path "character" path for input file to load.
-#' @param skipchecks "logical" Should data integrity checks be skipped?
+#' @param skipchecks "logical" should data integrity checks be skipped?
 #' @export
 #' @seealso \code{\link{MarxanUnsolved}}, \code{\link{MarxanUnsolved-class}}, \code{\link{read.MarxanOpts}}, \code{\link{read.MarxanData}}.
 read.MarxanUnsolved<-function(path, skipchecks=FALSE) {
@@ -165,12 +157,14 @@ write.MarxanUnsolved<-function(x, dir=getwd()) {
 
 #' @export
 #' @rdname names
+#' @inheritParams names
 names.MarxanUnsolved<-function(x) {
 	return(names.MarxanData(x@data))
 }
 
 #' @export
 #' @rdname names
+#' @inheritParams names
 `names<-.MarxanUnsolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.character(value) & !any(is.na(value)))
 	x@data@species$name<-value
@@ -179,13 +173,15 @@ names.MarxanUnsolved<-function(x) {
 
 
 #' @export
-#' @describeIn spfs
+#' @rdname spfs
+#' @inheritParams spfs
 spfs.MarxanUnsolved<-function(x) {
 	return(spfs.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn spfs
+#' @rdname spfs
+#' @inheritParams spfs
 `spfs<-.MarxanUnsolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
 	x@data@species$spf<-value
@@ -193,13 +189,15 @@ spfs.MarxanUnsolved<-function(x) {
 }
 
 #' @export
-#' @describeIn targets
+#' @rdname targets
+#' @inheritParams targets
 targets.MarxanUnsolved<-function(x) {
 	return(targets.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn targets
+#' @rdname targets
+#' @inheritParams targets
 `targets<-.MarxanUnsolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
 	x@data@species$target<-value
@@ -221,13 +219,15 @@ maxtargets.MarxanUnsolved<-function(x) {
 }
 
 #' @export
-#' @describeIn sppids
+#' @rdname sppids
+#' @inheritParams sppids
 sppids.MarxanUnsolved<-function(x) {
 	return(sppids.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn sppids
+#' @rdname sppids
+#' @inheritParams sppids
 `sppids<-.MarxanUnsolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.integer(value) & !any(is.na(value)))
 	x@data@species$id<-value
@@ -235,13 +235,15 @@ sppids.MarxanUnsolved<-function(x) {
 }
 
 #' @export
-#' @describeIn puids
+#' @rdname puids
+#' @inheritParams puids
 puids.MarxanUnsolved<-function(x) {
 	return(puids.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn puids
+#' @rdname puids
+#' @inheritParams puids
 `puids<-.MarxanUnsolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@pu) & is.integer(value) & !any(is.na(value)))
 	x@data@pu$id<-value
@@ -250,13 +252,13 @@ puids.MarxanUnsolved<-function(x) {
 
 
 #' @export
-#' @describeIn costs
+#' @rdname costs
 costs.MarxanUnsolved<-function(x) {
 	return(costs.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn costs
+#' @rdname costs
 `costs<-.MarxanUnsolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@pu) & is.numeric(value) & !any(is.na(value)))
 	x@data@pu$costs<-value
@@ -265,13 +267,15 @@ costs.MarxanUnsolved<-function(x) {
 
 
 #' @export
-#' @describeIn inistatus
+#' @rdname inistatus
+#' @inheritParams inistatus
 inistatus.MarxanUnsolved<-function(x) {
 	return(inistatus.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn inistatus
+#' @rdname inistatus
+#' @inheritParams inistatus
 `inistatus<-.MarxanUnsolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@pu) & is.numeric(value) & !any(is.na(value)))	
 	x@data@pu$status<-value

@@ -35,7 +35,8 @@ MarxanSolved<-function(unsolved, results) {
 	return(new("MarxanSolved", opts=unsolved@opts, data=unsolved@data, results=results))
 }
 
-#' @describeIn solve
+#' @rdname solve
+#' @inheritParams solve
 #' @export
 solve.MarxanSolved<-function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, force_reset=FALSE) {
 	if (!force_reset)
@@ -43,13 +44,15 @@ solve.MarxanSolved<-function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@
 	return(solve(MarxanUnsolved(opts=x@opts,data=x@data), wd, seeds, clean))
 }
 
-#' @describeIn selection
+#' @rdname selection
+#' @inheritParams selection
 #' @export
 selection.MarxanSolved<-function(x, y=NULL) {
 	return(selection.MarxanResults(x@results, y))
 }
 
-#' @describeIn score
+#' @rdname score
+#' @inheritParams score
 #' @export
 score.MarxanSolved<-function(x, y=NULL) {
 	return(score.MarxanResults(x@results, y))
@@ -77,92 +80,102 @@ setMethod(
 )
 
 
-#' @describeIn log
+#' @rdname log
+#' @inheritParams log
 #' @export
 log.MarxanSolved<-function(x) {
 	log.MarxanResults(x@results)
 }
 
-#' @describeIn amountheld
 #' @export
+#' @rdname amountheld
 amountheld.MarxanSolved<-function(x, y=NULL) {
 	return(amountheld.MarxanResults(x@results, y))
 }
 
-#' @describeIn occheld
+#' @rdname occheld
+#' @inheritParams occheld
 #' @export
 occheld.MarxanSolved<-function(x, y=NULL) {
 	return(occheld.MarxanResults(x@results, y))
 }
 
-#' @describeIn mpm
+#' @rdname mpm
+#' @inheritParams mpm
 #' @export
 mpm.MarxanSolved<-function(x, y=NULL) {
 	return(mpm.MarxanResults(x@results, y))
 }
 
-#' @describeIn sepacheived
+#' @rdname sepacheived
+#' @inheritParams sepacheived
 #' @export
 sepacheived.MarxanSolved<-function(x, y=NULL) {
 	return(sepacheived.MarxanResults(x@results, y))
 }
 
 
-#' @describeIn targetsmet
+#' @rdname targetsmet
+#' @inheritParams targetsmet
 #' @export
 targetsmet.MarxanSolved<-function(x, y=NULL) {
 	return(targetsmet.MarxanResults(x@results, y))
 }
 
-#' @describeIn pca
+#' @rdname pca
+#' @inheritParams pca
 #' @export
 pca.MarxanSolved<-function(x, var='selections', ..., force_reset=FALSE) {
 	return(dist.MarxanResults(x@results, var, ..., force_reset=force_reset))	
 }
 
-#' @describeIn dist
+#' @rdname dist
 #' @export
 dist.MarxanSolved<-function(x, var='selections', method="bray", force_reset=FALSE) {
 	return(dist.MarxanResults(x@results, var, method, force_reset=force_reset))
 }
 
-#' @describeIn mds
+#' @rdname mds
+#' @inheritParams mds
 #' @export
 mds.MarxanSolved<-function(x, var='selections', method="bray", ..., force_reset=FALSE) {
 	return(mds.MarxanResults(x@results, var, method, ..., force_reset=force_reset))
 }
 
-#' @describeIn hclust
+#' @rdname hclust
+#' @inheritParams hclust
 #' @export
 hclust.MarxanSolved<-function(x, type='mds', var='selections', ..., force_reset=FALSE) {
 	return(hclust.MarxanResults(x@results, type='mds', var='selections', ..., force_reset=force_reset))
 }
 
-#' @describeIn ordiplot
+#' @rdname ordiplot
+#' @inheritParams ordiplot
 #' @export
 ordiplot.MarxanSolved<-function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	return(ordiplot.MarxanResults(x@results, type, var, nbest, ..., force_reset=force_reset))
 }
 
-#' @describeIn dendrogram
+#' @rdname dendrogram
 #' @export
 dendrogram.MarxanSolved<-function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	return(dendrogram.MarxanResults(x@results, type, var, nbest, ..., force_reset=force_reset))
 }
 
-#' @describeIn dotchart
+#' @rdname dotchart
 #' @export
 dotchart.MarxanSolved<-function(x, var="score", nbest=1, n=50) {
 	dotchart.MarxanResults(x@results, var, nbest, n)
 }
 
-#' @describeIn basemap
+#' @rdname basemap
 #' @export
 basemap.MarxanSolved<-function(x, basemap="none", grayscale=FALSE, force_reset=FALSE) {
 	return(basemap.MarxanData(x@data, basemap, grayscale, force_reset))
 }
 
-#' @describeIn spplot
+#' @rdname spplot
+#' @inheritParams spplot
 #' @export
 spplot.MarxanSolved<-function(x, y, var='amount', basemap="none", colramp="YlOrRd", alpha=ifelse(basemap=="none", 1, 0.7), grayscale=FALSE, force_reset=FALSE) {
 	return(spplot.MarxanData(x@data, y, var, basemap, colramp, alpha, grayscale, force_reset))
@@ -171,21 +184,13 @@ spplot.MarxanSolved<-function(x, y, var='amount', basemap="none", colramp="YlOrR
 
 #' @export
 #' @rdname update
-update.MarxanSolved<-function(x, formula, evaluate=TRUE, force_reset=TRUE) {
-	return(update.MarxanUnsolved(MarxanUnsolved(x@opts, x@data), formula, evaluate, force_reset))
+update.MarxanSolved<-function(x, formula, solve=TRUE, force_reset=TRUE) {
+	return(update.MarxanUnsolved(MarxanUnsolved(x@opts, x@data), formula, solve, force_reset))
 }
 
-#' @describeIn plot
-#' @export
-setMethod(
-	"plot", 
-	signature(x="MarxanSolved", y="character"),
-	function(x, y, basemap="none", colramp="BuGn", alpha=1, grayscale=FALSE, force_reset=FALSE) {
-		plot(x@data, y, basemap, colramp, alpha, grayscale, force_reset=force_reset)
-	}
-)
 
-#' @describeIn plot
+#' @rdname plot
+#' @inheritParams plot
 #' @export
 setMethod(
 	"plot",
@@ -217,7 +222,8 @@ setMethod(
 	}
 )
 
-#' @describeIn plot
+#' @rdname plot
+#' @inheritParams plot
 #' @export
 setMethod(
 	"plot",
@@ -250,7 +256,8 @@ setMethod(
 	}
 )
 
-#' @describeIn plot
+#' @rdname plot
+#' @inheritParams plot
 #' @export
 setMethod(
 	"plot",
@@ -321,7 +328,7 @@ setMethod(
 )
 
 
-#' describeIn is.comparable
+#' @rdname is.comparable
 #' @export
 setMethod(
 	f="is.comparable",
@@ -331,7 +338,7 @@ setMethod(
 	}
 )
 
-#' describeIn is.comparable
+#' @rdname is.comparable
 #' @export
 setMethod(
 	f="is.comparable",
@@ -341,7 +348,7 @@ setMethod(
 	}
 )
 
-#' describeIn is.comparable
+#' @rdname is.comparable
 #' @export
 setMethod(
 	f="is.comparable",
@@ -357,7 +364,7 @@ setMethod(
 #' This function saves "MarxanSolved" objects to disk.
 #'
 #' @param path "character" path for input file to load.
-#' @param skipchecks "logical" Should data integrity checks be skipped?
+#' @param skipchecks "logical" should data integrity checks be skipped?
 #' @export
 #' @seealso \code{\link{MarxanSolved}}, \code{\link{MarxanSolved-class}}, \code{\link{read.MarxanOpts}}, \code{\link{read.MarxanData}}, \code{\link{read.MarxanUnsolved}}.
 read.MarxanSolved<-function(path, skipchecks=FALSE) {
@@ -427,12 +434,14 @@ write.MarxanSolved<-function(x, dir=getwd()) {
 
 #' @export
 #' @rdname names
+#' @inheritParams names
 names.MarxanSolved<-function(x) {
 	return(names.MarxanData(x@data))
 }
 
 #' @export
 #' @rdname names
+#' @inheritParams names
 `names<-.MarxanSolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.character(value) & !any(is.na(value)))
 	x@data@species$name<-value
@@ -441,13 +450,15 @@ names.MarxanSolved<-function(x) {
 
 
 #' @export
-#' @describeIn spfs
+#' @rdname spfs
+#' @inheritParams spfs
 spfs.MarxanSolved<-function(x) {
 	return(spfs.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn spfs
+#' @rdname spfs
+#' @inheritParams spfs
 `spfs<-.MarxanSolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
 	x@data@species$spf<-value
@@ -455,13 +466,15 @@ spfs.MarxanSolved<-function(x) {
 }
 
 #' @export
-#' @describeIn targets
+#' @rdname targets
+#' @inheritParams targets
 targets.MarxanSolved<-function(x) {
 	return(targets.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn targets
+#' @rdname targets
+#' @inheritParams targets
 `targets<-.MarxanSolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
 	x@data@species$target<-value
@@ -475,7 +488,7 @@ maxtargets.MarxanSolved<-function(x) {
 }
 
 #' @export
-#' @describeIn targets
+#' @describeIn maxtargets
 `maxtargets<-.MarxanSolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
 	x@data@species$maxtargets<-value
@@ -483,13 +496,15 @@ maxtargets.MarxanSolved<-function(x) {
 }
 
 #' @export
-#' @describeIn sppids
+#' @rdname sppids
+#' @inheritParams sppids
 sppids.MarxanSolved<-function(x) {
 	return(sppids.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn sppids
+#' @rdname sppids
+#' @inheritParams sppids
 `sppids<-.MarxanSolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@species) & is.integer(value) & !any(is.na(value)))
 	x@data@species$id<-value
@@ -497,13 +512,15 @@ sppids.MarxanSolved<-function(x) {
 }
 
 #' @export
-#' @describeIn puids
+#' @rdname puids
+#' @inheritParams puids
 puids.MarxanSolved<-function(x) {
 	return(puids.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn puids
+#' @rdname puids
+#' @inheritParams puids
 `puids<-.MarxanSolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@pu) & is.integer(value) & !any(is.na(value)))
 	x@data@pu$id<-value
@@ -512,13 +529,13 @@ puids.MarxanSolved<-function(x) {
 
 
 #' @export
-#' @describeIn costs
+#' @rdname costs
 costs.MarxanSolved<-function(x) {
 	return(costs.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn costs
+#' @rdname costs
 `costs<-.MarxanSolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@pu) & is.numeric(value) & !any(is.na(value)))
 	x@data@pu$costs<-value
@@ -527,13 +544,15 @@ costs.MarxanSolved<-function(x) {
 
 
 #' @export
-#' @describeIn inistatus
+#' @rdname inistatus
+#' @inheritParams inistatus
 inistatus.MarxanSolved<-function(x) {
 	return(inistatus.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn inistatus
+#' @rdname inistatus
+#' @inheritParams inistatus
 `inistatus<-.MarxanSolved`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@data@pu) & is.numeric(value) & !any(is.na(value)))	
 	x@data@pu$status<-value

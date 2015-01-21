@@ -5,6 +5,7 @@
 \alias{inistatus.MarxanData}
 \alias{inistatus.MarxanSolved}
 \alias{inistatus.MarxanUnsolved}
+\alias{inistatus<-}
 \alias{inistatus<-.MarxanData}
 \alias{inistatus<-.MarxanSolved}
 \alias{inistatus<-.MarxanUnsolved}
@@ -23,6 +24,8 @@
 \method{inistatus}{MarxanUnsolved}(x) <- value
 
 inistatus(x, ...)
+
+inistatus(object) <- value
 }
 \arguments{
 \item{x}{any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
@@ -30,20 +33,6 @@ inistatus(x, ...)
 \description{
 This function returns or assigns the planing unit initial statuses for a Marxan object.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanData}: 
-
-\item \code{MarxanData}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanUnsolved}: 
-
-\item \code{MarxanUnsolved}: 
-}}
 \note{
 This generic method does not work on "MaranOpts" or "MaranResults" objects because they do not store this information.
 }

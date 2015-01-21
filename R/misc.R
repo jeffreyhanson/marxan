@@ -4,14 +4,14 @@ NULL
 #' Test if GDAL is installed on computer
 #'
 #' This function tests if GDAL is installed on the computer.
-#' If not, download it here: \code{\url{http://download.osgeo.org/gdal}}.
+#' If not, download it here: \url{http://download.osgeo.org/gdal}.
 #'
-#' @return Logical. Is it installed?
+#' @return "logical" is GDAL installed?
 #' @seealso \code{\link[gdalUtils]{gdal_setInstallation}}.
 #' @export
 #' @examples
-#' gdal_setInstallation()
-is.gdalInstalled <- function() {
+#' is.gdalInstalled()
+is.gdalInstalled<-function() {
 	gdal_setInstallation()
 	return(!is.null(getOption("gdalUtils_gdalPath")))
 }
@@ -73,22 +73,22 @@ is.marxanInstalled<-function(verbose=FALSE) {
 #' Find Marxan executable suitable for computer
 #'
 #' This function checks the computer's specifications and sets options('marxanExecutablePath') accordingly.
-#' Marxan exectuables can be downloaded from \code{\link{marxanURL}}, and installed by unzipping the files contents, and copying them into the /bin folder in this package's installation directory. 
+#' Marxan executables can be downloaded from \url{http://www.uq.edu.au/marxan/marxan-software}, and installed by unzipping the files contents, and copying them into the /bin folder in this package's installation directory. 
 #' If a suitable executable cannot be found, this function will fail and provide information.
 #'
-#' @seealso \link{\code{is.marxanInstalled}}.
+#' @seealso \code{\link{is.marxanInstalled}}.
 #' @return "logical" Is Marxan installed?
 #' @export
 #' @examples
-#' # Marxan executable files should be copied to this directory
+#' # marxan executable files should be copied to this directory
 #' system.file("bin", package="marxan")
-#' # Look for Marxan
+#' # look for Marxan
 #' \donttest{
 #' findMarxanExecutablePath()
 #' }
-#' # Was Marxan found?
+#' # was Marxan found?
 #' is.marxanInstalled()
-findMarxanExecutablePath=function() {
+findMarxanExecutablePath<-function() {
 	# if path already set then return it
 	if(!is.null(options()$marxanExecutablePath))
 		return(options()$marxanExecutablePath)

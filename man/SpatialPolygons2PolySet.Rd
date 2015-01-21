@@ -4,7 +4,7 @@
 \alias{SpatialPolygons2PolySet}
 \title{Convert "SpatialPolygons" to "PolySet" data}
 \usage{
-SpatialPolygons2PolySet(x, ...)
+SpatialPolygons2PolySet(x, n=10000L)
 }
 \arguments{
 \item{x}{"SpatialPolygons" or "SpatialPolygonsDataFrame" object.}

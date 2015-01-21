@@ -24,14 +24,8 @@ dotchart(x, ...)
 \description{
 This function makes a dot chart to visualise differences between Marxan solutions using summary variables. Size of dots indicate overall solution quality (ie. 'score').
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \note{
-Supported summary variables are:
+Supported variables are shown below.
 \tabular{ccl}{
 	Short name \tab Full name \tab Description\cr
 	'score' \tab 'Score' \tab Quality of solution.\cr

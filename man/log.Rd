@@ -14,16 +14,12 @@ log(x, ...)
 }
 \arguments{
 \item{x}{"MarxanResults" or "MarxanSolved" object.}
+
+\item{...}{not used.}
 }
 \description{
 This function returns the log file associated with running Marxan.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 }

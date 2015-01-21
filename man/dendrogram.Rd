@@ -35,12 +35,6 @@ This function makes a dendrogram to visualise differences between Marxan solutio
 Clustering can be applied to distances between raw data, or to results from dimensional reduction analysis (ie. MDS and PCA).
 Distance matrices and results from multivariate analyses are cached to permit rapid display.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 }

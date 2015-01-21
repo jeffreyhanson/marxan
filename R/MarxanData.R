@@ -169,6 +169,7 @@ MarxanData<-function(pu, species, puvspecies, boundary, polygons=NULL, puvspecie
 #' This function loads Marxan input data from disk.
 #'
 #' @param path "character" file path for input parameter file or directory containing Marxan files named 'spec.dat', 'pu.dat', 'bound.dat', 'puvspr.dat', and (optionally) 'puvspr_sporder.dat'.
+#' @param skipchecks "logical" skip data integrity checks?
 #' @return "MarxanData" object
 #' @export
 #' @seealso \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}.
@@ -215,6 +216,7 @@ read.MarxanData<-function(path, skipchecks=FALSE) {
 #'
 #' @param x "MarxanData" object to save.
 #' @param dir "character" directory path for location to save data.
+#' @param ... not used.
 #' @export
 #' @seealso \code{\link{read.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}.
 write.MarxanData<-function(x, dir=getwd(), ...) {
@@ -238,6 +240,11 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 #' By default, raw data can be provided which be used to generate all Marxan inputs from scratch. However, if particular Marxan input file have
 #' already been generated, these can be supplied to avoid re-processing data.
 #'
+#' @usage format.MarxanData(polygons, rasters, targets = "20\%",
+#' spf = rep(1, nlayers(rasters)), sepdistance = rep(0, nlayers(rasters)),
+#' sepnum = rep(0L, nlayers(rasters)), targetocc = rep(0L, nlayers(rasters)),
+#' pu = NULL, species = NULL, puvspecies = NULL, puvspecies_spo = NULL,
+#' boundary = NULL, ..., verbose = FALSE)
 #' @param polygons "SpatialPolygons" with planning unit data.
 #' @param rasters "RasterLayer", "RasterStack", "RasterBrick" with species distribution data.
 #' @param targets "numeric" vector for targets for each species (eg. 12), or "character" vector with percent-based targets (eg. '12\%'). Defaults to '20\%' for each species.
@@ -246,9 +253,10 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 #' @param puvspecies "data.frame" pu vs. species data; with "species", "pu", and "amount" columns. Defaults to \code{NULL}, and will be calculated using \code{calcPuVsSpeciesData}.
 #' @param puvspecies_spo "data.frame" with data in \code{puvspecies} ordered by 'species' column. Defaults to \code{NULL}, and will generate data from \code{puvspecies}.
 #' @param boundary "data.frame" with data on the shared boundary length of planning; with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns. Default behaviour is to calculate this using \code{calcBoundaryData}.
-#' @param Additional arguments to \code{calcBoundaryData} and \code{calcPuVsSpeciesData}.
+#' @param ... additional arguments to \code{calcBoundaryData} and \code{calcPuVsSpeciesData}.
+#' @param verbose verbose "logical" print statements during processing?
 #' @seealso \code{\link{MarxanData-class}}, \code{\link{MarxanData}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}.
-#' @export
+#' @export format.MarxanData
 #' @examples
 #' data(planningunits, species)
 #' x<-MarxanData(planningunits, rasters=species, targets="10\%")
@@ -336,6 +344,7 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 	return(MarxanData(pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo, boundary=boundary, polygons=polyset, .cache=.cache))
 }
 
+
 #' @export
 print.MarxanData<-function(x, header=TRUE) {
 	if (header)
@@ -353,7 +362,7 @@ setMethod(
 )
 
 
-#' @describeIn basemap
+#' @rdname basemap
 #' @export
 basemap.MarxanData<-function(x, basemap="hybrid", grayscale=FALSE, force_reset=FALSE) {
 	callchar<-hashCall(match.call(), 1)
@@ -469,7 +478,8 @@ pu<-function(id, cost=NA, status=NA) {
 }
 
 
-#' @describeIn spplot
+#' @rdname spplot
+#' @inheritParams spplot
 #' @export
 spplot.MarxanData<-function(x, y, var='amount', basemap="none", colramp="YlOrRd", alpha=ifelse(basemap=="none", 1, 0.7), grayscale=FALSE, force_reset=FALSE) {
 	# data checks
@@ -516,53 +526,6 @@ spplot.MarxanData<-function(x, y, var='amount', basemap="none", colramp="YlOrRd"
 	)
 }
 
-#' @describeIn plot
-#' @export
-setMethod(
-	"plot", 
-	signature(x="MarxanData", y="character"),
-	function(x, y, basemap="none", colramp="BuGn", alpha=1, grayscale=FALSE, force_reset=FALSE) {
-		# init
-		stopifnot(alpha<=1 & alpha>=0)
-		match.arg(y, c("sum", "rich", unique(x@y$name)))
-		match.arg(colramp, rownames(brewer.pal.info))
-		stopifnot(inherits(x@polygons, "PolySet"))
-		# get basemap data
-		if (basemap!="none")
-			basemap<-basemap.MarxanData(x@data, basemap=basemap, grayscale=grayscale, force_reset=force_reset)
-		# get colours for planning units
-		values<-numeric(nrow(x@pu))
-		if (y=="all") {
-			sub<-data.table(x@puvspecies)
-			sub<-sub[,sum(amount),by=pu]
-			values[sub$pu]<-sub$V1
-		} else if (y=="rich") {
-			sub<-data.table(x@puvspecies)
-			sub<-sub[,.N,by=pu]
-			values[sub$pu]<-sub$V1
-		} else {
-			if (is.character(y))
-				y<-x@species$id[which(x@species$name==y)]
-			sub<-x@puvspecies[which(x@puvspecies==y),]
-			values[sub$pu]<-sub$amount
-		}
-		# plot data
-		switch(y,
-			"all"={
-				y<-"Total Species Occurrence"
-			},
-			"rich"={
-				y<-"Species Richness"
-			},
-			"default"={
-				y<-x@species$name[which(x@species$id==y)]
-			}
-		)
-		# make legend
-		prettyGeoplot(x@polygons, col=brewerCols(rescale(values, to=c(0,1))), basemap=basemap, main=y, legend=continuousLegend(values, colramp))
-		return(invisible())
-	}
-)
 
 #' @describeIn is.cached
 setMethod(
@@ -591,7 +554,7 @@ setMethod(
 	}
 )
 
-#' @describeIn is.comparable
+#' @rdname is.comparable
 #' export
 setMethod(
 	f="is.comparable",
@@ -609,13 +572,15 @@ setMethod(
 )
 
 #' @export
-#' @describeIn names
+#' @rdname names
+#' @inheritParams names
 names.MarxanData<-function(x) {
 	return(x@species$name)
 }
 
 #' @export
-#' @describeIn names
+#' @rdname names
+#' @inheritParams names
 `names<-.MarxanData`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@species) & is.character(value) & !any(is.na(value)))
 	x@species$name<-value
@@ -623,13 +588,15 @@ names.MarxanData<-function(x) {
 }
 
 #' @export
-#' @describeIn spfs
+#' @rdname spfs
+#' @inheritParams spfs
 spfs.MarxanData<-function(x) {
 	return(x@species$spfs)
 }
 
 #' @export
-#' @describeIn spfs
+#' @rdname spfs
+#' @inheritParams spfs
 `spfs<-.MarxanData`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@species) & is.numeric(value) & !any(is.na(value)))
 	x@species$spf<-value
@@ -637,13 +604,15 @@ spfs.MarxanData<-function(x) {
 }
 
 #' @export
-#' @describeIn targets
+#' @rdname targets
+#' @inheritParams targets
 targets.MarxanData<-function(x) {
 	return(x@species$target)
 }
 
 #' @export
-#' @describeIn targets
+#' @rdname targets
+#' @inheritParams targets
 `targets<-.MarxanData`<-function(x, value) {
 	stopifnot(length(value)==nrow(x@species) & is.numeric(value) & !any(is.na(value)))
 	x@species$target<-value
@@ -652,13 +621,13 @@ targets.MarxanData<-function(x) {
 
 #' @export
 #' @describeIn maxtargets
-targets.MarxanData<-function(x) {
+maxtargets.MarxanData<-function(x) {
 	return(x@species$maxtarget)
 }
 
 #' @export
 #' @describeIn maxtargets
-`targets<-.MarxanData`<-function(x, value) {
+`maxtargets<-.MarxanData`<-function(x, value) {
 	stopifnot(length(value)==nrow(x@species) & is.numeric(value) & !any(is.na(value)))
 	x@species$maxtarget<-value
 	return(x)
@@ -666,13 +635,15 @@ targets.MarxanData<-function(x) {
 
 
 #' @export
-#' @describeIn sppids
+#' @rdname sppids
+#' @inheritParams sppids
 sppids.MarxanData<-function(x) {
 	return(x@species$id)
 }
 
 #' @export
-#' @describeIn sppids
+#' @rdname sppids
+#' @inheritParams sppids
 `sppids<-.MarxanData`<-function(x, value) {
 	stopifnot(length(value)==nrow(x@species) & is.integer(value) & !any(is.na(value)))
 	x@species$id<-value
@@ -680,13 +651,15 @@ sppids.MarxanData<-function(x) {
 }
 
 #' @export
-#' @describeIn puids
+#' @rdname puids
+#' @inheritParams puids
 puids.MarxanData<-function(x) {
 	return(x@pu$ids)
 }
 
 #' @export
-#' @describeIn puids
+#' @rdname puids
+#' @inheritParams puids
 `puids<-.MarxanData`<-function(x, value) {
 	stopifnot(length(value)==nrow(x@pu) & is.integer(value) & !any(is.na(value)))
 	x@pu$id<-value
@@ -694,13 +667,13 @@ puids.MarxanData<-function(x) {
 }
 
 #' @export
-#' @describeIn costs
+#' @rdname costs
 costs.MarxanData<-function(x) {
 	return(x@pu$costs)
 }
 
 #' @export
-#' @describeIn costs
+#' @rdname costs
 `costs<-.MarxanData`<-function(x, value) {
 	stopifnot(length(value)==nrow(x@pu) & is.numeric(value) & !any(is.na(value)))
 	x@pu$costs<-value
@@ -709,13 +682,15 @@ costs.MarxanData<-function(x) {
 
 
 #' @export
-#' @describeIn inistatus
+#' @rdname inistatus
+#' @inheritParams inistatus
 inistatus.MarxanData<-function(x) {
 	return(x@pu$status)
 }
 
 #' @export
-#' @describeIn inistatus
+#' @rdname inistatus
+#' @inheritParams inistatus
 `inistatus<-.MarxanData`<-function(x,value) {
 	stopifnot(length(value)==nrow(x@pu) & is.integer(value) & !any(is.na(value)))	
 	x@pu$status<-value

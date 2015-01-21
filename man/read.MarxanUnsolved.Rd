@@ -9,7 +9,7 @@ read.MarxanUnsolved(path, skipchecks = FALSE)
 \arguments{
 \item{path}{"character" path for input file to load.}
 
-\item{skipchecks}{"logical" Should data integrity checks be skipped?}
+\item{skipchecks}{"logical" should data integrity checks be skipped?}
 }
 \description{
 This function saves "MarxanUnsolved" objects to disk.

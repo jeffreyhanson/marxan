@@ -7,6 +7,7 @@ NULL
 #' 
 #' @param x "SpatialPolygons" or "SpatialPolygonsDataFrame" object.
 #' @param n_preallocate "integer" How much memory should be preallocated for processing? Ideally, this number should equal the number of vertices in the "SpatialPolygons" object. If dtaa processing is taking too long consider increasing this value.
+#' @usage SpatialPolygons2PolySet(x, n=10000L)
 #' @return "PolySet" object.
 #' @note Be aware that this function is designed to be as fast as possible, but as a result it depends on C++ code and if used inappropriately this function will crash R.
 #' @seealso For a slower, more stable equivalent see \code{\link[maptools]{SpatialPolygons2PolySet}}.

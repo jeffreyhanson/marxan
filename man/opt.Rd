@@ -7,9 +7,7 @@
 opt(...)
 }
 \arguments{
-\item{name}{"character" name of parameter to change.}
-
-\item{value}{"numeric" new value.}
+\item{...}{arguments to update "MarxanOpts" object.}
 }
 \value{
 "MarxanOptsOperation" object.

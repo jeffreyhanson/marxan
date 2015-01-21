@@ -5,6 +5,7 @@
 \alias{spfs.MarxanData}
 \alias{spfs.MarxanSolved}
 \alias{spfs.MarxanUnsolved}
+\alias{spfs<-}
 \alias{spfs<-.MarxanData}
 \alias{spfs<-.MarxanSolved}
 \alias{spfs<-.MarxanUnsolved}
@@ -23,6 +24,8 @@
 \method{spfs}{MarxanUnsolved}(x) <- value
 
 spfs(x, ...)
+
+spfs(x, ...) <- value
 }
 \arguments{
 \item{x}{any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
@@ -30,20 +33,6 @@ spfs(x, ...)
 \description{
 This function returns or assigns the species penalty factors for speces in a Marxan object.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanData}: 
-
-\item \code{MarxanData}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanUnsolved}: 
-
-\item \code{MarxanUnsolved}: 
-}}
 \note{
 This generic method does not work on "MaranResults" objects because they do not store this information.
 }

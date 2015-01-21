@@ -13,7 +13,7 @@ NULL
 #' @param ncores "integer" Number of cores to use for processing. Defaults to 1.
 #' @param gdal "logical" Should raster processing be performed using GDAL libraries? Defaults to \code{FALSE}.
 #' @param field "character" "integer" index or "character" name of column with planning unit ids. Valid only for "SpatialPolygonsDataFrame" objects. Default behaviour is to treat each polygon as a different planning unit.
-#' @param ... Not used.
+#' @param ... not used.
 #' @return data.frame with sum of raster values in each polygon.
 #' @seealso \code{\link{is.gdalInstalled}}, \code{\link{zonalSum}}, \url{http://www.gdal.org/}, \url{http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries}.
 #' @export
@@ -24,7 +24,7 @@ NULL
 calcPuVsSpeciesData<-function(x, ...) UseMethod("calcPuVsSpeciesData")
 
 #' @export
-#' @describeIn calcPuVsSpeciesData
+#' @rdname calcPuVsSpeciesData
 calcPuVsSpeciesData.SpatialPolygons<-function(x,y,ids=seq_len(nlayers(y)), ncores=1, gdal=FALSE, ...) {
 	# check for invalid inputs
 	stopifnot(inherits(y, "Raster"))
@@ -42,7 +42,7 @@ calcPuVsSpeciesData.SpatialPolygons<-function(x,y,ids=seq_len(nlayers(y)), ncore
 }
 
 #' @export
-#' @describeIn calcPuVsSpeciesData
+#' @rdname calcPuVsSpeciesData
 calcPuVsSpeciesData.SpatialPolygonsDataFrame<-function(x,y,ids=seq_len(nlayers(y)), ncores=1, gdal=FALSE, field=NULL, ...) {
 	# check for invalid inputs
 	stopifnot(inherits(y, "Raster"))

@@ -15,7 +15,9 @@ mpm(x, ...)
 \arguments{
 \item{x}{"MarxanResults or "MarxanSolved" object.}
 
-\item{y}{"missing" to return all ratios, "integer" 0 to return ratios for best solution, "integer" value greater than 0 for y'th solution ratios.}
+\item{y}{"NULL" to return all ratios, "integer" 0 to return ratios for best solution, "integer" value greater than 0 for \code{y}'th solution ratios.}
+
+\item{...}{not used.}
 }
 \value{
 "matrix" or "numeric" vector with solution ratios depending on arguments.
@@ -23,12 +25,6 @@ mpm(x, ...)
 \description{
 Extract minimum proportion met (MPM) ratio from "MarxanResults" or "MarxanSolved" object.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 }

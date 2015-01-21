@@ -26,6 +26,11 @@ spplot(x, ...)
 
 \item{y}{"character" name of species, or "integer" species id.}
 
+\item{var}{"character" \itemize{
+\item if 'amount': sum density of \code{y} species in planning units is shown.
+\item if 'occ': number of \code{y} species in planning units is shown.
+}}
+
 \item{basemap}{"character" name of google base map. Defaults to "none".}
 
 \item{colramp}{"character" name of color ramp. See color palettes available in \code{\link[RColorBrewer]{brewer.pal.ino}}}
@@ -39,14 +44,6 @@ spplot(x, ...)
 \description{
 This function plots the density of species in planning units in "Marxan" objects.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanData}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanUnsolved}: 
-}}
 \seealso{
 \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanData-class}}, \code{\link[RgoogleMaps]{GetMap}}, \code{\link[RgoogleMaps]{PlotOnStaticMap}}
 }

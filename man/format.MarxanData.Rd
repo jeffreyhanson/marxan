@@ -4,11 +4,11 @@
 \alias{format.MarxanData}
 \title{Format data for Marxan}
 \usage{
-\method{format}{MarxanData}(polygons, rasters, targets = "20\%",
-  spf = rep(1, nlayers(rasters)), sepdistance = rep(0, nlayers(rasters)),
-  sepnum = rep(0L, nlayers(rasters)), targetocc = rep(0L, nlayers(rasters)),
-  pu = NULL, species = NULL, puvspecies = NULL, puvspecies_spo = NULL,
-  boundary = NULL, ..., verbose = FALSE)
+format.MarxanData(polygons, rasters, targets = "20\%",
+spf = rep(1, nlayers(rasters)), sepdistance = rep(0, nlayers(rasters)),
+sepnum = rep(0L, nlayers(rasters)), targetocc = rep(0L, nlayers(rasters)),
+pu = NULL, species = NULL, puvspecies = NULL, puvspecies_spo = NULL,
+boundary = NULL, ..., verbose = FALSE)
 }
 \arguments{
 \item{polygons}{"SpatialPolygons" with planning unit data.}
@@ -27,7 +27,9 @@
 
 \item{boundary}{"data.frame" with data on the shared boundary length of planning; with "integer" 'id1', "integer" 'id2', and "numeric" 'amount' columns. Default behaviour is to calculate this using \code{calcBoundaryData}.}
 
-\item{Additional}{arguments to \code{calcBoundaryData} and \code{calcPuVsSpeciesData}.}
+\item{...}{additional arguments to \code{calcBoundaryData} and \code{calcPuVsSpeciesData}.}
+
+\item{verbose}{verbose "logical" print statements during processing?}
 }
 \description{
 This function prepares spatially explicit planning unit and species data for Marxan processing.

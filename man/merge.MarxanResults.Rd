@@ -14,7 +14,7 @@ merge.MarxanResults(x)
 }
 \description{
 This function merges a list of "MarxanResults" objects into a single MarxanResults object.
-It used for collating Marxan results data when Marxan runs have been run in parallel.
+It is used for collating Marxan results data when Marxan runs have been run in parallel.
 }
 \seealso{
 \code{\link{MarxanResults-class}}, \code{\link{MarxanResults}}.

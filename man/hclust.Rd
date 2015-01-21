@@ -4,6 +4,7 @@
 \alias{hclust}
 \alias{hclust.MarxanResults}
 \alias{hclust.MarxanSolved}
+\alias{hclust.default}
 \title{Hierarchical Clustering for Marxan Solutions}
 \usage{
 \method{hclust}{MarxanResults}(x, type = "dist", var = "selections", ...,
@@ -13,19 +14,19 @@
   force_reset = FALSE)
 
 hclust(x, ...)
+
+\method{hclust}{default}(x, ...)
 }
 \arguments{
 \item{x}{"MarxanResults" or "MarxanSolved" object.}
 
 \item{type}{"character" use metric dimensional scaling ('mds'), or principle components analysis ('pca'), or distance matrix('dist') for analysis?}
 
+\item{var}{"character" should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?}
+
 \item{...}{arguments to \code{\link[vegan]{monoMDS}}, or \code{\link[stats]{prcomp}}.}
 
 \item{force_reset}{"logical" should analysis be run even if it is stored in the cache?}
-
-\item{"character"}{should solutions be compared based on selections ('solutions'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?}
-
-\item{method}{"character" name of distance metric to use for calculating distance (see \code{\link[vegan]{vegdist}}).}
 }
 \value{
 "hclust" object with an extra element named "phylo" that stores a "phylo" representation for pretty plotting.
@@ -34,12 +35,6 @@ hclust(x, ...)
 This function runs an hierarchical clustering on (using \code{\link[fastcluster]{hclust}}) on Marxan solutions using various characteristics.
 Results cached to permit rapid display for plotting functions.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
 }

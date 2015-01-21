@@ -15,7 +15,7 @@ sepacheived(x, ...)
 \arguments{
 \item{x}{"MarxanResults or "MarxanSolved" object.}
 
-\item{y}{"missing" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for y'th solution values.}
+\item{y}{"NULL" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for \code{y}'th solution values.}
 }
 \value{
 "matrix" or "numeric" vector with values depending on arguments.
@@ -23,12 +23,6 @@ sepacheived(x, ...)
 \description{
 Extract separation achieved value from "MarxanResults" or "MarxanSolved" object.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 }

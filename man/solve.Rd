@@ -24,18 +24,12 @@
 \item{force_reset}{"logical" should Marxan solutions be recalculated even if "MarxanSolved" object supplied?}
 }
 \value{
-Marxan object
+"MarxanSolved" object
 }
 \description{
 This function executes Marxan using the input parameter and data stored in a "MarxanUsolved" object,
 and returns a "MarxanSolved" object with outputs in it.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanUnsolved}: 
-}}
 \note{
 This function is used to solve a MarxanUnsolved object that has all of its inputs generated. The marxan function (without lower case 'm') provides a more general interface for generating inputs and outputs for Marxan.
 }

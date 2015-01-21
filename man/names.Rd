@@ -28,12 +28,6 @@
 \description{
 This function returns or assigns the species names for a Marxan object.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanData}: 
-
-\item \code{MarxanData}: 
-}}
 \note{
 This generic method does not work on "MaranOpts" or "MaranResults" objects because they do not store this information.
 }

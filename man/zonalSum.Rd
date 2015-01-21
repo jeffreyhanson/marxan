@@ -27,10 +27,6 @@ This function calculates the zonal sum of "SpatialPolygons" in a "Raster" object
 For most cases it is expected to run faster than the zonal functon in the raster package.
 This function is useful for extracting the sum of raster values inside each planning unit.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{x = RasterLayer,y = Raster}: 
-}}
 \note{
 This function is designed to be used to generate inputs for Marxan. The column names are appropriate for the 'puvspr.dat' file. Data is sorted by values in 'pu' column.
 }

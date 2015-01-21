@@ -15,7 +15,7 @@ selection(x, ...)
 \arguments{
 \item{x}{"MarxanResults or "MarxanSolved" object.}
 
-\item{y}{"missing" to return all solution selections, "integer" 0 to return selection for best solution, "integer" value greater than 0 for y'th solution selection.}
+\item{y}{"NULL" to return all solution selections, "integer" 0 to return selection for best solution, "integer" value greater than 0 for \code{y}'th solution selection.}
 }
 \value{
 "matrix" or "numeric" vector with planning units statuses depending on arguments.
@@ -23,12 +23,6 @@ selection(x, ...)
 \description{
 Extract selections for a given solution from a "MarxanResults or "MarxanSolved" object.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
 }

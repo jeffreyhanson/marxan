@@ -10,6 +10,8 @@ write.MarxanData(x, dir = getwd(), ...)
 \item{x}{"MarxanData" object to save.}
 
 \item{dir}{"character" directory path for location to save data.}
+
+\item{...}{not used.}
 }
 \description{
 This function saves "MarxanData" objects to disk.

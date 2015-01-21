@@ -5,6 +5,7 @@
 \alias{sppids.MarxanData}
 \alias{sppids.MarxanSolved}
 \alias{sppids.MarxanUnsolved}
+\alias{sppids<-}
 \alias{sppids<-.MarxanData}
 \alias{sppids<-.MarxanSolved}
 \alias{sppids<-.MarxanUnsolved}
@@ -23,27 +24,15 @@
 \method{sppids}{MarxanUnsolved}(x) <- value
 
 sppids(x, ...)
+
+sppids(x, ...) <- value
 }
 \arguments{
-\item{x}{any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
+\item{x}{any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
 }
 \description{
 This function returns or assigns the species ids for a Marxan object.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanData}: 
-
-\item \code{MarxanData}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanUnsolved}: 
-
-\item \code{MarxanUnsolved}: 
-}}
 \note{
 This generic method does not work on "MaranResults" objects because they do not store this information.
 }

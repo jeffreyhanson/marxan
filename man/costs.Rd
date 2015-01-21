@@ -5,6 +5,7 @@
 \alias{costs.MarxanData}
 \alias{costs.MarxanSolved}
 \alias{costs.MarxanUnsolved}
+\alias{costs<-}
 \alias{costs<-.MarxanData}
 \alias{costs<-.MarxanSolved}
 \alias{costs<-.MarxanUnsolved}
@@ -23,27 +24,17 @@
 \method{costs}{MarxanUnsolved}(x) <- value
 
 costs(x, ...)
+
+costs(x, ...) <- value
 }
 \arguments{
 \item{x}{any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.}
+
+\item{...}{not used}
 }
 \description{
 This function returns or assigns the planing unit costs for a Marxan object.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanData}: 
-
-\item \code{MarxanData}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanUnsolved}: 
-
-\item \code{MarxanUnsolved}: 
-}}
 \note{
 This generic method does not work on "MaranResults" objects because they do not store this information.
 }

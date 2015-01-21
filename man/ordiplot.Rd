@@ -35,12 +35,6 @@ This function makes an ordination plot to visualise the differences between solu
 Numbers indicate solution ids. The size of the number on your screen indicates relative solution quality ('score').
 Distance matrices and results from multivariate analyses are cached to permit rapid display.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
 }

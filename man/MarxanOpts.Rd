@@ -7,45 +7,37 @@
 MarxanOpts(..., ignore.extra = FALSE)
 }
 \arguments{
+\item{...}{arguments to set slots in a "MarxanOpts" object.}
+
 \item{ignore.extra}{"logical" Should extra arguments be ignored? Defaults to \code{FALSE}.}
-
-\item{BLM}{"numeric" Boundary length modifier. Defaults to 1000000.}
-
-\item{PROP}{"numeric" Proportion of planning units in initial reserve system. Defaults to -1.}
-
-\item{NUMREPS}{"integer" Number of replicate runs. Defaults to 100.}
-
-\item{NUMITNS}{"integer" Number of iterations for annealing. Defaults to 1000000.}
-
-\item{STARTTEMP}{"numeric" Initial temperature for annealing. Default to -1.}
-
-\item{COOLFAC}{"numeric" Cooling factor for annealing. Defaults to 0.}
-
-\item{NUMTEMP}{"integer" Number of temperature decreases for annealing. Defaults to 100000.}
-
-\item{COSTTHRESH}{"numeric" Cost threshold. Defaults to 0.}
-
-\item{THRESHPEN1}{"numeric" Size of cost threshold penalty. Defaults to 0.14.}
-
-\item{THRESHPEN2}{"numeric" Shape of cost threshold penalty. Defaults to 0.}
-
-\item{MISSLEVEL}{"numeric" Amount of target below which it is counted as 'missing'. Defaults to 1.}
-
-\item{ITIMPTYPE}{"integer" Iterative improvement type. Defaults to 1.}
-
-\item{HEURTYPE}{"integer" Heuristic type. Defaults to 0.}
-
-\item{CLUMPTYPE}{"integer" Clumping penalty type. Defaults to 0.}
-
-\item{VERBOSITY}{"integer" Amount of output displayed on the program screen. Defaults to 3.}
-
-\item{NCORES}{"integer" Number of cores to use for processing. Defaults to 1.}
 }
 \value{
 "MarxanOpts" object
 }
 \description{
-This function creates a new MarxanOpts object.
+This function creates a new "MarxanOpts" object.
+}
+\details{
+The slots of class "MarxanOpts" are shown below for reference.
+\tabular{cccl}{
+\strong{Name} \tab \strong{Class} \tab \strong{Default} \tab \strong{Description}\cr
+BLM \tab "numeric" \tab 1000000L \tab boundary length modifier\cr
+PROP \tab "numeric" \tab -1 \tab proportion of planning units in initial reserve system\cr
+NUMREPS \tab "integer" \tab 100L \tab number of replicate runs\cr
+NUMITNS \tab "integer" \tab 1000000L \tab number of iterations for annealing\cr
+STARTTEMP \tab "numeric" \tab -1 \tab initial temperature for annealing\cr
+COOLFAC \tab "numeric" \tab 0 \tab cooling factor for annealing\cr
+NUMTEMP \tab "integer" \tab 100000L \tab number of temperature decreases for annealing\cr
+COSTTHRESH \tab "numeric" \tab 0 \tab cost threshold\cr
+THRESHPEN1 \tab "numeric" \tab 0 \tab size of cost threshold penalty\cr
+THRESHPEN2 \tab "numeric" \tab 0 \tab shape of cost threshold penalty\cr
+MISSLEVEL \tab "numeric" \tab 1 \tab amount of target below which it is counted as 'missing'\cr
+ITIMPTYPE \tab "integer" \tab 1L \tab iterative improvement type\cr
+HEURTYPE \tab "integer" \tab 0L \tab heuristic type\cr
+CLUMPTYPE \tab "integer" \tab 0L \tab clumping penalty type\cr
+VERBOSITY \tab "integer" \tab 1L \tab amount of output displayed on the program screen\cr
+NCORES \tab "integer" \tab 1L \tab number of cores to use for processing\cr
+}
 }
 \examples{
 x<-MarxanOpts(NCORES=4, NUMREPS=2, NUMITNS=5)

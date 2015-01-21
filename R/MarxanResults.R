@@ -96,7 +96,7 @@ read.MarxanResults=function(dir) {
 #' Merge Marxan results
 #'
 #' This function merges a list of "MarxanResults" objects into a single MarxanResults object. 
-#' It used for collating Marxan results data when Marxan runs have been run in parallel.
+#' It is used for collating Marxan results data when Marxan runs have been run in parallel.
 #'
 #' @param x "list" of "MarxanResults" objects.
 #' @export
@@ -117,7 +117,8 @@ merge.MarxanResults<-function(x) {
 	return(x)
 }
 
-#' @describeIn selection
+#' @rdname selection
+#' @inheritParams selection
 #' @export
 selection.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
@@ -128,7 +129,8 @@ selection.MarxanResults<-function(x, y=NULL) {
 }
 
 
-#' @describeIn score
+#' @rdname score
+#' @inheritParams score
 #' @export
 score.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
@@ -159,14 +161,15 @@ setMethod(
 )
 
 
-#' @describeIn log
+#' @rdname log
+#' @inheritParams log
 #' @export
-log.MarxanResults=function(x) {
+log.MarxanResults<-function(x) {
 	cat(x@log)
 }
 
-#' @describeIn amountheld
 #' @export
+#' @rdname amountheld
 amountheld.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
 		return(x@amountheld)
@@ -175,7 +178,8 @@ amountheld.MarxanResults<-function(x, y=NULL) {
 	return(x@amountheld[y,])
 }
 
-#' @describeIn occheld
+#' @rdname occheld
+#' @inheritParams occheld
 #' @export
 occheld.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
@@ -185,7 +189,8 @@ occheld.MarxanResults<-function(x, y=NULL) {
 	return(x@occheld[y,])
 }
 
-#' @describeIn targetsmet
+#' @rdname targetsmet
+#' @inheritParams targetsmet
 #' @export
 targetsmet.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
@@ -195,7 +200,8 @@ targetsmet.MarxanResults<-function(x, y=NULL) {
 	return(x@targetsmet[y,])
 }
 
-#' @describeIn mpm
+#' @rdname mpm
+#' @inheritParams mpm
 #' @export
 mpm.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
@@ -205,7 +211,8 @@ mpm.MarxanResults<-function(x, y=NULL) {
 	return(x@mpm[y,])
 }
 
-#' @describeIn sepacheived
+#' @rdname sepacheived
+#' @inheritParams sepacheived
 #' @export
 sepacheived.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
@@ -215,7 +222,8 @@ sepacheived.MarxanResults<-function(x, y=NULL) {
 	return(x@sepacheived[y,])
 }
 
-#' @describeIn pca
+#' @rdname pca
+#' @inheritParams pca
 #' @export
 pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 	# init
@@ -236,9 +244,9 @@ pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 	return(cache(x, callchar))
 }
 
-#' @describeIn dist
+#' @rdname dist
 #' @export
-dist.MarxanResults=function(x, var="selections", method="bray", force_reset=FALSE) {
+dist.MarxanResults<-function(x, var="selections", method="bray", force_reset=FALSE) {
 	# init
 	callchar=hashCall(match.call(), 1)
 	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
@@ -251,7 +259,8 @@ dist.MarxanResults=function(x, var="selections", method="bray", force_reset=FALS
 	return(cache(x, callchar))
 }
 
-#' @describeIn mds
+#' @rdname mds
+#' @inheritParams mds
 #' @export
 mds.MarxanResults=function(x, var="selections", method="bray", ..., force_reset=FALSE) {
 	# init
@@ -266,7 +275,8 @@ mds.MarxanResults=function(x, var="selections", method="bray", ..., force_reset=
 	return(cache(x, callchar))
 }
 
-#' @describeIn hclust
+#' @rdname hclust
+#' @inheritParams hclust
 #' @export
 hclust.MarxanResults=function(x, type="dist", var="selections", ..., force_reset=FALSE) {
 	# init
@@ -289,7 +299,8 @@ hclust.MarxanResults=function(x, type="dist", var="selections", ..., force_reset
 	return(cache(x, callchar))
 }
 
-#' @describeIn ordiplot
+#' @rdname ordiplot
+#' @inheritParams ordiplot
 #' @export
 ordiplot.MarxanResults<-function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	match.arg(type, c("pca", "mds"))
@@ -306,7 +317,7 @@ ordiplot.MarxanResults<-function(x, type='mds', var='selections', nbest=1, ..., 
 	return(invisible(tmp))
 }
 
-#' @describeIn dendrogram
+#' @rdname dendrogram
 #' @export
 dendrogram.MarxanResults=function(x, type='mds', var='selections', nbest=1, ..., force_reset=FALSE) {
 	match.arg(type, c("pca", "mds", "dist"))
@@ -323,7 +334,7 @@ dendrogram.MarxanResults=function(x, type='mds', var='selections', nbest=1, ...,
 	return(invisible(tmp))
 }
 
-#' @describeIn dotchart
+#' @rdname dotchart
 #' @export
 dotchart.MarxanResults<-function(x, var="score", nbest=1, n=50) {
 	match.arg(var, 

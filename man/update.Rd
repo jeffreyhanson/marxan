@@ -12,7 +12,7 @@ update.MarxanData(x, formula, force_reset = TRUE)
 
 update.MarxanOpts(x, formula)
 
-update.MarxanSolved(x, formula, evaluate = TRUE, force_reset = TRUE)
+update.MarxanSolved(x, formula, solve = TRUE, force_reset = TRUE)
 
 update.MarxanUnsolved(x, formula, solve = TRUE, force_reset = TRUE)
 }
@@ -21,7 +21,7 @@ update.MarxanUnsolved(x, formula, solve = TRUE, force_reset = TRUE)
 
 \item{formula}{"formula" with update commands (see examples).}
 
-\item{evaluate}{"logical" should solutions be generated for the new object?}
+\item{sovle}{"logical" should solutions be generated for the new object?}
 }
 \value{
 "MarxanSolved" or "MarxanUnsolved" object depending on solve argument.

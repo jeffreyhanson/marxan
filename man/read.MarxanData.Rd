@@ -8,6 +8,8 @@ read.MarxanData(path, skipchecks = FALSE)
 }
 \arguments{
 \item{path}{"character" file path for input parameter file or directory containing Marxan files named 'spec.dat', 'pu.dat', 'bound.dat', 'puvspr.dat', and (optionally) 'puvspr_sporder.dat'.}
+
+\item{skipchecks}{"logical" skip data integrity checks?}
 }
 \value{
 "MarxanData" object

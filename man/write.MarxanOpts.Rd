@@ -8,11 +8,13 @@ write.MarxanOpts(x, inputdir, outputdir = inputdir, seed = sample.int(n =
   10000L, size = 1L))
 }
 \arguments{
-\item{outputdir}{"character" directory path for location where Marxan input data files are saved.}
+\item{x}{"MarxanOpts" object.}
+
+\item{inputdir}{"character" directory path for of input data files.}
+
+\item{outputdir}{"character" directory path for location where Marxan input file and result data files are saved.}
 
 \item{seed}{"integer" seed for random number generation in Marxan.}
-
-\item{dir}{"character" directory path for location to save input parameters file.}
 }
 \description{
 This function writes Marxan parameter settings to a file.

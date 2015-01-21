@@ -22,7 +22,8 @@ NULL
 #' zonalSum(planningunitsraster, species)
 setGeneric("zonalSum", function(x, y, ...) standardGeneric("zonalSum"))
 
-#' @describeIn zonalSum
+#' @rdname zonalSum
+#' @inheritParams zonalSum
 #' @export
 setMethod(
 	"zonalSum",

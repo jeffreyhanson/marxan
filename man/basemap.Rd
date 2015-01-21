@@ -19,15 +19,13 @@
 basemap(x, ...)
 }
 \arguments{
+\item{x}{"MarxanData", "MarxanUnsolved", "MarxanSolved" object.}
+
 \item{basemap}{"character" name of base map to display. Valid names are "roadmap", "mobile", "satellite", "terrain", "hybrid", "mapmaker-roadmap", "mapmaker-hybrid".}
 
 \item{grayscale}{"logical" should base map be gray scale?}
 
 \item{force_reset}{"logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.}
-
-\item{xzoom}{"numeric" zoom the geoplot in or out along the x-axis by this percent.}
-
-\item{yzoom}{"numeric" zoom the geoplot in or out along the y-axis by this percent.}
 }
 \value{
 "list" with google map data.
@@ -35,14 +33,6 @@ basemap(x, ...)
 \description{
 This function retrieves google map data for planning units. The google map data is cached to provide fast plotting capabilities.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanData}: 
-
-\item \code{MarxanSolved}: 
-
-\item \code{MarxanUnsolved}: 
-}}
 \seealso{
 \cite{\link[RgoogleMaps]{GetMap.bbox}}, \cite{\link{plot}}
 }

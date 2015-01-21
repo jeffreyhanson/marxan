@@ -15,7 +15,7 @@ occheld(x, ...)
 \arguments{
 \item{x}{"MarxanResults" or "MarxanSolved" object.}
 
-\item{y}{"missing" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for y'th solution value.}
+\item{y}{"NULL" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for \code{y}'th solution value.}
 }
 \value{
 "matrix" or "numeric" vector depending on arguments.
@@ -23,12 +23,6 @@ occheld(x, ...)
 \description{
 This function returns the number of occurrences held for each species in a solution.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 }

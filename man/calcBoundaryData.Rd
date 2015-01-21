@@ -2,14 +2,22 @@
 % Please edit documentation in R/calcBoundaryData.R
 \name{calcBoundaryData}
 \alias{calcBoundaryData}
+\alias{calcBoundaryData.PolySet}
+\alias{calcBoundaryData.SpatialPolygons}
 \title{Calculate boundary data for planning units}
 \usage{
 calcBoundaryData(x, ...)
+
+\method{calcBoundaryData}{PolySet}(x, tolerance = 0.001, lengthFactor = 1,
+  edgeFactor = 1, ...)
+
+\method{calcBoundaryData}{SpatialPolygons}(x, tolerance = 0.001,
+  lengthFactor = 1, edgeFactor = 1, ...)
 }
 \arguments{
 \item{x}{"PolySet", "SpatialPolygons" or "SpatialPolyognsDataFrame" object.}
 
-\item{...}{Not used.}
+\item{...}{not used.}
 
 \item{tolerance}{"numeric" to specify precision of calculations (ie. how far apart do vertices have to be to be considered different).}
 

@@ -18,7 +18,7 @@ calcPuVsSpeciesData(x, ...)
 \arguments{
 \item{x}{"SpatialPolygons" or "SpatialPolygonsDataFrame" object.}
 
-\item{...}{Not used.}
+\item{...}{not used.}
 
 \item{y}{"RasterLayer", "RasterStack", or "RasterBrick" object.}
 
@@ -38,12 +38,6 @@ This function calculates the sum of species values in each planning unit.
 Be aware that using polygons with overlaps will result in inaccuracies.
 By default all polygons will be treated as having separate ids.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{SpatialPolygons}: 
-
-\item \code{SpatialPolygonsDataFrame}: 
-}}
 \examples{
 data(species, planningunits)
 puvspr1.dat<-calcPuVsSpeciesData(planningunits, species[[1]])

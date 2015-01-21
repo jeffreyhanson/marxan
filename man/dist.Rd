@@ -19,7 +19,7 @@ dist(x, ...)
 
 \item{var}{"character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?}
 
-\item{method}{"character" name of distance metric to use for calculating distance (see \code{\link[vegan]{vegdist}})}
+\item{method}{"character" name of distance metric to use for calculations (see \code{\link[vegan]{vegdist}})}
 
 \item{force_reset}{"logical" should analysis be run even if it is stored in the cache?}
 }
@@ -30,12 +30,6 @@ dist(x, ...)
 This function calculates a dissimilty matrix for Marxan solutions using various characteristics.
 Results cached to permit rapid display for plotting functions.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{MarxanResults}: 
-
-\item \code{MarxanSolved}: 
-}}
 \seealso{
 \code{\link{MarxanSolved-class}}, \code{\link{marxan}}, \code{\link{ordiplot}}, \code{\link{dendrogram}}
 }
