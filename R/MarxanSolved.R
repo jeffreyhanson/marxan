@@ -255,11 +255,12 @@ setMethod(
 setMethod(
 	"plot",
 	signature(x="MarxanSolved",y="MarxanSolved"),
-	function(x, y, i=NULL, j=i, basemap="none", colramp=ifelse(is.null(i), "RdYlBu", "Set1"), xlockedincol="#000000FF", xlockedoutcol="#D7D7D7FF", ylockedincol="#FFFFFFFF", ylockedoutcol="#D7D7D7FF", alpha=ifelse(basemap=="none",1,0.7), grayscale=FALSE, force_reset=FALSE) {
+	function(x, y, i=NULL, j=i, basemap="none", colramp=ifelse(is.null(i), "RdYlBu", "Accent"), xlockedincol="#000000FF", xlockedoutcol="#D7D7D7FF", ylockedincol="#FFFFFFFF", ylockedoutcol="#D7D7D7FF", alpha=ifelse(basemap=="none",1,0.7), grayscale=FALSE, force_reset=FALSE) {
 		# check for issues
 		stopifnot(alpha<=1 & alpha>=0)
 		match.arg(colramp, rownames(brewer.pal.info))
 		stopifnot(inherits(x@data@polygons, "PolySet"))
+		stopifnot(is.comparable(x,y))
 		# get basemap data
 		if (basemap!="none")
 			basemap<-basemap.MarxanData(x@data, basemap, grayscale, force_reset)	
@@ -272,12 +273,12 @@ setMethod(
 		if (is.null(i) || is.null(j)) {
 			if (force_reset || !is.cached(x@results, "selectionfreqs"))
 				cache(x@results, "selectionfreqs", colMeans(x@results@selections))
+			xsc<-cache(x@results, "selectionfreqs")[which(nchar(cols)==0)]
 			if (force_reset || !is.cached(y@results, "selectionfreqs"))
 				cache(y@results, "selectionfreqs", colMeans(y@results@selections))
-			xsc<-cache(x@results, "selectionfreqs")[which(nchar(cols)==0)]
 			ysc<-cache(y@results, "selectionfreqs")[which(nchar(cols)==0)]
-			values<-(xsc/sum(xsc)) - (ysc/sum(ysc))
-			cols[which(nchar(cols)==0)]<-brewerCols(rescale(order(values),to=c(0,1)), colramp, alpha)
+			values<-xsc-ysc
+			cols[which(nchar(cols)==0)]<-brewerCols(rescale(values,to=c(0,1)), colramp, alpha)
 			prettyGeoplot(
 				x@data@polygons,
 				cols,
@@ -296,7 +297,7 @@ setMethod(
 			if (j==0)
 				j<-y@results@best
 				
-			cols2<-brewerCols(seq(0,1,0.25),colramp,alpha,n=4)
+			cols2<-brewerCols(seq(0,1,length.out=4),colramp,alpha,n=4)
 			cols[which(x@results@selections[i,]==1 & x@results@selections[j,]==0)]<-cols2[1]
 			cols[which(x@results@selections[i,]==0 & x@results@selections[j,]==1)]<-cols2[2]
 			cols[which(x@results@selections[i,]==1 & x@results@selections[j,]==1)]<-cols2[3]

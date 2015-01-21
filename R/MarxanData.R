@@ -223,7 +223,7 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 		rows<-x@species$id[grep('%', x@species$target)]
 		if (is.null(x@species$maxtarget))
 			stop('Maximum targets have not been stored and so percent targets cannot be used,\nuse function maxtargets to set maximum targets')
-		tmp$target<-x@species$maxtarget[rows]*(as.numeric(gsub('%', '', x@species$target[rows], fixed=TRUE))/100)
+		tmp$target[rows]<-x@species$maxtarget[rows]*(as.numeric(gsub('%', '', x@species$target[rows], fixed=TRUE))/100)
 	}
 	write.table(tmp,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
 	write.table(x@puvspecies,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr.dat"))
@@ -386,18 +386,20 @@ update.MarxanData<-function(x, formula, force_reset=TRUE) {
 			}
 			if (length(ops[[i]]$row)==0)
 				stop('argument to x (',ops[[i]]$x,') is not a valid species id or name')
-			for (j in seq_along(ops[[i]]$value))
-				x@species[ops[[i]]$row,ops[[i]]$col[j]] <- ops[[i]]$value[j]			
+			for (j in seq_along(ops[[i]]$value)) {
+				x@species[ops[[i]]$row,ops[[i]]$col[j]] <- ops[[i]]$value[[j]]
+			}
 		} else if (inherits(ops[[i]], "MarxanPuOperation")) {
 			ops[[i]]$row<-match(ops[[i]]$id, x@pu$id)
 			if (length(ops[[i]]$row)==0)
 				stop('argument to x (',ops[[i]]$x,') is not a valid pu id')
 			for (j in seq_along(ops[[i]]$value))
-				x@pu[ops[[i]]$row,ops[[i]]$col[j]] <- ops[[i]]$value[j]
+				x@pu[ops[[i]]$row,ops[[i]]$col[j]] <- ops[[i]]$value[[j]]
 		} else {
 			stop("Unrecognised update operation.")
 		}
 	}
+	validObject(x, test=FALSE)
 	return(x)
 }
 
@@ -419,8 +421,8 @@ update.MarxanData<-function(x, formula, force_reset=TRUE) {
 spp<-function(x, name=NA, spf=NA, target=NA) {
 	if (is.na(name) & is.na(spf) & is.na(target))
 		stop("no arguments were specified to change values.")
-	args<-structure(c(name,spf,target), .Names=c("name","spf","target"))
-	args<-args[!is.na(args)]
+	args<-structure(list(name,spf,target), .Names=c("name","spf","target"))
+	args<-args[which(!laply(args, is.na))]
 	return(
 		structure(
 			list(
@@ -451,8 +453,8 @@ spp<-function(x, name=NA, spf=NA, target=NA) {
 pu<-function(id, cost=NA, status=NA) {
 	if (is.na(cost) & is.na(status))
 		stop("no arguments were supplied to change values.")
-	args<-structure(c(cost,status), .Names=c("cost","status"))
-	args<-args[!is.na(args)]	
+	args<-structure(list(cost,status), .Names=c("cost","status"))
+	args<-args[which(!laply(args, is.na))]		
 	return(
 		structure(
 			list(

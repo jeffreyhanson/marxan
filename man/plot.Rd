@@ -28,7 +28,7 @@
   force_reset = FALSE)
 
 \S4method{plot}{MarxanSolved,MarxanSolved}(x, y, i = NULL, j = i,
-  basemap = "none", colramp = ifelse(is.null(i), "RdYlBu", "Set1"),
+  basemap = "none", colramp = ifelse(is.null(i), "RdYlBu", "Accent"),
   xlockedincol = "#000000FF", xlockedoutcol = "#D7D7D7FF",
   ylockedincol = "#FFFFFFFF", ylockedoutcol = "#D7D7D7FF",
   alpha = ifelse(basemap == "none", 1, 0.7), grayscale = FALSE,

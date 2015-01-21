@@ -39,6 +39,7 @@ First, let's load the 'marxan' R package and some example data.
 ```
 # load marxan R package
 library(marxan)
+
 # load example data
 data(planningunits, species)
 ```
@@ -58,13 +59,15 @@ Now, let's make some reserve systems.
 ```
 # format data, and run marxan with a low number of iterations so this example
 # doesn't take too long
-#
+results<-marxan(planningunits, species, NUMITNS=10L, NUMTEMP=8L)
+
+
 # note the L letters next to the numbers used to set NUMITNS and NUMTEMP:
 # these tell R that you mean the integer 10 and not a decimal place number 10
 #
 # these L characters need to be used after numbers when specifying integer parameters,
 # like NUMITNS, and NUMTEMP
-results<-marxan(planningunits, species, NUMITNS=10L, NUMTEMP=8L)
+
 ```
 
 Ok, so apparently it worked, but how can we visualise the solutions?
@@ -117,8 +120,8 @@ Ok, so looking at these solutions we might decide that we need to change a few p
 results2<-update(results, ~opt(BLM=100))
 
 # change the species penalty factor for species 1, lock out planning unit 1,
-# and reduce the BLM again
-results3<-update(results2, ~spp(1, spf=20, target=200) + opt(BLM=70))
+# reduce the BLM again, and use a different heuristic. 
+results3<-update(results2, ~spp(1, spf=20, target=200) + opt(BLM=70, HEURTYPE=5L))
 
 ```
 

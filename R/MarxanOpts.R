@@ -74,6 +74,7 @@ setClass("MarxanOpts",
 		expect_true(object@ITIMPTYPE <= 3L & object@ITIMPTYPE >= 0L, info="opts@ITIMPTYPE must be an integer between 0 and 3")
 		expect_true(object@HEURTYPE <= 7L & object@HEURTYPE >= 0L, info="opts@ITIMPTYPE must be an integer between 0 and 7")
 		expect_true(object@VERBOSITY <= 3L & object@VERBOSITY >= 0L, info="opts@VERBOSITY must be an integer between 0 and 3")
+		return(TRUE)
 	}
 )
 
@@ -141,6 +142,7 @@ read.MarxanOpts<-function(path) {
 		if (length(pos)!=0)
 			slot(x, names(sl)[i])<-as(strsplit(marxanOptsFile[pos[1]]," ", fixed=TRUE)[[1]][[2]], sl[[i]])
 	}
+	validObject(x)
 	return(x)
 }
 
@@ -240,7 +242,9 @@ update.MarxanOpts<-function(x, formula) {
 	findInvalidMarxanOperations(ops)
 	ops<-ops[which(laply(ops, inherits, "MarxanOptsOperation"))]
 	for (i in seq_along(ops))
-		slot(x, ops[[i]]$slot)<-ops[[i]]$value[[1]]
+		for (j in seq_along(ops[[i]]$value))
+			slot(x, ops[[i]]$slot[[j]])<-ops[[i]]$value[[j]]
+	validObject(x, test=FALSE)
 	return(x)
 }
 
@@ -257,7 +261,7 @@ update.MarxanOpts<-function(x, formula) {
 #' opt(BLM=90)
 #' opt(PROP=0.7, NUMITNS=100)
 opt<-function(...) {
-	args<-unlist(as.list(substitute(list(...)))[c(-1L)])
+	args<-as.list(substitute(list(...)))[c(-1L)]
 	llply(names(args), match.arg, names(getSlots("MarxanOpts")))
 	return(
 		structure(

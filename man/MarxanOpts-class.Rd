@@ -10,37 +10,37 @@ This class is used to store Marxan input parameters.
 \section{Slots}{
 
 \describe{
-\item{\code{BLM}}{"numeric" Boundary length modifier. Defaults to 1000000.}
+\item{\code{BLM}}{"numeric" Boundary length modifier. Defaults to 100.}
 
-\item{\code{PROP}}{"numeric" Proportion of planning units in initial reserve system. Defaults to -1.}
+\item{\code{PROP}}{"numeric" Proportion of planning units in initial reserve system. Defaults to 0.}
 
-\item{\code{NUMREPS}}{"integer" Number of replicate runs. Defaults to 100.}
+\item{\code{NUMREPS}}{"integer" Number of replicate runs. Defaults to 100L.}
 
-\item{\code{NUMITNS}}{"integer" Number of iterations for annealing. Defaults to 1000000.}
+\item{\code{NUMITNS}}{"integer" Number of iterations for annealing. Defaults to 1000000L.}
 
 \item{\code{STARTTEMP}}{"numeric" Initial temperature for annealing. Default to -1.}
 
 \item{\code{COOLFAC}}{"numeric" Cooling factor for annealing. Defaults to 0.}
 
-\item{\code{NUMTEMP}}{"integer" Number of temperature decreases for annealing. Defaults to 100000.}
+\item{\code{NUMTEMP}}{"integer" Number of temperature decreases for annealing. Defaults to 10000L.}
 
 \item{\code{COSTTHRESH}}{"numeric" Cost threshold. Defaults to 0.}
 
-\item{\code{THRESHPEN1}}{"numeric" Size of cost threshold penalty. Defaults to 0.14.}
+\item{\code{THRESHPEN1}}{"numeric" Size of cost threshold penalty. Defaults to 0.}
 
 \item{\code{THRESHPEN2}}{"numeric" Shape of cost threshold penalty. Defaults to 0.}
 
 \item{\code{MISSLEVEL}}{"numeric" Amount of target below which it is counted as 'missing'. Defaults to 1.}
 
-\item{\code{ITIMPTYPE}}{"integer" Iterative improvement type. Defaults to 1.}
+\item{\code{ITIMPTYPE}}{"integer" Iterative improvement type. Defaults to 1L.}
 
-\item{\code{HEURTYPE}}{"integer" Heuristic type. Defaults to 0.}
+\item{\code{HEURTYPE}}{"integer" Heuristic type. Defaults to 1L.}
 
-\item{\code{CLUMPTYPE}}{"integer" Clumping penalty type. Defaults to 0.}
+\item{\code{CLUMPTYPE}}{"integer" Clumping penalty type. Defaults to 0L.}
 
-\item{\code{VERBOSITY}}{"integer" Amount of output displayed on the program screen. Defaults to 3.}
+\item{\code{VERBOSITY}}{"integer" Amount of output displayed on the program screen. Defaults to 1L.}
 
-\item{\code{NCORES}}{"integer" Number of cores to use for processing. Defaults to 1.}
+\item{\code{NCORES}}{"integer" Number of cores to use for processing. Defaults to 1L.}
 }}
 \note{
 This class was not called "MarxanPars" due to the inevitable conflicts with \code{\link[base]{par}}.

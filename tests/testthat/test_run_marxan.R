@@ -127,7 +127,7 @@ test_that("MarxanUnsolved methods don't work", {
 	findMarxanExecutablePath()
 	is.marxanInstalled()
 	# try solving it using update function and with paralleling
-	ms<-update(mu, ~opt(BLM=101) + pu(5, cost=30) + spp(1, spf=10) + opt(NCORES=2L))
+	ms<-update(mu, ~opt(BLM=101) + pu(5, cost=30, status=1) + spp(1, spf=10, target=12) + opt(NCORES=2L))
 	# try results getters
 	expect_identical(score(ms, 1), score(ms@results, 1))
 	expect_identical(score(ms, 0), score(ms@results, 0))
