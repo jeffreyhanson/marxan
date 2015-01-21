@@ -23,7 +23,7 @@ Next, [download the Marxan software](http://www.uq.edu.au/marxan/marxan-software
 system.file("bin", package="marxan")
 ```
 
-Finally,let's verify that R can find these files:
+Finally, let's verify that R can find these files:
 
 ```
 marxan:::findMarxanExecutablePath()
@@ -84,15 +84,14 @@ plot(results, 2)
 plot(results, basemap='hybrid', alpha=0.7)
 ```
 
-We have one hundred solutions. How can we see how they all compare? We could make dot charts.
+We have one hundred solutions. How do we compare them all? We could make dot charts that show various summary statistics.
 
 ```
 # make dotchart of showing the solution scores of the best 50 solutions
 dotchart(results, var='score')
 
-
 # make dotchart of connectivity, showing best 20 solutions with best 5 five colored in red
-dotchart(results, var='score', nbest=5, n=20)
+dotchart(results, var='con', nbest=5, n=20)
 ```
 
 How can we visualise the variation in the solutions? Are most of them the same but with a few small differences, or do the solutions tend to fall into two or three main groups?
@@ -120,9 +119,8 @@ Ok, so looking at these solutions we might decide that we need to change a few p
 results2<-update(results, ~opt(BLM=100))
 
 # change the species penalty factor for species 1, lock out planning unit 1,
-# reduce the BLM again, and use a different heuristic. 
+# reduce the BLM again, and use a different heuristic
 results3<-update(results2, ~spp(1, spf=20, target=200) + opt(BLM=70, HEURTYPE=5L))
-
 ```
 
 Finally, we can compare the solutions in different runs

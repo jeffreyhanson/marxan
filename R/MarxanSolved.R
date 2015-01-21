@@ -287,7 +287,8 @@ setMethod(
 				fun<-continuousLegend(
 					values,
 					colramp,
-					posx=c(0.3, 0.4),posy=c(0.1, 0.9)
+					posx=c(0.3, 0.4),posy=c(0.1, 0.9),
+					center=TRUE
 				),
 				beside=TRUE
 			)
