@@ -220,10 +220,10 @@ read.MarxanData<-function(path, skipchecks=FALSE) {
 write.MarxanData<-function(x, dir=getwd(), ...) {
 	tmp<-x@species
 	if (is.character(x@species$target)) {
-		ids<-x@species$id[grep('%', x@species$target)]
+		rows<-x@species$id[grep('%', x@species$target)]
 		if (is.null(x@species$maxtarget))
 			stop('Maximum targets have not been stored and so percent targets cannot be used,\nuse function maxtargets to set maximum targets')
-		tmp$target<-x@species$maxtarget*(as.numeric(gsub('%', '', x@species$target[ids], fixed=TRUE))/100)
+		tmp$target<-x@species$maxtarget[rows]*(as.numeric(gsub('%', '', x@species$target[rows], fixed=TRUE))/100)
 	}
 	write.table(tmp,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
 	write.table(x@puvspecies,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr.dat"))

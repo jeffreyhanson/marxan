@@ -1,0 +1,13 @@
+Please copy Marxan executable files into this directory. 
+
+The current versions of Marxan files are called:
+	MarOpt_v243_Linux32
+	MarOpt_v243_Linux64
+	MarOpt_v243_Mac32
+	MarOpt_v243_Mac64
+	Marxan.exe
+	Marxan_x64.exe
+	
+While you only need to copy across the file(s) corresponding to your OS and R environment(s), 
+you can copy across all of these files if you are not sure which file(s) you should copy across,
+and R will determine the correct file to use.

@@ -298,10 +298,10 @@ ordiplot.MarxanResults<-function(x, type='mds', var='selections', nbest=1, ..., 
 		stop('All solutions have the same values for this variable.')	
 	if (type=="pca") {
 		tmp<-pca.MarxanResults(x, var, ..., force_reset=force_reset)
-		prettyPcaBiplot(x=tmp,size=rescale(x@summary$Score, to=c(1,2)),nbest=nbest, main=paste0("Solution biplot based on ",to.pretty.name(var)))
+		prettyPcaBiplot(x=tmp,size=rescale(x@summary$Score, to=c(0.8,2)),nbest=nbest, main=paste0("Solution biplot based on ",to.pretty.name(var)))
 	} else if (type=="mds") {
 		tmp<-mds.MarxanResults(x, var, ..., force_reset=force_reset)
-		prettyBiplot(x=tmp$points,size=rescale(x@summary$Score, to=c(1,2)),nbest=nbest,xlab="MDS1", ylab="MDS2", main=paste0("Solution biplot based on ",to.pretty.name(var)))
+		prettyBiplot(x=tmp$points,size=rescale(x@summary$Score, to=c(0.8,2)),nbest=nbest,xlab="MDS1", ylab="MDS2", main=paste0("Solution biplot based on ",to.pretty.name(var)))
 	}
 	return(invisible(tmp))
 }
@@ -316,7 +316,7 @@ dendrogram.MarxanResults=function(x, type='mds', var='selections', nbest=1, ...,
 	tmp<-hclust.MarxanResults(x, type, var, ..., force_reset=force_reset)$phylo
 	prettyDendrogram(
 		tmp,
-		rescale(x@summary$Score, to=c(1,2)),
+		rescale(x@summary$Score, to=c(0.8,2)),
 		nbest, 
 		paste0("Solution dendrogram based on ",to.pretty.name(var))
 	)
@@ -355,7 +355,7 @@ dotchart.MarxanResults<-function(x, var="score", nbest=1, n=50) {
 	n=min(nrow(x@summary),n)
 	ord<-order(x@summary[[var]])[seq_len(n)]
 	tmp<-x@summary[ord,]
-	cex<-rescale(tmp[[var]], to=c(1,2))
+	cex<-rescale(tmp[[var]], to=c(0.8,2))
 	prettyDotchart(
 		x=tmp[[var]], 
 		pch=16, 
