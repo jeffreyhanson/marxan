@@ -17,7 +17,7 @@ devtools:::install_github('paleo13/marxan')
 
 ```
 
-Next, download the [Marxan software](http://www.uq.edu.au/marxan/marxan-software), unzip it, and copy the executable files ('MarOpt_v243_Linux32', 'MarOpt_v243_Linux64', 'MarOpt_v243_Mac32', 'MarOpt_v243_Mac64', 'Marxan.exe', and 'Marxan_x64'), into the 'bin' folder where the R package was installed. This 'bin' folder can be found by running:
+Next, [download the Marxan software](http://www.uq.edu.au/marxan/marxan-software), unzip it, and copy the executable files ('MarOpt_v243_Linux32', 'MarOpt_v243_Linux64', 'MarOpt_v243_Mac32', 'MarOpt_v243_Mac64', 'Marxan.exe', and 'Marxan_x64.exe'), into the 'bin' folder where the R package was installed. This 'bin' folder can be found by running:
 
 ```
 system.file("bin", package="marxan")
@@ -30,7 +30,7 @@ marxan:::findMarxanExecutablePath()
 marxan:::is.marxanInstalled(verbose=TRUE)
 ```
 
-If everything works, you should see the message 'marxan R package successfully installed'. If not, try repeating the above steps. Failing that, [lodge an issue](https://github.com/paleo13/marxan/issues).
+If everything works, you should see the message 'marxan R package successfully installed'. If not, try repeating the above steps. Failing that, [please lodge an issue](https://github.com/paleo13/marxan/issues).
 
 ##### Quick start guide
 
@@ -56,10 +56,14 @@ plot(species)
 Now, let's make some reserve systems.
 
 ```
-# format data, and run marxan with a (ridiculously) small number of iterations to it doesn't take long to run
+# format data, and run marxan with a low number of iterations so this example
+# doesn't take too long
+#
 # note the L letters next to the numbers used to set NUMITNS and NUMTEMP:
-# these tell R that you mean the integer 10 and not a decimal place number 10,
-# these L characters need to be after numbers when specifying integer parameters.
+# these tell R that you mean the integer 10 and not a decimal place number 10
+#
+# these L characters need to be used after numbers when specifying integer parameters,
+# like NUMITNS, and NUMTEMP
 results<-marxan(planningunits, species, NUMITNS=10L, NUMTEMP=8L)
 ```
 
