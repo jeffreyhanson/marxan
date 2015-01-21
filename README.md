@@ -3,7 +3,9 @@ marxan
 
 #### This R package contains decision support tools for reserve selection using Marxan. It brings the entire Marxan workflow to R. Key features include the ability to prepare input data for Marxan, execute Marxan, and visualise Marxan solutions.
 
-##### Installation instructions
+##### Installation
+
+If you are using a Windows operating system, you will need to have Rtools installed. Follow these [instructions to install Rtools](https://github.com/stan-dev/rstan/wiki/Install-Rtools-for-Windows). If you are using Mac OSX or Linux, you can skip this step. 
 
 To install this package, execute the following commands in R:
 
