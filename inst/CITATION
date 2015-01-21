@@ -7,7 +7,9 @@ url <- meta$URL
 
 citEntry(entry = "incollection",
 	author=personList(as.person("Ball I.R."),as.person("Possingham H.P."),as.person("Watts M.E.")),
-	title="Spatial conservation prioritisation: Quantitative methods and computational tools",
+	title="Marxan and relatives: Software for spatial conservation prioritisation",
+	year="2009",
+	booktitle="Spatial conservation prioritisation: Quantitative methods and computational tools",
 	editor=personList(as.person("Moilanen A.R."),as.person("Wilson K.A."),as.person("Possingham H.P.")),
 	chapter="Chaper 14: Marxan and relatives: Software for spatial conservation prioritisation",
 	pages="185-195",
