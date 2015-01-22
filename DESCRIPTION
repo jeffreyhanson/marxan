@@ -34,7 +34,7 @@ Collate:
     'data.R'
     'marxan.R'
 Depends:
-    R (>= 3.1),
+    R (>= 3),
     sp,
     rgdal,
     raster
