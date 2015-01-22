@@ -103,7 +103,7 @@ findMarxanExecutablePath<-function() {
 		}
 	} else {
 		if (.Platform$OS.type=="unix") {
-			if (Sys.info()$Sys.info()[["sysname"]]=="Darwin") {
+			if (Sys.info()[["sysname"]]=="Darwin") {
 				if (Sys.info()$machine=="x86_64") {
 					path=list.files(system.file("bin", package="marxan"), "^MarOpt.*Mac64",full.names=TRUE)
 				} else if (Sys.info()$machine=="i686") {
