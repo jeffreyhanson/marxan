@@ -93,7 +93,7 @@ dotchart(results, var='con', nbest=5, n=20)
 
 How can we visualise the variation in the solutions? Are most of them the same but with a few small differences, or do the solutions tend to fall into two or three main groups?
 
-Fortunately, statisticians solved this problem a long time ago. We can use dimension reducing techniques to find commonalities in the solutions, and reduce variation in the solutions to a manageable number of dimensions. 
+Fortunately, statisticians solved this problem a long time ago. We can use ordination techniques to create a few variables that describe commonalities in the solutions, and visualise the main sources of variation in a few dimensions.
 
 ```
 # dendrogram showing differences between solutions based on which planning units 
