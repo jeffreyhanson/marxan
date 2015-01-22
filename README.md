@@ -66,10 +66,9 @@ Now, let's make some reserve systems.
 # doesn't take too long
 results<-marxan(planningunits, species, NUMITNS=10L, NUMTEMP=8L)
 
-
 # note the L letters next to the numbers used to set NUMITNS and NUMTEMP:
 # these tell R that you mean the integer 10 and not a decimal place number 10
-#
+
 # these L characters need to be used after numbers when specifying integer parameters,
 # like NUMITNS, and NUMTEMP
 ```
