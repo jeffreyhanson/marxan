@@ -70,10 +70,19 @@ setClass("MarxanOpts",
 		NCORES=1L
 	),
 	validity=function(object) {
-		expect_true(object@PROP <= 1 & object@PROP >= 0, info="opts@PROP must be a numeric between 0 and 1")
-		expect_true(object@ITIMPTYPE <= 3L & object@ITIMPTYPE >= 0L, info="opts@ITIMPTYPE must be an integer between 0 and 3")
-		expect_true(object@HEURTYPE <= 7L & object@HEURTYPE >= 0L, info="opts@ITIMPTYPE must be an integer between 0 and 7")
-		expect_true(object@VERBOSITY <= 3L & object@VERBOSITY >= 0L, info="opts@VERBOSITY must be an integer between 0 and 3")
+		# check for NA or non-finite values
+		for (i in c('BLM','PROP','NUMREPS','NUMITNS','STARTTEMP','COOLFAC','NUMTEMP','COSTTHRESH','THRESHPEN1','THRESHPEN2','MISSLEVEL','ITIMPTYPE','HEURTYPE','CLUMPTYPE','VERBOSITY','NCORES'))
+			if (!is.finite(slot(object, i)))
+				stop('argument to ',i,'is NA or non-finite')
+		# check for valid parameters
+		if (object@PROP > 1 || object@PROP < 0)
+			stop('argument to PROP is not a numeric between 0 and 1')
+		if (object@ITIMPTYPE > 3L || object@PROP < 0L)
+			stop('argument to ITIMPTYPE is not an integer between 0L and 3L')
+		if (object@HEURTYPE > 7L || object@HEURTYPE < 0L)
+			stop('argument to HEURTYPE is not an integer between 0L and 7L')
+		if (object@VERBOSITY > 3L || object@VERBOSITY < 0L)
+			stop('argument to VERBOSITY is not an integer between 0L and 3L')
 		return(TRUE)
 	}
 )

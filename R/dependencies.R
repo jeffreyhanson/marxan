@@ -32,11 +32,6 @@
 #' @importFrom data.table setnames
 #' @importFrom data.table fread
 
-#' @importFrom testthat expect_named
-#' @importFrom testthat expect_is
-#' @importFrom testthat expect_true
-#' @importFrom testthat expect_false
-
 #' @importFrom gdalUtils gdal_rasterize
 #' @importFrom gdalUtils gdal_setInstallation
 

@@ -295,7 +295,8 @@ setMethod(
 					values,
 					colramp,
 					posx=c(0.3, 0.4),posy=c(0.1, 0.9),
-					center=TRUE
+					center=TRUE,
+					endlabs=c('+X','+Y')
 				),
 				beside=TRUE
 			)
@@ -310,7 +311,10 @@ setMethod(
 			cols[which(x@results@selections[i,]==0 & x@results@selections[j,]==1)]<-cols2[2]
 			cols[which(x@results@selections[i,]==1 & x@results@selections[j,]==1)]<-cols2[3]
 			cols[which(x@results@selections[i,]==0 & x@results@selections[j,]==0)]<-cols2[4]
-			j<<-environment()
+
+			xrepr<-ifelse(i==x@results@best, '(best)', paste0('(',i,')'))
+			yrepr<-ifelse(i==y@results@best, '(best)', paste0('(',j,')'))
+
 			prettyGeoplot(
 				x@data@polygons,
 				cols,
@@ -318,7 +322,7 @@ setMethod(
 				paste0("Difference in solutions ",i,ifelse(i==x@results@best, " (best)", ""), " and ",j, ifelse(j==y@results@best, " (best)", "")),
 				categoricalLegend(
 					c(cols2,xlockedincol,ylockedincol,xlockedoutcol,ylockedoutcol),
-					c("Selected in X",  "Selected in Y", "Both Selected", "Neither Selected", "Locked In X", "Locked In Y", "Locked Out X", "Locked Out Y"),
+					c(paste("Selected in X",xrepr),  paste("Selected in Y",yrepr), "Both Selected", "Neither Selected", paste("Locked in X",xrepr), paste("Locked in Y",yrepr), paste("Locked out X",xrepr), paste("Locked out Y",yrepr)),
 					ncol=4
 				),
 				beside=FALSE

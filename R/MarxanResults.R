@@ -364,7 +364,7 @@ dotchart.MarxanResults<-function(x, var="score", nbest=1, n=50) {
 		'mv'={var<-'Missing_Values'}
 	)
 	n=min(nrow(x@summary),n)
-	ord<-order(x@summary[[var]])[seq_len(n)]
+	ord<-rev(order(x@summary[[var]])[seq_len(n)])
 	tmp<-x@summary[ord,]
 	cex<-rescale(tmp[[var]], to=c(0.8,2))
 	prettyDotchart(

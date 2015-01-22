@@ -5,32 +5,29 @@ marxan
 
 ##### Installation
 
-If you are using a Windows operating system, you will need to have Rtools installed. Follow these [instructions to install Rtools](https://github.com/stan-dev/rstan/wiki/Install-Rtools-for-Windows). If you are using Mac OSX or Linux, you can skip this step. 
-
 To install this package, execute the following commands in R:
 
 ```
-
 if (!require('devtools'))
 	install.packages('devtools', repo='http://cran.rstudio.com', dep=TRUE)
 devtools:::install_github('paleo13/marxan')
-
 ```
 
-Next, [download the Marxan software](http://www.uq.edu.au/marxan/marxan-software), unzip it, and copy the executable files ('MarOpt_v243_Linux32', 'MarOpt_v243_Linux64', 'MarOpt_v243_Mac32', 'MarOpt_v243_Mac64', 'Marxan.exe', and 'Marxan_x64.exe'), into the 'bin' folder where the R package was installed. This 'bin' folder can be found by running:
+Note that Linux and Mac OSX users may experience issues installing the 'rgdal' and 'rgeos' packages. To install these dependencies, try running code below:
 
 ```
-system.file("bin", package="marxan")
-```
+## rgdal on ubuntu 12
+# run this in the terminal
+sudo apt-get install libgdal-dev
+sudo apt-get install libproj-dev
+# run this inside R
+install.packages("rgdal")
 
-Finally, let's verify that R can find these files:
-
+## rgdal on Mac OSX Mavericks
+# run this inside R
+setRepositories(ind = c(1,6))
+install.packages(c('rgeos', 'rgdal'))
 ```
-marxan:::findMarxanExecutablePath()
-marxan:::is.marxanInstalled(verbose=TRUE)
-```
-
-If everything works, you should see the message 'marxan R package successfully installed'. If not, try repeating the above steps. Failing that, [please lodge an issue](https://github.com/paleo13/marxan/issues).
 
 ##### Quick start guide
 

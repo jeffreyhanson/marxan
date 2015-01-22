@@ -25,7 +25,7 @@ test_that("MarxanData methods don't work", {
 		pu=data.frame(
 			id=seq_len(nrow(polys@data)),
 			cost=10,
-			status=0
+			status=0L
 		),
 		species=data.frame(id=1L, spf=1, target=100, name='spp'),
 		puvspecies=calcPuVsSpeciesData(polys,species, id=1L),
@@ -33,10 +33,10 @@ test_that("MarxanData methods don't work", {
 	)
 	write.MarxanData(md1, tempdir())
 	md1@species[1,"spf"]=2
-	md1@pu[5,"status"]=3
+	md1@pu[5,"status"]=3L
 	# construction method 2
 	md2<-read.MarxanData(tempdir())
-	md2<-update(md2,~pu(5,status=3) + spp('spp',spf=2))
+	md2<-update(md2,~pu(5,status=3L) + spp('spp',spf=2))
 	# construction method 3
 	md3<-format.MarxanData(
 		polys,
@@ -50,7 +50,7 @@ test_that("MarxanData methods don't work", {
 	spplot(md3, 1, var='amount', basemap='hybrid')
 
 	# update and solve
-	md3<-update(md2,~pu(5,status=3) + opt(NUMITNS=10L, NUMTEMP=10L))
+	md3<-update(md2,~pu(5,status=3L) + opt(NUMITNS=10L, NUMTEMP=10L))
 
 	# tests
 	expect_equal(md1@pu,md2@pu)
@@ -80,7 +80,7 @@ test_that("MarxanUnsolved methods don't work", {
 		pu=data.frame(
 			id=seq_len(nrow(polys@data)),
 			cost=10,
-			status=0
+			status=0L
 		),
 		species=data.frame(id=1L, spf=1, target=100, name='spp'),
 		puvspecies=calcPuVsSpeciesData(polys,species, id=1L),
@@ -111,7 +111,7 @@ test_that("MarxanUnsolved methods don't work", {
 		pu=data.frame(
 			id=seq_len(nrow(polys@data)),
 			cost=10,
-			status=0
+			status=0L
 		),
 		species=data.frame(id=1L, spf=1, target=100, name='spp'),
 		puvspecies=calcPuVsSpeciesData(polys,species, id=1L),
@@ -127,7 +127,7 @@ test_that("MarxanUnsolved methods don't work", {
 	findMarxanExecutablePath()
 	is.marxanInstalled()
 	# try solving it using update function and with paralleling
-	ms<-update(mu, ~opt(BLM=101) + pu(5, cost=30, status=1) + spp(1, spf=10, target=12) + opt(NCORES=2L))
+	ms<-update(mu, ~opt(BLM=101) + pu(5, cost=30, status=1L) + spp(1, spf=10, target=12) + opt(NCORES=2L))
 	# try results getters
 	expect_identical(score(ms, 1), score(ms@results, 1))
 	expect_identical(score(ms, 0), score(ms@results, 0))

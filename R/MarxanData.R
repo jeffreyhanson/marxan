@@ -30,80 +30,159 @@ setClass("MarxanData",
 		if (!object@skipchecks) {
 			### check column names of inputs		
 			# pu
-			expect_named(object@pu, c("id","cost","status"), label='argument to pu')
-			expect_is(object@pu$id, "integer", label='argument to pu$id')
-			expect_false(any(duplicated(object@pu$id)), info='argument to pu$id contains duplicates')
-			expect_is(object@pu$cost, "numeric", label='argument to pu$cost')
-			expect_true(all(object@pu$status %in% 0:3), info='argument to pu$status must only contain values in 0:3')
+			if (any(!c("id","cost","status") %in% names(object@pu)))
+				stop("argument to pu is missing one of these columns: 'id', 'cost', or 'status'")
+
+			if (!inherits(object@pu$id, 'integer'))
+				stop('argument to pu$id is not integer')
+			if (any(!is.finite(object@pu$id)))
+				stop('argument to pu$id contains NA or non-finite values')
+			if (anyDuplicated(object@pu$id))
+				stop('argument to pu$id most not contain duplicates')
+								
+			if (!inherits(object@pu$cost, 'numeric'))
+				stop('argument to pu$cost is not numeric')
+			if (any(!is.finite(object@pu$cost)))
+				stop('argument to pu$cost contains NA or non-finite values')		
+				
+			if (!inherits(object@pu$status, 'integer'))
+				stop('argument to pu$status is not integer')
+			if (any(!is.finite(object@pu$status)))
+				stop('argument to pu$status contains NA or non-finite values')				
+			if (any(!object@pu$status %in% 0L:3L))
+				stop('argument to pu$status must not contain values other than 0L, 1L, 2L, 3L')
 
 			# species
-			if (is.factor(object@species$target))
-				object@species$target<-as.character(object@species$target)
-			expect_true(all(c("id","spf","target") %in% names(object@species)), label='argument to species')
-			expect_is(object@species$id, "integer", label='argument to species$id')
-			expect_false(any(is.na(object@species$id)), info='argument to species$id must not contain any NA values')
-			expect_false(any(duplicated(object@species$id)), info='argument to species$id contains duplicates')
-			expect_is(object@species$spf, "numeric", label='argument to species$spf')
-			expect_false(any(is.na(object@species$spf)), info='argument to species$spf must not contain any NA values')
-			expect_true(inherits(object@species$target, c("numeric","character")), info='argument to species$target must be "character" or "numeric"')
-			expect_false(any(is.na(object@species$target)), info='argument to species$target must not contain any NA values')
+			if (any(!c('id','spf','target') %in% names(object@species)))
+				stop("argument to species is missing one of these columns: 'id', 'spf', or 'target'")
+			
+			if (!inherits(object@species$id, 'integer'))
+				stop('argument to species$id is not integer')
+			if (any(!is.finite(object@species$id)))
+				stop('argument to species$id contains NA or non-finite values')				
+			if (anyDuplicated(object@species$id))
+				stop('argument to species$id most not contain duplicates')
+				
+			if (!inherits(object@species$spf, 'numeric'))
+				stop('argument to species$spf is not numeric')
+			if (any(!is.finite(object@species$spf)))
+				stop('argument to species$spf contains NA or non-finite values')				
+				
+			if (!inherits(object@species$target, c('numeric','character')))
+				stop('argument to species$spf is not numeric or character')
+			if (any(is.na(object@species$target)))
+				stop('argument to species$target contains NA or non-finite values')
+				
 			if (!is.null(object@species$name)) {
-				object@species$name<-as.character(object@species$name)
-				expect_is(object@species$name, "character", label='argument to species$name')
-				expect_false(any(is.na(object@species$name)), info='argument to species$name must not contain any NA values')
+				if (is.factor(object@species$name))
+					object@species$name<-as.character(object@species$name)
+				if (!inherits(object@species$name, 'character'))
+					stop('argument to species$name is not character')
+				if (any(is.na(object@species$name)))
+					stop('argument to species$name contains NA values')
 			}
 			if (!is.null(object@species$targetocc)) {
-				expect_is(object@species$targetocc, "integer", label='argument to species$targetocc')
-				expect_false(any(is.na(object@species$targetocc)), info='argument to species$targetocc must not contain any NA values')
+				if (!inherits(object@species$targetocc, 'integer'))
+					stop('argument to species$targetocc is not integer')
+				if (any(!is.finite(object@species$targetocc)))
+					stop('argument to species$targetocc contains NA or non-finite values')
 			}
 			if (!is.null(object@species$sepnum)) {
-				expect_is(object@species$sepnum, "integer", label='argument to species$sepnum')
-				expect_false(any(is.na(object@species$sepnum)), info='argument to species$sepnum must not contain any NA values')
+				if (!inherits(object@species$sepnum, 'integer'))
+					stop('argument to species$sepnum is not integer')
+				if (any(!is.finite(object@species$sepnum)))
+					stop('argument to species$sepnum contains NA or non-finite values')
 			}
 			if (!is.null(object@species$sepdistance)) {
-				expect_is(object@species$sepdistance, "numeric", label='argument to species$sepdistance')
-				expect_false(any(is.na(object@species$sepdistance)), info='argument to species$sepdistance must not contain any NA values')
+				if (!inherits(object@species$sepdistance, 'numeric'))
+					stop('argument to species$sepdistance is not numeric')
+				if (any(!is.finite(object@species$sepdistance)))
+					stop('argument to species$sepdistance contains NA or non-finite values')				
 			}
 			
 			# puvspecies
-			expect_named(object@puvspecies, c("species","pu","amount"), label='argument to puvspecies')
-			expect_is(object@puvspecies$species, "integer", label='argument to puvspecies$species')
-			expect_false(any(is.na(object@puvspecies$species)), info='argument to puvspecies$species must not contain any NA values')
-			expect_is(object@puvspecies$pu, "integer", label='argument to puvspecies$pu')
-			expect_false(any(is.na(object@puvspecies$pu)), info='argument to puvspecies$pu must not contain any NA values')
-			expect_is(object@puvspecies$amount, "numeric", label='argument to puvspecies$amount')
-			expect_false(any(is.na(object@puvspecies$amount)), info='argument to puvspecies$amount must not contain any NA values')
+			if (any(!c('species','pu','amount') %in% names(object@puvspecies)))
+				stop("argument to puvspecies is missing one of these columns: 'species', 'pu', or 'amount'")
+
+			if (!inherits(object@puvspecies$species, 'integer'))
+				stop('argument to puvspecies$species is not integer')
+			if (any(!is.finite(object@puvspecies$species)))
+				stop('argument to puvspecies$species contains NA or non-finite values')				
+			
+			if (!inherits(object@puvspecies$pu, 'integer'))
+				stop('argument to puvspecies$pu is not integer')
+			if (any(!is.finite(object@puvspecies$pu)))
+				stop('argument to puvspecies$pu contains NA or non-finite values')				
+			
+			if (!inherits(object@puvspecies$amount, 'numeric'))
+				stop('argument to puvspecies$amount is not numeric')
+			if (any(!is.finite(object@puvspecies$amount)))
+				stop('argument to puvspecies$amount contains NA or non-finite values')
 
 			# puvspecies_spo
-			expect_named(object@puvspecies_spo, c("species","pu","amount"), label='argument to puvspecies_spo')
-			expect_is(object@puvspecies_spo$species, "integer", label='argument to puvspecies_spo$species')
-			expect_false(any(is.na(object@puvspecies_spo$species)), info='argument to puvspecies_spo$species must not contain any NA values')
-			expect_is(object@puvspecies_spo$pu, "integer", label='argument to puvspecies_spo$pu')
-			expect_false(any(is.na(object@puvspecies_spo$pu)), info='argument to puvspecies_spo$pu must not contain any NA values')
-			expect_is(object@puvspecies_spo$amount, "numeric", label='argument to puvspecies_spo$amount')
-			expect_false(any(is.na(object@puvspecies_spo$amount)), info='argument to puvspecies_spo$amount must not contain any NA values')
+			if (any(!c('species','pu','amount') %in% names(object@puvspecies_spo)))
+				stop("argument to puvspecies_spo is missing one of these columns: 'species', 'pu', or 'amount'")
+
+			if (!inherits(object@puvspecies_spo$species, 'integer'))
+				stop('argument to puvspecies_spo$species is not integer')
+			if (any(!is.finite(object@puvspecies_spo$species)))
+				stop('argument to puvspecies_spo$species contains NA or non-finite values')				
+			
+			if (!inherits(object@puvspecies_spo$pu, 'integer'))
+				stop('argument to puvspecies_spo$pu is not integer')
+			if (any(!is.finite(object@puvspecies_spo$pu)))
+				stop('argument to puvspecies_spo$pu contains NA or non-finite values')				
+			
+			if (!inherits(object@puvspecies_spo$amount, 'numeric'))
+				stop('argument to puvspecies_spo$amount is not numeric')
+			if (any(!is.finite(object@puvspecies_spo$amount)))
+				stop('argument to puvspecies_spo$amount contains NA or non-finite values')			
 
 			# boundary
-			expect_named(object@boundary, c("id1","id2","boundary"), label='argument to boundary')
-			expect_is(object@boundary$id1, "integer", label='argument to boundary$id1')
-			expect_false(any(is.na(object@boundary$id1)), info='argument to boundary$id1 must not contain any NA values')
-			expect_is(object@boundary$id2, "integer", label='argument to boundary$id2')
-			expect_false(any(is.na(object@boundary$id2)), info='argument to boundary$id2 must not contain any NA values')
-			expect_is(object@boundary$boundary, "numeric", label='argument to boundary$boundary')
-			expect_false(any(is.na(object@boundary$boundary)), "numeric", info='argument to boundary$boundary must not contain any NA values')
+			if (any(!c('id1','id2','boundary') %in% names(object@boundary)))
+				stop("argument to boundary is missing one of these columns: 'id1', 'id2', or 'boundary'")			
+
+			if (!inherits(object@boundary$id1, 'integer'))
+				stop('argument to boundary$id1 is not integer')
+			if (any(!is.finite(object@boundary$id1)))
+				stop('argument to boundary$id1 contains NA or non-finite values')					
+
+			if (!inherits(object@boundary$id2, 'integer'))
+				stop('argument to boundary$id2 is not integer')
+			if (any(!is.finite(object@boundary$id2)))
+				stop('argument to boundary$id2 contains NA or non-finite values')					
+
+			if (!inherits(object@boundary$boundary, 'numeric'))
+				stop('argument to boundary$boundary is not numeric')
+			if (any(!is.finite(object@boundary$boundary)))
+				stop('argument to boundary$boundary contains NA or non-finite values')					
 			
 			# cross table dependencies
-			expect_true(all(object@boundary$id1 %in% object@pu$id), info='argument to boundary$id1 must only contain values present in pu$id')
-			expect_true(all(object@boundary$id2 %in% object@pu$id), info='argument to boundary$id2 must only contain values present in pu$id')
-			expect_true(all(object@puvspecies$pu %in% object@pu$id), info='argument to puvspecies$pu must only contain values present in pu$id')
-			expect_true(all(object@puvspecies_spo$pu %in% object@pu$id), info='argument to puvspecies_spo$pu must only contain values present in pu$id')
-			expect_true(all(object@puvspecies$species %in% object@species$id), info='argument to puvspecies$species must only contain values present in species$id')			
-			expect_true(all(object@puvspecies_spo$species %in% object@species$id), info='argument to puvspecies_spo$species must only contain values present in species$id')
+			if (!setequal(object@boundary$id1,object@pu$id))
+				stop('argument to boundary$id1 and pu$id must share the same values')
+			if (!setequal(object@boundary$id2,object@pu$id))
+				stop('argument to boundary$id2 and pu$id must share the same values')
+			if (!setequal(object@puvspecies$pu,object@pu$id))
+				stop('argument to puvspecies$pu and pu$id must share the same values')
+			if (!setequal(object@puvspecies_spo$pu,object@pu$id))
+				stop('argument to puvspecies_spo$pu and pu$id must share the same values')
+			if (!setequal(object@puvspecies$species,object@species$id))
+				stop('argument to puvspecies$species and species$id must share the same values')
+			if (!setequal(object@puvspecies_spo$species,object@species$id))
+				stop('argument to puvspecies_spo$species and species$id must share the same values')
 			if (!is.null(object@species$sepdistance)) {
-				expect_is(object@pu$xloc, "numeric", label='argument to pu$xloc')
-				expect_false(any(is.na(object@pu$xloc)), info='argument to pu$xloc must not contain any NA values')				
-				expect_is(object@pu$yloc, "numeric", label='argument to pu$yloc')
-				expect_false(any(is.na(object@pu$yloc)), info='argument to pu$yloc must not contain any NA values')				
+				if (is.null(object@pu$xloc))
+					stop("argument to pu must have a an 'xloc' column because argument to species has column 'sepdistance'")
+				if (!inherits(object@pu$xloc, 'numeric'))
+					stop("argument to pu$xloc is not numeric")
+				if (any(!is.finite(object@pu$xloc)))
+					stop("argument to pu$xloc contains NA or non-finite values")
+				if (is.null(object@pu$yloc))
+					stop("argument to pu must have a an 'yloc' column because argument to species has column 'sepdistance'")
+				if (!inherits(object@pu$yloc, 'numeric'))
+					stop("argument to pu$yloc is not numeric")
+				if (any(!is.finite(object@pu$yloc)))
+					stop("argument to pu$yloc contains NA or non-finite values")
 			}
 		}
 		return(TRUE)
@@ -174,7 +253,8 @@ MarxanData<-function(pu, species, puvspecies, boundary, polygons=NULL, puvspecie
 #' @export
 #' @seealso \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData}}, \code{\link{MarxanData-class}}.
 read.MarxanData<-function(path, skipchecks=FALSE) {
-	expect_true(file.exists(path), info="argument to path does not exist.")
+	if (!file.exists(path))
+		stop('argument to path is not a valid file path')
 	if (nchar(tools::file_ext(path))>0) {
 		# load from input file
 		args<-readLines(path)
@@ -280,7 +360,7 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 			pu<-polygons@data[,validNames[which(validNames %in% names(polygons@data))],drop=FALSE]
 		} else {
 			warning("argument to polygons@data does not have 'id', 'cost', and 'status' columns, creating default with equal costs and status=0")
-			pu<-data.frame(id=seq_along(polygons@polygons), cost=1, status=0)
+			pu<-data.frame(id=seq_along(polygons@polygons), cost=1, status=0L)
 		}
 		# get xy coordinates 
 		if (any(sepdistance!=0)) {

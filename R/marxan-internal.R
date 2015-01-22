@@ -274,7 +274,7 @@ brewerCols<-function(values, pal, alpha=1, n=NULL) {
 
 
 ### automated legend functions
-continuousLegend<-function(values, pal, posx, posy, center=FALSE) {
+continuousLegend<-function(values, pal, posx, posy, center=FALSE, endlabs=NULL) {
 	return(
 		function() {
 			if (center) {
@@ -292,6 +292,11 @@ continuousLegend<-function(values, pal, posx, posy, center=FALSE) {
 			}
 			# rect(xleft=par()$usr[1]+(xdiff*posx[1]), ybottom=par()$usr[3]+(ydiff*posy[1]), xright=par()$usr[1]+(xdiff*posx[2]), ytop=par()$usr[4]+(ydiff*posy[2]), xpd=TRUE)
 			shape::colorlegend(zlim=range(values), digit=digit, col=brewerCols(seq(0,1,length.out=100), pal), zval=zvals, posx=posx, posy=posy, xpd=TRUE)
+			if (!is.null(endlabs)) {
+				xcoord<-par()$usr[1] + mean(par()$usr[2:1]*posx*2.2)
+				ycoords<-(par()$usr[3] + diff(par()$usr[3:4])*posy) + (diff(par()$usr[3:4]) * c(-0.02,0.02))
+				text(x=rep(xcoord, 2), y=ycoords, rev(endlabs), cex=1.2, ad=c(0.5,0.5))
+			}
 		}
 	)
 }
