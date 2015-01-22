@@ -112,7 +112,7 @@ ordiplot(results, type='mds', var='occheld', method='euclidean')
 ordiplot(results, type='pca', var='amountheld')
 ```
 
-Ok, so looking at these solutions we might decide that we need to change a few parameters and rerun Marxan. We can do this--efficiently--by 'updating' our 'results' Marxan object and storing the results in a new objects.
+Ok, so looking at these solutions we might decide that we need to change a few parameters and rerun Marxan. We can do this--efficiently--by 'updating' our 'results' Marxan object with new parameters, running Marxan again, and storing the results in a new object.
 
 ```
 # change boundary length and rerun
