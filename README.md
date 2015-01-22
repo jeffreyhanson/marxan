@@ -5,7 +5,15 @@ marxan
 
 ##### Installation
 
-To install this package, execute the following commands in R:
+Users running the latest version of R (3.1.2) can ignore this step. Earlier versions of R (ie. 3.0.1, 3.0.2, or 3.1.1) may run into issues installing this package due to issues with the testthat package. In such cases, users should first install an archived version of the 'testthat' R package before trying to install the 'marxan' R package. The code below can be used to install 'testthat' for R version 3.0.2 and on [Marxan.net](http://marxan.net/rstudio/):
+
+```
+if (!require('devtools'))
+	install.packages('devtools', repo='http://cran.rstudio.com', dep=TRUE)
+install_url('http://cran.r-project.org/src/contrib/Archive/testthat/testthat_0.8.1.tar.gz')
+```
+
+To install the marxan R package, execute the following commands in R:
 
 ```
 if (!require('devtools'))
@@ -13,7 +21,7 @@ if (!require('devtools'))
 devtools:::install_github('paleo13/marxan')
 ```
 
-Note that Linux and Mac OSX users may experience issues installing the 'rgdal' and 'rgeos' packages. To install these dependencies, try running code below:
+There have been reports of Linux and Mac OSX users having issues with installing the 'rgdal' and 'rgeos' packages. Users experiencing these issues can try running code below to install these packages:
 
 ```
 ## rgdal on ubuntu 12
@@ -64,7 +72,6 @@ results<-marxan(planningunits, species, NUMITNS=10L, NUMTEMP=8L)
 #
 # these L characters need to be used after numbers when specifying integer parameters,
 # like NUMITNS, and NUMTEMP
-
 ```
 
 Ok, so apparently it worked, but how can we visualise the solutions?

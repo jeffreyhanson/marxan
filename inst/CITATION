@@ -24,6 +24,6 @@ citEntry(entry="Manual",
 	year=year,
 	note=note,
 	url=url,
-	textVersion = paste0("Hanson, J.O., Watts, M.E. ",year,". marxan: Decision support tools for reserve selection in R using Marxan.",note,". URL ",url,".")
+	textVersion = paste0("Hanson, J.O. & Watts, M.E. ",year,". marxan: Decision support tools for reserve selection in R using Marxan.",note,". URL ",url,".")
 )
 
