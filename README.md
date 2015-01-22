@@ -120,7 +120,7 @@ results2<-update(results, ~opt(BLM=100))
 results3<-update(results2, ~spp(1, spf=20, target=200) + opt(BLM=70, HEURTYPE=5L))
 ```
 
-Finally, we can compare the solutions in different runs
+Finally, we can compare the solutions in different runs.
 
 ```
 # geoplot showing different in selection frequencies in the 'results' and 'results2' objects
