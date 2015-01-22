@@ -41,6 +41,8 @@
 
 #' @importFrom scales rescale
 
+#' @importFrom Rcpp evalCpp
+
 #' @import sp
 #' @import rgdal
 #' @import raster

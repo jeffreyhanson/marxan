@@ -49,7 +49,7 @@ Imports:
     RgoogleMaps,
     testthat,
     data.table,
-	doSNOW
+    doSNOW
 LinkingTo: Rcpp
 Suggests:
     testthat
