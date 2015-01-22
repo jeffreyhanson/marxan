@@ -51,6 +51,9 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 		write.MarxanOpts(x@opts, file.path(wd, 'input'), coredirs[i], seed=seeds[i])
 	# copy marxan to core dir
 	file.copy(options()$marxanExecutablePath, file.path(coredirs, basename(options()$marxanExecutablePath)))
+	# run chmod on marxan executable if windows
+	if (.Platform$OS.type=="unix")
+		llply(paste0('chdmod +x ', file.path(coredirs, basename(options()$marxanExecutablePath))), system)
 	# set up parrallelisation
 	if (x@opts@NCORES>1)
 		registerDoSNOW(makeCluster(x@opts@NCORES, type="SOCK"))
