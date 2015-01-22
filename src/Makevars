@@ -1,2 +1,2 @@
-PKG_CXXFLAGS= -std=c++0x -stdlib=libc++
-
+PKG_CXX=g++ 
+PKG_CXXFLAGS= -std=c++0x
