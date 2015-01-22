@@ -48,7 +48,8 @@ Imports:
     PBSmapping,
     RgoogleMaps,
     testthat,
-    data.table
+    data.table,
+	doSNOW
 LinkingTo: Rcpp
 Suggests:
     testthat
