@@ -1,29 +1,36 @@
 
-#' Simulated species data
+#' Broad vegetation data
 #'
-#' Data for five simulated species inhabiting Tasmania (Australia) for an example reserve selection problem. 
+#' "RasterLayer" data for the distribution of 63 vegetation classes in Tasmania, Australia. This data was sourced from the "Introduction to Marxan" course.
 #'
-#' @name species
+#' @name tasinvis
 #' @docType data
-#' @usage data(species)
-#' @format An object of class \code{"RasterStack"}.
+#' @usage data(tasinvis)
+#' @format An object of class \code{"RasterLayer"}.
 #' @keywords datasets
+#' @seealso \code{\link{taspu}}
 #' @examples
-#' data(species)
-#' \donttest{plot(species)}
-"species"
+#' data(tasinvis)
+#' plot(tasinvis)
+"tasinvis"
 
-#' Planning units for example reserve selection problems
+#' Planning units for example reserve selection problem
 #'
-#' Example planning units in Tasmania (Australia) for an example reserve selection problem. 
+#' "SpatialPolygonsDataFrame" data for planning units in Tasmania, Australia. This data was sourced from the "Introduction to Marxan" course. The 'data' slot contains a 'data.frame' with three fields: 
+#' \itemize{
+#' 	\item The 'id' field contains "integer" planning unit ids.
+#' 	\item The 'cost' field contains "numeric" unimproved land values to represent acquisition costs.
+#' 	\item The 'status' field indicates the level of existing protection in each planning unit. Units with 50\% or more of their area contained in IUCN protected areas are associated with a value of 2; otherwise they are associated with a value of 0.
+#' }
 #'
-#' @name planningunits
+#' @name taspu
 #' @docType data
-#' @usage data(planningunits)
+#' @usage data(taspu)
 #' @format An object of class \code{"SpatialPolygonsDataFrame"}.
 #' @keywords datasets
+#' @seealso \code{\link{tasinvis}}
 #' @examples
-#' data(planningunits)
-#' \donttest{plot(planningunits)}
-"planningunits"
+#' data(taspu)
+#' plot(taspu)
+"taspu"
 
