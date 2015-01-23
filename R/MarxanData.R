@@ -421,6 +421,7 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 	# set puvspecies_spo
 	if (is.null(puvspecies_spo))
 		puvspecies_spo<-puvspecies[order(puvspecies$species),]
+	o1<<-environment()
 	return(MarxanData(pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo, boundary=boundary, polygons=polyset, .cache=.cache))
 }
 
