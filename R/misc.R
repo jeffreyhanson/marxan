@@ -12,9 +12,10 @@ NULL
 #' @examples
 #' is.gdalInstalled()
 is.gdalInstalled<-function() {
-	gdal_setInstallation()
+	suppressWarnings(findGdalInstallationPaths())
 	return(!is.null(getOption("gdalUtils_gdalPath")))
 }
+
 
 #' Rasterize polygon data using GDAL
 #'
