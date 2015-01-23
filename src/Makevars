@@ -1,2 +1,3 @@
+CXX=g++ 
 PKG_CXX=g++ 
 PKG_CXXFLAGS= -std=c++0x

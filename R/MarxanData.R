@@ -281,7 +281,7 @@ read.MarxanData<-function(path, skipchecks=FALSE) {
 	# return MarxanData object
 	return(MarxanData(
 		pu=fread(pu.pth, header=TRUE, sep=",", stringsAsFactors=FALSE, colClasses=c(id="integer", cost="numeric", status="integer"), data.table=FALSE),
-		species=fread(species.pth, header=TRUE, sep=",", stringsAsFactors=FALSE, colClasses=c(id="integer", spf="numeric", target="numeric", name="character"), data.table=FALSE),
+		species=fread(species.pth, header=TRUE, sep=",", stringsAsFactors=FALSE, colClasses=c(id="integer", spf="numeric", target="numeric"), data.table=FALSE),
 		puvspecies=fread(puvspr.pth, header=TRUE, sep=",", stringsAsFactors=FALSE, colClasses=c(species="integer", pu="integer", amount="numeric"), data.table=FALSE),
 		boundary=fread(bound.pth, header=TRUE, sep=",", stringsAsFactors=FALSE, colClasses=c(id1="integer", id2="integer", boundary="numeric"), data.table=FALSE),
 		polygons=NULL,
