@@ -10,7 +10,7 @@ Users running the latest version of R (3.1.2) can ignore this step. Earlier vers
 ```
 if (!require('devtools'))
 	install.packages('devtools', repo='http://cran.rstudio.com', dep=TRUE)
-install_url('http://cran.r-project.org/src/contrib/Archive/testthat/testthat_0.8.1.tar.gz')
+devtools:::install_url('http://cran.r-project.org/src/contrib/Archive/testthat/testthat_0.8.1.tar.gz')
 ```
 
 To install the marxan R package, execute the following commands in R:
