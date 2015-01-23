@@ -158,17 +158,17 @@ setClass("MarxanData",
 				stop('argument to boundary$boundary contains NA or non-finite values')					
 			
 			# cross table dependencies
-			if (!setequal(object@boundary$id1,object@pu$id))
+			if (!all(object@boundary$id1 %in% object@pu$id))
 				stop('argument to boundary$id1 and pu$id must share the same values')
-			if (!setequal(object@boundary$id2,object@pu$id))
+			if (!all(object@boundary$id2 %in% object@pu$id))
 				stop('argument to boundary$id2 and pu$id must share the same values')
-			if (!setequal(object@puvspecies$pu,object@pu$id))
+			if (!all(object@puvspecies$pu %in% object@pu$id))
 				stop('argument to puvspecies$pu and pu$id must share the same values')
-			if (!setequal(object@puvspecies_spo$pu,object@pu$id))
+			if (!all(object@puvspecies_spo$pu %in% object@pu$id))
 				stop('argument to puvspecies_spo$pu and pu$id must share the same values')
-			if (!setequal(object@puvspecies$species,object@species$id))
+			if (!all(object@puvspecies$species %in% object@species$id))
 				stop('argument to puvspecies$species and species$id must share the same values')
-			if (!setequal(object@puvspecies_spo$species,object@species$id))
+			if (!all(object@puvspecies_spo$species %in% object@species$id))
 				stop('argument to puvspecies_spo$species and species$id must share the same values')
 			if (!is.null(object@species$sepdistance)) {
 				if (is.null(object@pu$xloc))
@@ -421,7 +421,6 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 	# set puvspecies_spo
 	if (is.null(puvspecies_spo))
 		puvspecies_spo<-puvspecies[order(puvspecies$species),]
-	o1<<-environment()
 	return(MarxanData(pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo, boundary=boundary, polygons=polyset, .cache=.cache))
 }
 

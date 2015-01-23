@@ -63,7 +63,7 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 		data.frame(
 			file.path(coredirs, basename(options()$marxanExecutablePath)),
 			file.path(coredirs, 'input.dat'),
-			(verbose & seq_along(coredirs)==1),
+			(.Platform$OS=="windows" & verbose & seq_along(coredirs)==1),
 			stringsAsFactors=FALSE
 		), 1, .parallel=x@opts@NCORES>1, 
 		function(x) {
