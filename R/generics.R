@@ -329,7 +329,7 @@ ordiplot<-function(x, ...) UseMethod("ordiplot")
 #'
 #' This function plots the density of species in planning units in "Marxan" objects.
 #'
-#' @param x "MarxanData", "MarxanUnsolved", "MarxanSolved" object.
+#' @param obj "MarxanData", "MarxanUnsolved", "MarxanSolved" object.
 #' @param y "character" name of species, or "integer" species id.
 #' @param var "character" \itemize{
 #' \item if 'amount': sum density of \code{y} species in planning units is shown.
@@ -342,8 +342,7 @@ ordiplot<-function(x, ...) UseMethod("ordiplot")
 #' @param force_reset "logical" should base map image be downloaded even if it is stored in the cache?
 #' @export
 #' @seealso \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanData-class}}, \code{\link[RgoogleMaps]{GetMap}}, \code{\link[RgoogleMaps]{PlotOnStaticMap}}
-spplot<-function(x, ...) UseMethod("spplot")
-
+setGeneric('spplot',function(obj,...) standardGeneric('spplot'))
 
 #' Dendrogram of Marxan solutions
 #'
