@@ -57,6 +57,8 @@ calcPuVsSpeciesData.SpatialPolygonsDataFrame<-function(x,y,ids=seq_len(nlayers(y
 	if (gdal & is.gdalInstalled()) {
 		x<-rasterize.gdal(x, y[[1]], "id")
 	} else {
+		if (gdal & !is.gdalInstalled())
+			warning('GDAL ins not installed on this computer, using raster::rasterize for processing')
 		x<-rasterize(x, y[[1]], method="ngb")
 	}
 	# main processing
