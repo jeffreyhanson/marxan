@@ -51,5 +51,7 @@ Imports:
     data.table,
     doSNOW
 LinkingTo: Rcpp
+VignetteBuilder: knitr
 Suggests:
-    testthat
+    testthat,
+	knitr
