@@ -24,3 +24,8 @@ spplot(taspu, 'cost')
 # otherwise they have a status of 0
 spplot(taspu, 'status')
 
+## ------------------------------------------------------------------------
+# the NUMREPS=100L parameter tells marxan to generate 100 candidate reserve systems
+# the BLM=0 parameter indicates that fragmented prioritisations incur no additional penalties
+results<-marxan(taspu, tasinvis, NUMREPS=100L, BLM=0)
+

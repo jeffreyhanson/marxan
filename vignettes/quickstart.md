@@ -7,7 +7,32 @@ First, let's load the 'marxan' R package and some example data.
 ```r
 # load marxan R package
 library(marxan)
+```
 
+```
+## Loading required package: sp
+## Loading required package: rgdal
+## rgdal: version: 0.9-1, (SVN revision 518)
+## Geospatial Data Abstraction Library extensions to R successfully loaded
+## Loaded GDAL runtime: GDAL 1.11.1, released 2014/09/24
+## Path to GDAL shared files: C:/R/R-3.1.2/library/rgdal/gdal
+## GDAL does not use iconv for recoding strings.
+## Loaded PROJ.4 runtime: Rel. 4.8.0, 6 March 2012, [PJ_VERSION: 480]
+## Path to PROJ.4 shared files: C:/R/R-3.1.2/library/rgdal/proj
+## Loading required package: raster
+## 
+## Attaching package: 'marxan'
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     dist, hclust
+## 
+## The following object is masked from 'package:graphics':
+## 
+##     dotchart
+```
+
+```r
 # load example data
 data(taspu, tasinvis)
 ```
@@ -66,6 +91,13 @@ spplot(taspu, 'status')
 Now, let's make some reserve systems.
 
 
+```r
+# the NUMREPS=100L parameter tells marxan to generate 100 candidate reserve systems
+# the BLM=0 parameter indicates that fragmented prioritisations incur no additional penalties
+results<-marxan(taspu, tasinvis, NUMREPS=100L, BLM=0)
+```
+
+Well, that was easy. Apparently it worked? All we see is text. How can visualise these solutions and assess their quality? We can make some geoplots.
 
 
 

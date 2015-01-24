@@ -1,6 +1,86 @@
 marxan tutorial
 ============
 
+#### Overview
+The marxan R package is designed to bring the entire Marxan work-flow to R. It provides functions for preparing raw data for Marxan, running Marxan, and visualising Marxan results. It is designed to be fast. To achieve this aim, many of the computationally intensive operations are performed in C++ and can easily be completed using parallel processing. However, the package was also designed to be robust and flexible. Marxan users need to be able to change any aspect of a conservation planning scenario and the Marxan parameters. To achieve this, the package makes extensive use of S4 classes, along with S3 and S4 dispatch methods.
+
+This package relies on five main classes. These are the `MarxanOpts`, `MarxanData`, `MarxanUnsolved`, `MarxanResults`, and `MarxanSolved` classes (Figure 1). Each class encapsulates a different aspect of the Marxan work-flow. To make the most of this package, users will need to be familiar with each of these classes. Briefly, the `MarxanOpts` class stores the Marxan input parameters. The `MarxanData` class stores Marxan input data relating to the planning units and the species. The `MarxanUnsolved` class combines `MarxanOpts` and `MarxanData` objects to represent an unsolved Marxan problem. The `MarxanResults` class stores the outputs from Marxan. The `MarxanSolved` class combines `MarxanOpts`, `MarxanData`, and `MarxanrResults` class to represent the inputs and outputs from Marxan. All of these classes are associated with help files, for example `?\x60MarxanOpts-class\x60`. 
+
+![Figure 1. The relationship between the five main Marxan classes. The `MarxanOpts` and `MarxanData` classes are used to construct a `MarxanUnsolved` object. The `MarxanUnsolved` class is then processed by the Marxan program to generate outputs for the `MarxanResults` class. The `MarxanOpts`, `MarxanData`, and `MarxanResults` classes are used to construct the `MarxanSolved` class. Open circles denote classes, filled in circles denote programs, and arrows indicate dependencies.](/vignettes/fig/mainclasses.png)
+
+#### Marxan classes
+### MarxanOpts
+The `MarxanOpts` class represents the input parameters for Marxan (Figure 2). In effect, it is used to generate 'input.dat' files for Marxan. To ensure that Marxan outputs are compatible with the functions used to read Marxan outputs into R, the user is unable to set parameters that affect which files are output by Marxan.
+
+![Figure 2. The structure of the `MarxanOpt` class. Most conventions are detailed in Figure 1, with exception to rectangles. Rectangles indicate class slots, bold text inside a rectangle indicates the name of the slot, italic test indicates the class of data stored in the slot, and normal text indicates a valid value.](/vignettes/fig/marxanopt.png)
+
+New `MarxanOpts` objects can be created in R by specifying desired input parameters, or by reading them from an existing 'input.dat' file.
+```{r}
+# create new MarxanOpts object, with default parameters except BLM and NUMITNS
+# note that NUMITNS is an integer and must be set using numbers with an L after them
+opts1<-MarxanOpts(BLM=100, NUMITNS=10L)
+
+# write to disk to a temporary directory
+write.Marxan(tempdir())
+
+# show the resulting input.dat file
+cat(paste(readLines(), collapse="\n"),"\n")
+
+# create new Marxanopts object by loading parameters from the input.dat
+opts2<-read.MarxanOpts()
+```
+
+Once created, the parameters stored in a `MarxanOpts` object can be viewed.
+```{r}
+# show all parameters and their values
+str(opts1)
+str(opts2)
+
+# show BLM parameter with @ operator
+# the @ operator is conceptually similar to the $ operator,
+# but used for S4 classes and not S3 classes.
+opts1@BLM
+
+# show PROP parameter with slot function
+slot(opts1, 'PROP')
+```
+
+The parameters stored in an existing `MarxanOpts` object can also be changed.
+```{r}
+# change BLM parameter with @ operator and show it
+opts1@BLM<-100
+opts1@BLM
+
+# change HEURTYPE parameter with slot operator
+slot(opts1, 'HEURTYPE')<-5L
+opts1@HEURTYPE
+
+# copy parameters in opts1 to opts3, 
+# but change NCORES parameter to 2L
+opts3<-update(opts1, ~opt(NCORES=2L))
+opts1@NCORES
+opts3@NCORES
+```
+
+#### MarxanData
+The `MarxanData` class stores the input planning unit and species data for Marxan scenarios (Figure 3). All slots of this class are `data.frame` objects that correspond to a specific Marxan input data file. The `species` slot corresponds to 'spec.dat', the `pu` slot corresponds to 'pu.dat', the `puvspecies` slot corresponds to 'puvspr2.dat', and `puvspecies_spo` slot corresponds to  'puvspr2.dat' sorted by species id (an undocumented feature of Marxan to speed up pre-processing), and the `boundary` slot corresponds to 'bound.dat'.
+
+![Figure 3. The structure of the `MarxanData` class. Conventions are detailed in Figure 2. ](/vignettes/fig/marxanopt.png)
+
+New `MarxanData` objects can be created in R by specifying desired input parameters, or by reading them from an existing 'input.dat' file.
+
+
+### MarxanUnsolved 
+
+
+### MarxanResults
+
+
+### MarxanSolved
+
+
+#### Demo
+
 
 
 <!--

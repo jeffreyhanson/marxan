@@ -344,6 +344,10 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 #' stopifnot(identical(x,y))
 format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers(rasters)), sepdistance=rep(0, nlayers(rasters)), sepnum=rep(0L,nlayers(rasters)), targetocc=rep(0L,nlayers(rasters)), pu=NULL, species=NULL, puvspecies=NULL, puvspecies_spo=NULL, boundary=NULL, ..., verbose=FALSE) {
 	# init
+	if (!inherits(polygons, 'SpatialPolygons'))
+		stop('argument to polygons must be either SpatialPolygons or SpatialPolygonsDataFrame')
+	if (!inherits(rasters, 'Raster'))
+		stop('argument to rasters must be either RasterLayer, RasterStack, or RasterBrick')
 	.cache<-new.env()
 	# set polygons
 	geoPolygons<-polygons
@@ -398,13 +402,12 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 		species$maxtargets<-c(cellStats(rasters,'sum'))
 	}
 	# set boundary
-	polyset<-rcpp_Polygons2PolySet(polygons@polygons)
 	if (is.null(boundary)) {
 		if (identical(polygons@proj4string, CRS('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')))
 			warning("creating boundary length data from polygons in WGS1984; consider supplying in an object a projected CRS.")
 		if (verbose)
 			cat("Calculating boundary data.")
-		boundary<-calcBoundaryData(polyset, ...)
+		boundary<-calcBoundaryData(rcpp_Polygons2PolySet(polygons@polygons), ...)
 	}
 	# set puvspecies
 	if (is.null(puvspecies)) {
@@ -421,7 +424,7 @@ format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers
 	# set puvspecies_spo
 	if (is.null(puvspecies_spo))
 		puvspecies_spo<-puvspecies[order(puvspecies$species),]
-	return(MarxanData(pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo, boundary=boundary, polygons=polyset, .cache=.cache))
+	return(MarxanData(pu=pu, species=species, puvspecies=puvspecies, puvspecies_spo=puvspecies_spo, boundary=boundary, polygons=geoPolygons, .cache=.cache))
 }
 
 
