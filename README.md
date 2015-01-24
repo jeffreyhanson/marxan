@@ -22,7 +22,6 @@ vignette('marxan', package='marxan')
 
 **If this R package helped you, please cite it along with the main Marxan citation.**
 
-Hanson, J.O. & Watts, M.E. 2015. marxan: Decision support tools for reserve selection in R using Marxan. R package version 1.0.0. URL https://github.com/paleo13/marxan.
-
 Ball, I.R., Possingham, H.P., and Watts, M.E. 2009. Marxan and relatives: Software for spatial conservation prioritisation. Chapter 14: Pages 185-195 in Spatial conservation prioritisation:   Quantitative methods and computational tools. Eds Moilanen, A., Wilson, K.A., Possingham H.P. Oxford University Press, Oxford, UK. 
 
+Hanson, J.O. & Watts, M.E. 2015. marxan: Decision support tools for reserve selection in R using Marxan. R package version 1.0.0. URL https://github.com/paleo13/marxan.
