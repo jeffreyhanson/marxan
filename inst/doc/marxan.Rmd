@@ -1,9 +1,9 @@
-marxan quick start guide
+marxan tutorial
 ============
 
 First, let's load the 'marxan' R package and some example data.
 
-```{r}
+```
 # load marxan R package
 library(marxan)
 
@@ -13,7 +13,7 @@ data(taspu, tasinvis)
 
 This data comes from the ['Introduction to Marxan'](http://marxan.net/courses.html). `taspu` is a `SpatialPolygonsDataFrame` object that contains our planning units, and `tasinvis` is a `RasterLayer` that contains distribution data for 63 broad vegetation classes. Let's take a look at the data.
 
-```{r}
+``` 
 # plot planning units
 plot(taspu)
 
@@ -23,7 +23,7 @@ plot(tasinvis)
 
 Each planning unit in the `taspu` object is associated with an id, an acquisition cost, and a value indicating if the most of the unit is already locked up in protected areas. This information is stored in the `data` slot.
 
-```{r}
+```
 # print data in the attribute table for first 20 planning units
 head(taspu@data)
 
@@ -36,9 +36,24 @@ spplot(taspu, 'cost')
 spplot(taspu, 'status')
 ```
 
+To keep things simple, let's make some reserve systems assuming that all planning units have equal cost, that there are no protected areas in Tasmania, and that we don't care about fragmentation in the prioritisation. To do this, we will first need to make a copy of `taspu` and change the `cost` and `status` fields.
+
+```
+# copy object
+taspu2<-taspu
+
+# change cost field
+taspu2@data$cost<-1
+
+# change status field
+# note that we're putting using 0L to indicate
+# this value is an integer
+taspu2@data$status<-0L
+```
+
 Now, let's make some reserve systems.
 
-```{r}
+```
 # the NUMREPS=100L parameter tells marxan to generate 100 candidate reserve systems
 # the BLM=0 parameter indicates that fragmented prioritisations incur no additional penalties
 results<-marxan(taspu, tasinvis, NUMREPS=100L, BLM=0)
@@ -46,7 +61,7 @@ results<-marxan(taspu, tasinvis, NUMREPS=100L, BLM=0)
 
 Well, that was easy. Apparently it worked? All we see is text. How can visualise these solutions and assess their quality? We can make some geoplots.
 
-```{r}
+```
 ## make a geoplot of the best solution
 plot(results, 0)
 
@@ -63,7 +78,7 @@ plot(results, basemap='satellite', alpha=0.8)
 
 We have one hundred solutions. How can we compare them? We don't want to make 100 maps; while they are pretty, they're not that pretty. Instead, we could make some dotcharts that let us compare various properties of the solutions.
 
-```{r}
+```
 # make dotchart showing the score of each solution
 # the score describes the overall value of the prioritisations based on our criteria
 # the lower the value, the better the solution
@@ -83,7 +98,7 @@ How can we visualise the main components of variation in the solutions? In other
 
 But how can we do this? Fortunately, statisticians solved this problem a long time ago. We can use ordination techniques to create a few variables that describe commonalities among the solutions, and visualise the main sources of variation in a manageable number of dimensions.
 
-```{r}
+```
 ## dendrogram showing differences between solutions based on which planning units 
 ## were selected (using Bray-Curtis distances by default)
 # the solutions are shown at the tips of the tree.
@@ -118,38 +133,49 @@ ordiplot(results, type='mds', var='occheld', method='bray')
 ordiplot(results, type='pca', var='amountheld')
 ```
 
-We can see that the all the solutions so far are fairly fragmented. This could be an issue, because such protected area networks may be associated with poor connectivity and higher maintenance costs. Let's try increasing the boundary length modifier, and generating more solutions. To do this--efficiently--we will use the `update` function.
+Before, to keep things simple we made several horrifying assumtions. We assumed that all areas had equal acquisition costs--we assumed that placing a protected area in Hobart (that's the capital city) would cost the same as placing it in an urbanised of land. We also assumed that Tasmania also has no protected areas--so many of the vegetation classes we want to represent in our reserve network may already be captured by existing areas, and so if implemented, our reserve system might over-represent these classes and under-represent other classes. Let's do it right.
 
-```{r}
-# use the update function to copy the data in results,
-# tweak the parameters, rerun marxan, and store the 
-# new solutions in results2.
-results2<-update(results, ~opt(BLM=100))
+```
+# run marxan again, but this time using the original data
+results2<-marxan(taspu, tasinvis, NUMREPS=100L, BLM=0)
 ```
 
 Let's compare the solutions in different runs.
 
-```{r}
+```
 ## geoplot showing differences between the best solution in 
 ## results and results2 
-plot(results, results2, i=0, j=0)
+plot(results2, results3, i=0, j=0)
 
 ## geoplot showing differences between the third solution
 ## in results and the fifth solution in results2
-plot(results, results2, i=3, j=j)
+plot(results2, results3, i=3, j=j)
 
-## geoplot showing different in selection frequencies in the results and results2 objects
+## geoplot showing different in selection frequencies in the 'results' and 'results2' objects
 # blue colours indicate that units were more often selected in
 # the scenario where we assumed equal costs and that Tasmania has no protected areas.
 # red  colours indicate that untis were more often selected
 # in the scenario where we used cost and protected area data
 # to get more informed prioritisations.
 plot(results, results2)
-```
+````
 
+We can see that the all the solutions so far are fairly fragmented. This could be an issue, because such protected area networks may be associated with poor connectivity and higher maintenance costs. Let's try increasing the boundary length modifier, and generating more solutions. To do this--efficiently--we will use the `update` function. The `marxan` function sets the Marxan parameters, formats the data, and runs Marxan. Formatting the data can take a very long time, especially for large problems. To reduce processing time, we can to reuse the formatted data in `results2` using the `update` function.
+
+```
+# use the update function to copy the data in results2,
+# tweak the parameters, rerun marxan, and store the 
+# new solutions in results3.
+results3<-update(results2, ~opt(BLM=100))
+
+# show differences in the best solutions in results2
+# and results3 with a google basemap
+plot(results2, results3, basemap='hybrid', alpha=0.5)
+```
 
 
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Quick start guide to the marxan R package}
+%\VignetteIndexEntry{marxan R package tutorial}
 -->
+

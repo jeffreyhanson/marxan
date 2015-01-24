@@ -3,7 +3,7 @@ marxan quick start guide
 
 First, let's load the 'marxan' R package and some example data.
 
-```{r}
+```
 # load marxan R package
 library(marxan)
 
@@ -13,7 +13,7 @@ data(taspu, tasinvis)
 
 This data comes from the ['Introduction to Marxan'](http://marxan.net/courses.html). `taspu` is a `SpatialPolygonsDataFrame` object that contains our planning units, and `tasinvis` is a `RasterLayer` that contains distribution data for 63 broad vegetation classes. Let's take a look at the data.
 
-```{r}
+``` 
 # plot planning units
 plot(taspu)
 
@@ -23,7 +23,7 @@ plot(tasinvis)
 
 Each planning unit in the `taspu` object is associated with an id, an acquisition cost, and a value indicating if the most of the unit is already locked up in protected areas. This information is stored in the `data` slot.
 
-```{r}
+```
 # print data in the attribute table for first 20 planning units
 head(taspu@data)
 
@@ -38,7 +38,7 @@ spplot(taspu, 'status')
 
 Now, let's make some reserve systems.
 
-```{r}
+```
 # the NUMREPS=100L parameter tells marxan to generate 100 candidate reserve systems
 # the BLM=0 parameter indicates that fragmented prioritisations incur no additional penalties
 results<-marxan(taspu, tasinvis, NUMREPS=100L, BLM=0)
@@ -46,7 +46,7 @@ results<-marxan(taspu, tasinvis, NUMREPS=100L, BLM=0)
 
 Well, that was easy. Apparently it worked? All we see is text. How can visualise these solutions and assess their quality? We can make some geoplots.
 
-```{r}
+```
 ## make a geoplot of the best solution
 plot(results, 0)
 
@@ -63,7 +63,7 @@ plot(results, basemap='satellite', alpha=0.8)
 
 We have one hundred solutions. How can we compare them? We don't want to make 100 maps; while they are pretty, they're not that pretty. Instead, we could make some dotcharts that let us compare various properties of the solutions.
 
-```{r}
+```
 # make dotchart showing the score of each solution
 # the score describes the overall value of the prioritisations based on our criteria
 # the lower the value, the better the solution
@@ -83,7 +83,7 @@ How can we visualise the main components of variation in the solutions? In other
 
 But how can we do this? Fortunately, statisticians solved this problem a long time ago. We can use ordination techniques to create a few variables that describe commonalities among the solutions, and visualise the main sources of variation in a manageable number of dimensions.
 
-```{r}
+```
 ## dendrogram showing differences between solutions based on which planning units 
 ## were selected (using Bray-Curtis distances by default)
 # the solutions are shown at the tips of the tree.
@@ -120,7 +120,7 @@ ordiplot(results, type='pca', var='amountheld')
 
 We can see that the all the solutions so far are fairly fragmented. This could be an issue, because such protected area networks may be associated with poor connectivity and higher maintenance costs. Let's try increasing the boundary length modifier, and generating more solutions. To do this--efficiently--we will use the `update` function.
 
-```{r}
+```
 # use the update function to copy the data in results,
 # tweak the parameters, rerun marxan, and store the 
 # new solutions in results2.
@@ -129,7 +129,7 @@ results2<-update(results, ~opt(BLM=100))
 
 Let's compare the solutions in different runs.
 
-```{r}
+```
 ## geoplot showing differences between the best solution in 
 ## results and results2 
 plot(results, results2, i=0, j=0)
@@ -145,7 +145,7 @@ plot(results, results2, i=3, j=j)
 # in the scenario where we used cost and protected area data
 # to get more informed prioritisations.
 plot(results, results2)
-```
+````
 
 
 
