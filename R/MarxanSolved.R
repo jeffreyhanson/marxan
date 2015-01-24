@@ -326,7 +326,7 @@ setMethod(
 				paste0("Difference in solutions ",i,ifelse(i==x@results@best, " (best)", ""), " and ",j, ifelse(j==y@results@best, " (best)", "")),
 				categoricalLegend(
 					c(cols2,xlockedincol,ylockedincol,xlockedoutcol,ylockedoutcol),
-					c(paste("Selected in X",xrepr),  paste("Selected in Y",yrepr), "Both Selected", "Neither Selected", paste("Locked in X",xrepr), paste("Locked in Y",yrepr), paste("Locked out X",xrepr), paste("Locked out Y",yrepr)),
+					c(paste("Selected in X",xrepr),  paste("Selected in Y",yrepr), "Both", "Neither", paste("Locked in X",xrepr), paste("Locked in Y",yrepr), paste("Locked out X",xrepr), paste("Locked out Y",yrepr)),
 					ncol=4
 				),
 				beside=FALSE
