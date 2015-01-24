@@ -227,6 +227,8 @@ sepacheived.MarxanResults<-function(x, y=NULL) {
 #' @export
 pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 	# init
+	if (ncol(x@occheld)==1)
+		stop('Marxan scenario must involve two or more species to be summarised using a PCA')
 	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
 	if (length(unique(aaply(slot(x, var), 1, paste, collapse=",", .drop=TRUE, .expand=FALSE)))==1)
 		stop('All solutions have the same values for this variable.')

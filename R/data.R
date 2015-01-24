@@ -1,7 +1,7 @@
 
 #' Broad vegetation data
 #'
-#' "RasterLayer" data for the distribution of 63 vegetation classes in Tasmania, Australia. This data was sourced from the "Introduction to Marxan" course.
+#' "RasterStack" data for the distribution of 63 vegetation classes in Tasmania, Australia. Each 'RasterLayer' in the 'RasterStack' represents the binary distribution for a single vegetation class. This data was obtained from the "Introduction to Marxan" course.
 #'
 #' @name tasinvis
 #' @docType data

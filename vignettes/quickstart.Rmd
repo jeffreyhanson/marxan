@@ -3,7 +3,7 @@ marxan quick start guide
 
 First, let's load the 'marxan' R package and some example data.
 
-```{r}
+```{r load_deps, results="hide"}
 # load marxan R package
 library(marxan)
 
@@ -41,7 +41,7 @@ Now, let's make some reserve systems.
 ```{r}
 # the NUMREPS=100L parameter tells marxan to generate 100 candidate reserve systems
 # the BLM=0 parameter indicates that fragmented prioritisations incur no additional penalties
-results<-marxan(taspu, tasinvis, NUMREPS=100L, BLM=0)
+results<-marxan(taspu, tasinvis, targets="50%", NUMREPS=100L, BLM=0)
 ```
 
 Well, that was easy. Apparently it worked? All we see is text. How can visualise these solutions and assess their quality? We can make some geoplots.
