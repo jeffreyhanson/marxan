@@ -12,7 +12,7 @@ if (!require('devtools'))
 devtools:::install_github('paleo13/marxan')
 ```
 
-Once this package has been installed, you can explore the functions of this package by reading through the vignettes. This package comes with a quick start guide, called 'quickstart', and a more in depth tutorial, called 'marxan'. You can access them via R by running the code below.
+Once this package has been installed, you can explore the functions of this package by reading through the vignettes. This package comes with a quick start guide, called 'quickstart', and a more in depth tutorial, called 'marxan'. You can access them in R by running the code below:
 
 ```
 # open vignettes in web browsers
