@@ -227,19 +227,22 @@ sepacheived.MarxanResults<-function(x, y=NULL) {
 #' @export
 pca.MarxanResults=function(x, var, ..., force_reset=FALSE) {
 	# init
-	if (ncol(x@occheld)==1)
-		stop('Marxan scenario must involve two or more species to be summarised using a PCA')
-	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
-	if (length(unique(aaply(slot(x, var), 1, paste, collapse=",", .drop=TRUE, .expand=FALSE)))==1)
-		stop('All solutions have the same values for this variable.')
 	callchar=hashCall(match.call(), 1)
+	match.arg(var, c("selections", "occheld", "amountheld", "targetsmet", "sepacheived", "mpm"))	
+	if (ncol(slot(x, var))==1)
+		stop('Marxan solutions must involve two or more species to be summarised using a PCA')
+	tmp<-slot(x, var)[,apply(slot(x, var), 2, function(z){length(unique(z))>1})]
+	if (ncol(tmp)<2)
+		stop('Marxan solution ',var,' values are identical for (nearly) all species; PCA cannot be performed')
+	if (length(unique(aaply(tmp, 1, paste, collapse=",", .drop=TRUE, .expand=FALSE)))==1)
+		stop('All solutions have the same values for this variable.')
 	# check that pca not being applied to non-continuous data
 	if (var=='selections' || var=='targetsmet')
 		warning("Running a pca on binary data is not recommended; consider using a NMDS with method='bray'.")
 	# run analysis
 	if (force_reset || !is.cached(x, callchar)) {
-		pca<-prcomp(slot(x, var), center=TRUE, scale=TRUE, ...)
-		pca$predict<-predict(pca, slot(x,var), ...)
+		pca<-prcomp(tmp, center=TRUE, scale=TRUE, ...)
+		pca$predict<-predict(pca, tmp, ...)
 		pca$dist<-dist(pca$predict, method="euclidean")
 		cache(x, callchar, pca)
 	}

@@ -160,6 +160,11 @@ We have one hundred solutions. How can we compare them? We don't want to make 10
 dotchart(results, var='score')
 ```
 
+```
+## Warning in plot.window(xlim = xlim, ylim = ylim, log = ""): relative range
+## of values = 80 * EPS, is small (axis 1)
+```
+
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 ```r
