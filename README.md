@@ -20,7 +20,7 @@ vignette('quickstart', package='marxan')
 vignette('marxan', package='marxan')
 ```
 
-\strong{If this R package helped you, please cite it along with the main Marxan citation.}
+**If this R package helped you, please cite it along with the main Marxan citation.**
 
 Hanson, J.O. & Watts, M.E. 2015. marxan: Decision support tools for reserve selection in R using Marxan. R package version 1.0.0. URL https://github.com/paleo13/marxan.
 
