@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>marxan classes</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>marxan classes</h1>
+
+<h2>Overview</h2>
+
+<p>This package relies on five main classes. These are the <code>MarxanOpts</code>, <code>MarxanData</code>, <code>MarxanUnsolved</code>, <code>MarxanResults</code>, and <code>MarxanSolved</code> classes (Figure 1). Each class encapsulates a different aspect of the Marxan work-flow. To make the most of this package, users will need to be familiar with each of these classes. Briefly, the <code>MarxanOpts</code> class stores the Marxan input parameters. The <code>MarxanData</code> class stores Marxan input data relating to the planning units and the species. The <code>MarxanUnsolved</code> class combines <code>MarxanOpts</code> and <code>MarxanData</code> objects to represent an unsolved Marxan problem. The <code>MarxanResults</code> class stores the outputs from Marxan. The <code>MarxanSolved</code> class combines <code>MarxanOpts</code>, <code>MarxanData</code>, and <code>MarxanResults</code> class to represent the inputs and outputs from Marxan. All of these classes are associated with help files, for example <code>help(&#39;MarxanOpts-class&#39;)</code>. </p>
+
+<p><img src="doc/images/figure1.png" alt="The relationship between the five main Marxan classes. The `MarxanOpts` and `MarxanData` classes are used to construct a `MarxanUnsolved` object. The `MarxanUnsolved` class is then processed by the Marxan program to generate outputs for the `MarxanResults` class. The `MarxanOpts`, `MarxanData`, and `MarxanResults` classes are used to construct the `MarxanSolved` class. Open circles denote classes, filled in circles denote programs, and arrows indicate dependencies."/></p>
+
+<p>The example data used in this tutorial is a simplified version of the data used in the &ldquo;Introduction to Marxan&rdquo; course. It can be loaded in R by running the code below:</p>
+
+<pre><code class="r">data(taspu, tasinvis)
+</code></pre>
+
+<h2>MarxanOpts</h2>
+
+<p>The <code>MarxanOpts</code> class represents the input parameters for Marxan (Figure 2). <code>MarxanOpts</code> objects are used to generate &#39;input.dat&#39; files for Marxan. This class has slots that correspond to the names of input parameters in the &#39;input.dat&#39; file, and an additional <code>NCORES</code> slot that refers to the number of processes to use for parallel processing. To ensure that Marxan outputs are compatible with other functions in this package, the user is unable to set parameters that affect which files are output by Marxan.</p>
+
+<p>New <code>MarxanOpts</code> objects can be created in R by specifying desired input parameters, or by reading them from an existing &#39;input.dat&#39; file.</p>
+
+<pre><code class="r"># create new MarxanOpts object, with default parameters except BLM and NUMITNS
+# note that NUMITNS is an integer and must be set using numbers with an L after them
+opts1&lt;-MarxanOpts(BLM=100, NUMITNS=10L)
+
+# write to disk to a temporary directory
+write.MarxanOpts(opts1, tempdir())
+
+# show the resulting input.dat file
+cat(paste(readLines(), collapse=&quot;\n&quot;),&quot;\n&quot;)
+
+# create new Marxanopts object by loading parameters from the input.dat
+opts2&lt;-read.MarxanOpts()
+</code></pre>
+
+<p>Once created, the parameters stored in a <code>MarxanOpts</code> object can be viewed.</p>
+
+<pre><code class="r"># show all parameters and their values
+str(opts1)
+str(opts2)
+
+# show BLM parameter with @ operator
+# the @ operator is conceptually similar to the $ operator,
+# but used for S4 classes and not S3 classes.
+opts1@BLM
+
+# show PROP parameter with slot function
+slot(opts1, &#39;PROP&#39;)
+</code></pre>
+
+<p>The parameters stored in an existing <code>MarxanOpts</code> object can be changed.</p>
+
+<pre><code class="r"># change BLM parameter with @ operator and show it
+opts1@BLM&lt;-100
+opts1@BLM
+
+# change HEURTYPE parameter with slot operator
+slot(opts1, &#39;HEURTYPE&#39;)&lt;-5L
+opts1@HEURTYPE
+
+# copy parameters in opts1 to opts3, 
+# but change NCORES parameter to 2L
+opts3&lt;-update(opts1, ~opt(NCORES=2L))
+opts1@NCORES
+opts3@NCORES
+</code></pre>
+
+<h2>MarxanData</h2>
+
+<p>The <code>MarxanData</code> class stores the input planning unit and species data for Marxan scenarios (Figure 3). All slots of this class are <code>data.frame</code> objects that correspond to a specific Marxan input data file. The <code>species</code> slot corresponds to &#39;spec.dat&#39;, the <code>pu</code> slot corresponds to &#39;pu.dat&#39;, the <code>puvspecies</code> slot corresponds to &#39;puvspr2.dat&#39;, the <code>puvspecies_spo</code> slot corresponds to &#39;puvspr2.dat&#39; sorted by species id (an undocumented feature in Marxan used to speed up pre-processing), and the <code>boundary</code> slot corresponds to &#39;bound.dat&#39;.</p>
+
+<p>New <code>MarxanData</code> objects can be created in R by supplying pre-processed data, supplying raw data for processing, or by reading Marxan input data from files.</p>
+
+<pre><code class="r">## create MarxanData object from pre-processed data
+# make pre-processed data
+pu.dat&lt;-taspu@data
+spec.dat&lt;-data.frame(id=unique(getValues(tasinvis)),spf=1,target=100)
+puvspr.dat&lt;-calcPuVsSpeciesData(taspu, tasinvis)
+bound.dat&lt;-calcBoundaryData(taspu)
+polyset&lt;-SpatialPolygons2PolySet(taspu)
+# make MarxanData object
+mdata1&lt;-MarxanData(pu=pu.dat, species=spec.dat, puvspecies=puvspr.dat, boundary=bound.dat, polygons=polyset)
+
+## create MarxanData object from raw data
+# format.MarxanData is basically a wrapper for code shown above
+mdata2&lt;-format.MarxanData(taspu, tasinvis, targets=100, spf=1)
+
+## create MarxanData object from data marxan files
+# write mdata1 to temporary folder
+write.MarxanData(mdata1, tempdir())
+# create new MarxanData object
+mdata3&lt;-read.MarxanData(tempdir())
+</code></pre>
+
+<p>Data in existing <code>MarxanData</code> objects can be viewed and changed using several functions and operators. While only functions to get and set species penalty factors and targets are shown below, functions exist to get and set all fields in the &#39;pu.dat&#39; and &#39;spec.dat&#39; tables. Generally, users are encouraged to use the <code>update</code> function. Be aware, that the set functions, eg. <code>targets(...)&lt;-value</code> and <code>spfs(...)&lt;-value</code> shown below, are extremely inefficient and should only be used for small problems.</p>
+
+<pre><code class="r"># show first 20 rows of species data
+head(mdata1@species)
+head(slot(mdata1, &#39;species&#39;))
+
+# show species targets
+mdata1@species$target
+slot(mdata1, &#39;species&#39;)$target
+targets(mdata1)
+
+# change species spfs to 5
+mdata1@species$spf&lt;-5L
+slot(mdata1, &#39;species&#39;)$spf=5L
+spfs(mdata1)&lt;-5L
+
+#  copy data in mdata1 to mdata2
+#  and change the target for species 1 to 10
+mdata2&lt;-update(mdata1, ~spp(1, target=10))
+</code></pre>
+
+<h2>MarxanUnsolved</h2>
+
+<p>The <code>MarxanUnsolved</code> class stores the input parameters and data for Marxan (Figure 4). It has two slots, an <code>opts</code> slot containing a <code>MarxanOpts</code> object and a <code>data</code> slot containing a <code>MarxanData</code> object.</p>
+
+<p>New <code>MarxanUnsolved</code> objects can be created using <code>MarxanOpts</code> and <code>MarxanData</code> objects, reading Marxan input data from file, or using the <code>marxan</code> function with argument <code>solve=FALSE</code>.</p>
+
+<pre><code class="r">## create new MarxanUnsolved object using existing objects
+mu1&lt;-MarxanUnsolved(mopts1, mdata1)
+
+## create new MarxanUnsolved object by reading data from file
+# write data to file
+write.MarxanUnsolved(mu1, tempdir())
+
+# read data from file and store in new object
+input.dat.path&lt;-file.path(tempdir(), &#39;input.dat&#39;)
+mu2&lt;-read.MarxanUnsolved(input.dat.path)
+
+# create new MarxanUnsvoled object by processing raw data
+mu3&lt;-marxan(taspus, tasinvis, targets=&#39;50%&#39;, solve=FALSE)
+</code></pre>
+
+<p>Similar to the <code>MarxanOpts</code> and <code>MarxanData</code> classes, the update function can be used to change the Marxan input data and parameters for <code>MarxanUnsolved</code> objects.</p>
+
+<pre><code class="r"># take mu3, copy its data,
+# then change the HEURTYPE parameter to 4,
+# change the CLUMPTYPE parameter to 1,
+# change the target for species 1 to 2,
+# change the cost for planning unit 4 to 10,
+# and store data in mu4
+mu4&lt;-update(mu3, ~opt(HEURTYPE=4, CLUMPTYPE=1) + spp(1, target=2) + pu(4, cost=10))
+</code></pre>
+
+<h2>MarxanResults</h2>
+
+<p>The <code>MarxanResults</code> class stores all the outputs from Marxan (Figure 5). The <code>summary</code> slot contains the &#39;output_sum.csv&#39;, the <code>selections</code> slot contains the &#39;output_solutionsmatrix.csv&#39;, the <code>log</code> slot contains the <code>output_log.dat</code>, and the <code>best</code> slot contains index of the best solution. The <code>amountheld</code>, <code>occheld</code>, <code>mpm</code>, <code>sepacheived</code>, and <code>targetsmet</code> slots contain data from the fields in all the <code>output_mv*.dat</code> files merged into a <code>matrix</code>. Each row in these matrices refers to different solution; each column refers to a different species.</p>
+
+<p>New <code>MarxanResults</code> objects can created by reading Marxan outputs from disk. The code below is provided only for instructive purposes, users should generally use the <code>solve</code> and <code>marxan</code> functions.</p>
+
+<pre><code class="r"># save MarxanUnsolved object to temporary directory
+write.MarxanUnsolved(mu1, tempdir())
+
+# copy marxan executable to temporary directory
+findMarxanExecutablePath()
+file.copy(options()$marxanExecutablePath, file.path(tempdir(), basename(options()$marxanExecutablePath)))
+
+# run marxan
+system(paste0(&#39;&quot;&#39;,file.path(tempdir(), basename(options()$marxanExecutablePath)),&#39;&quot; &quot;&#39;,file.path(tempdir(), &#39;input.dat&#39;),&#39;&quot;&#39;))
+
+# create MarxanResults object by reading results from disk
+mr1&lt;-read.MarxanResults(tempdir())
+</code></pre>
+
+<p>Data stored in a <code>MarxanResults</code> object can be accessed using the <code>@</code> operator, the slot function, and using various get methods. The code below used to access the solutions selections in the <code>selection</code> slot can also be used to access solution data in the <code>occheld</code>, <code>accountheld</code>, <code>mpm</code>, <code>sepacheived</code>, and <code>targetsheld</code> by using the corresponding slot name.</p>
+
+<pre><code class="r"># show summary data
+mr1@summary
+slot(mr1, &#39;summary&#39;)
+summary(mr1)
+
+# show best solution index
+mr1@best
+slot(mr1, &#39;best&#39;)
+
+# show debug information
+mr1@debug
+slot(mr1, &#39;debug&#39;)
+debug(mr1)
+
+# access selections in all solutions
+mr1@selections
+slot(mr1, &#39;selections&#39;)
+selections(mr1)
+
+# access selections for best solution
+mr1@selections[mr1@best,]
+slot(mr1, &#39;selections&#39;)[mr1@best,]
+selections(mr1, 0)
+
+# access selections for third solution
+mr1@selections[3,]
+slot(mr1, &#39;selections&#39;)[3,]
+selections(mr1, 3)
+</code></pre>
+
+<h2>MarxanSolved</h2>
+
+<p>The <code>MarxanSolved</code> class stores Marxan input parameters, data, and outputs. It has a <code>opts</code> slot that contains a <code>MarxanOpts</code> object, a <code>data</code> slot that contains a <code>MarxanData</code> object, and a <code>results</code> slot that contains a <code>MarxanResults</code> object.</p>
+
+<p>New <code>MarxanSolved</code> objects can be created by solving a <code>MarxanUnsolved</code> and <code>MarxanSolved</code> objects, or by updating existing <code>MarxanUnsolved</code> and  <code>MarxanSolved</code> objects.</p>
+
+<pre><code class="r"># solved MarxanUnsolved object
+ms1&lt;-solve(mu1)
+
+# resolve a MarxanSolved object
+ms2&lt;-solve(ms1, force_reset=TRUE)
+
+# update MarxanUnsolved object
+ms3&lt;-update(mu1, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
+
+# update MarxanSolved object
+ms4&lt;-update(ms3, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
+</code></pre>
+
+<p>The data stored in the <code>MarxanSolved</code> object can be accessed using methods describe for the <code>MarxanOpts</code>, <code>MarxanData</code>, and <code>MarxanUnsolved</code> classes.</p>
+
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{marxan R package classes}
+-->
+
+</body>
+
+</html>
