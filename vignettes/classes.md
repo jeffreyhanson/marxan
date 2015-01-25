@@ -4,7 +4,7 @@ marxan classes
 ## Overview
 This package relies on five main classes. These are the `MarxanOpts`, `MarxanData`, `MarxanUnsolved`, `MarxanResults`, and `MarxanSolved` classes (Figure 1). Each class encapsulates a different aspect of the Marxan work-flow. To make the most of this package, users will need to be familiar with each of these classes. Briefly, the `MarxanOpts` class stores the Marxan input parameters. The `MarxanData` class stores Marxan input data relating to the planning units and the species. The `MarxanUnsolved` class combines `MarxanOpts` and `MarxanData` objects to represent an unsolved Marxan problem. The `MarxanResults` class stores the outputs from Marxan. The `MarxanSolved` class combines `MarxanOpts`, `MarxanData`, and `MarxanResults` class to represent the inputs and outputs from Marxan. All of these classes are associated with help files, for example `help('MarxanOpts-class')`. 
 
-![The relationship between the five main Marxan classes. The `MarxanOpts` and `MarxanData` classes are used to construct a `MarxanUnsolved` object. The `MarxanUnsolved` class is then processed by the Marxan program to generate outputs for the `MarxanResults` class. The `MarxanOpts`, `MarxanData`, and `MarxanResults` classes are used to construct the `MarxanSolved` class. Open circles denote classes, filled in circles denote programs, and arrows indicate dependencies.](doc/images/figure1.png)
+![The relationship between the five main Marxan classes. The `MarxanOpts` and `MarxanData` classes are used to construct a `MarxanUnsolved` object. The `MarxanUnsolved` class is then processed by the Marxan program to generate outputs for the `MarxanResults` class. The `MarxanOpts`, `MarxanData`, and `MarxanResults` classes are used to construct the `MarxanSolved` class. Open rectangles denote classes, the filled in rectangle denotes the MARXAN program, and the arrows indicate dependencies.](images/figure1.png)
 
 The example data used in this tutorial is a simplified version of the data used in the "Introduction to Marxan" course. It can be loaded in R by running the code below:
 
@@ -14,6 +14,8 @@ data(taspu, tasinvis)
 
 ## MarxanOpts
 The `MarxanOpts` class represents the input parameters for Marxan (Figure 2). `MarxanOpts` objects are used to generate 'input.dat' files for Marxan. This class has slots that correspond to the names of input parameters in the 'input.dat' file, and an additional `NCORES` slot that refers to the number of processes to use for parallel processing. To ensure that Marxan outputs are compatible with other functions in this package, the user is unable to set parameters that affect which files are output by Marxan.
+
+![The structure for the `MarxanOpts` class. The rectangle denotes the class, and ovals represent class slots. The normal text in each oval indicates the name of the slot, and the text in italics indicates the class for the object in the slot. Arrows indicate dependencies.](images/figure2.png)
 
 New `MarxanOpts` objects can be created in R by specifying desired input parameters, or by reading them from an existing 'input.dat' file.
 
@@ -69,6 +71,8 @@ opts3@NCORES
 ## MarxanData
 The `MarxanData` class stores the input planning unit and species data for Marxan scenarios (Figure 3). All slots of this class are `data.frame` objects that correspond to a specific Marxan input data file. The `species` slot corresponds to 'spec.dat', the `pu` slot corresponds to 'pu.dat', the `puvspecies` slot corresponds to 'puvspr2.dat', the `puvspecies_spo` slot corresponds to 'puvspr2.dat' sorted by species id (an undocumented feature in Marxan used to speed up pre-processing), and the `boundary` slot corresponds to 'bound.dat'.
 
+![The structure for the `MarxanData` class. Conventions are detailed in Figure 2.](images/figure3.png)
+
 New `MarxanData` objects can be created in R by supplying pre-processed data, supplying raw data for processing, or by reading Marxan input data from files.
 
 ```r
@@ -118,6 +122,8 @@ mdata2<-update(mdata1, ~spp(1, target=10))
 ## MarxanUnsolved 
 The `MarxanUnsolved` class stores the input parameters and data for Marxan (Figure 4). It has two slots, an `opts` slot containing a `MarxanOpts` object and a `data` slot containing a `MarxanData` object.
 
+![The structure for the `MarxanUnsolved` class. Conventions are detailed in Figure 2.](images/figure4.png)
+
 New `MarxanUnsolved` objects can be created using `MarxanOpts` and `MarxanData` objects, reading Marxan input data from file, or using the `marxan` function with argument `solve=FALSE`.
 
 ```r
@@ -150,6 +156,8 @@ mu4<-update(mu3, ~opt(HEURTYPE=4, CLUMPTYPE=1) + spp(1, target=2) + pu(4, cost=1
 
 ## MarxanResults
 The `MarxanResults` class stores all the outputs from Marxan (Figure 5). The `summary` slot contains the 'output_sum.csv', the `selections` slot contains the 'output_solutionsmatrix.csv', the `log` slot contains the `output_log.dat`, and the `best` slot contains index of the best solution. The `amountheld`, `occheld`, `mpm`, `sepacheived`, and `targetsmet` slots contain data from the fields in all the `output_mv*.dat` files merged into a `matrix`. Each row in these matrices refers to different solution; each column refers to a different species.
+
+![The structure for the `MarxanResults` class. Conventions are detailed in Figure 2.](images/figure5.png)
 
 New `MarxanResults` objects can created by reading Marxan outputs from disk. The code below is provided only for instructive purposes, users should generally use the `solve` and `marxan` functions.
 
@@ -204,6 +212,8 @@ selections(mr1, 3)
 
 ## MarxanSolved
 The `MarxanSolved` class stores Marxan input parameters, data, and outputs. It has a `opts` slot that contains a `MarxanOpts` object, a `data` slot that contains a `MarxanData` object, and a `results` slot that contains a `MarxanResults` object.
+
+![The structure for the `MarxanSolved` class. Conventions are detailed in Figure 2.](images/figure6.png)
 
 New `MarxanSolved` objects can be created by solving a `MarxanUnsolved` and `MarxanSolved` objects, or by updating existing `MarxanUnsolved` and  `MarxanSolved` objects.
 

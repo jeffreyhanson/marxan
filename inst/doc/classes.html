@@ -207,7 +207,7 @@ hr {
 
 <p>This package relies on five main classes. These are the <code>MarxanOpts</code>, <code>MarxanData</code>, <code>MarxanUnsolved</code>, <code>MarxanResults</code>, and <code>MarxanSolved</code> classes (Figure 1). Each class encapsulates a different aspect of the Marxan work-flow. To make the most of this package, users will need to be familiar with each of these classes. Briefly, the <code>MarxanOpts</code> class stores the Marxan input parameters. The <code>MarxanData</code> class stores Marxan input data relating to the planning units and the species. The <code>MarxanUnsolved</code> class combines <code>MarxanOpts</code> and <code>MarxanData</code> objects to represent an unsolved Marxan problem. The <code>MarxanResults</code> class stores the outputs from Marxan. The <code>MarxanSolved</code> class combines <code>MarxanOpts</code>, <code>MarxanData</code>, and <code>MarxanResults</code> class to represent the inputs and outputs from Marxan. All of these classes are associated with help files, for example <code>help(&#39;MarxanOpts-class&#39;)</code>. </p>
 
-<p><img src="doc/images/figure1.png" alt="The relationship between the five main Marxan classes. The `MarxanOpts` and `MarxanData` classes are used to construct a `MarxanUnsolved` object. The `MarxanUnsolved` class is then processed by the Marxan program to generate outputs for the `MarxanResults` class. The `MarxanOpts`, `MarxanData`, and `MarxanResults` classes are used to construct the `MarxanSolved` class. Open circles denote classes, filled in circles denote programs, and arrows indicate dependencies."/></p>
+<p><img src="images/figure1.png" alt="The relationship between the five main Marxan classes. The `MarxanOpts` and `MarxanData` classes are used to construct a `MarxanUnsolved` object. The `MarxanUnsolved` class is then processed by the Marxan program to generate outputs for the `MarxanResults` class. The `MarxanOpts`, `MarxanData`, and `MarxanResults` classes are used to construct the `MarxanSolved` class. Open rectangles denote classes, the filled in rectangle denotes the MARXAN program, and the arrows indicate dependencies."/></p>
 
 <p>The example data used in this tutorial is a simplified version of the data used in the &ldquo;Introduction to Marxan&rdquo; course. It can be loaded in R by running the code below:</p>
 
@@ -217,6 +217,8 @@ hr {
 <h2>MarxanOpts</h2>
 
 <p>The <code>MarxanOpts</code> class represents the input parameters for Marxan (Figure 2). <code>MarxanOpts</code> objects are used to generate &#39;input.dat&#39; files for Marxan. This class has slots that correspond to the names of input parameters in the &#39;input.dat&#39; file, and an additional <code>NCORES</code> slot that refers to the number of processes to use for parallel processing. To ensure that Marxan outputs are compatible with other functions in this package, the user is unable to set parameters that affect which files are output by Marxan.</p>
+
+<p><img src="images/figure2.png" alt="The structure for the `MarxanOpts` class. The rectangle denotes the class, and ovals represent class slots. The normal text in each oval indicates the name of the slot, and the text in italics indicates the class for the object in the slot. Arrows indicate dependencies."/></p>
 
 <p>New <code>MarxanOpts</code> objects can be created in R by specifying desired input parameters, or by reading them from an existing &#39;input.dat&#39; file.</p>
 
@@ -270,6 +272,8 @@ opts3@NCORES
 
 <p>The <code>MarxanData</code> class stores the input planning unit and species data for Marxan scenarios (Figure 3). All slots of this class are <code>data.frame</code> objects that correspond to a specific Marxan input data file. The <code>species</code> slot corresponds to &#39;spec.dat&#39;, the <code>pu</code> slot corresponds to &#39;pu.dat&#39;, the <code>puvspecies</code> slot corresponds to &#39;puvspr2.dat&#39;, the <code>puvspecies_spo</code> slot corresponds to &#39;puvspr2.dat&#39; sorted by species id (an undocumented feature in Marxan used to speed up pre-processing), and the <code>boundary</code> slot corresponds to &#39;bound.dat&#39;.</p>
 
+<p><img src="images/figure3.png" alt="The structure for the `MarxanData` class. Conventions are detailed in Figure 2."/></p>
+
 <p>New <code>MarxanData</code> objects can be created in R by supplying pre-processed data, supplying raw data for processing, or by reading Marxan input data from files.</p>
 
 <pre><code class="r">## create MarxanData object from pre-processed data
@@ -318,6 +322,8 @@ mdata2&lt;-update(mdata1, ~spp(1, target=10))
 
 <p>The <code>MarxanUnsolved</code> class stores the input parameters and data for Marxan (Figure 4). It has two slots, an <code>opts</code> slot containing a <code>MarxanOpts</code> object and a <code>data</code> slot containing a <code>MarxanData</code> object.</p>
 
+<p><img src="images/figure4.png" alt="The structure for the `MarxanUnsolved` class. Conventions are detailed in Figure 2."/></p>
+
 <p>New <code>MarxanUnsolved</code> objects can be created using <code>MarxanOpts</code> and <code>MarxanData</code> objects, reading Marxan input data from file, or using the <code>marxan</code> function with argument <code>solve=FALSE</code>.</p>
 
 <pre><code class="r">## create new MarxanUnsolved object using existing objects
@@ -349,6 +355,8 @@ mu4&lt;-update(mu3, ~opt(HEURTYPE=4, CLUMPTYPE=1) + spp(1, target=2) + pu(4, cos
 <h2>MarxanResults</h2>
 
 <p>The <code>MarxanResults</code> class stores all the outputs from Marxan (Figure 5). The <code>summary</code> slot contains the &#39;output_sum.csv&#39;, the <code>selections</code> slot contains the &#39;output_solutionsmatrix.csv&#39;, the <code>log</code> slot contains the <code>output_log.dat</code>, and the <code>best</code> slot contains index of the best solution. The <code>amountheld</code>, <code>occheld</code>, <code>mpm</code>, <code>sepacheived</code>, and <code>targetsmet</code> slots contain data from the fields in all the <code>output_mv*.dat</code> files merged into a <code>matrix</code>. Each row in these matrices refers to different solution; each column refers to a different species.</p>
+
+<p><img src="images/figure5.png" alt="The structure for the `MarxanResults` class. Conventions are detailed in Figure 2."/></p>
 
 <p>New <code>MarxanResults</code> objects can created by reading Marxan outputs from disk. The code below is provided only for instructive purposes, users should generally use the <code>solve</code> and <code>marxan</code> functions.</p>
 
@@ -401,6 +409,8 @@ selections(mr1, 3)
 <h2>MarxanSolved</h2>
 
 <p>The <code>MarxanSolved</code> class stores Marxan input parameters, data, and outputs. It has a <code>opts</code> slot that contains a <code>MarxanOpts</code> object, a <code>data</code> slot that contains a <code>MarxanData</code> object, and a <code>results</code> slot that contains a <code>MarxanResults</code> object.</p>
+
+<p><img src="images/figure6.png" alt="The structure for the `MarxanSolved` class. Conventions are detailed in Figure 2."/></p>
 
 <p>New <code>MarxanSolved</code> objects can be created by solving a <code>MarxanUnsolved</code> and <code>MarxanSolved</code> objects, or by updating existing <code>MarxanUnsolved</code> and  <code>MarxanSolved</code> objects.</p>
 
