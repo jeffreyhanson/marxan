@@ -451,7 +451,7 @@ names.MarxanSolved<-function(x) {
 #' @rdname names
 #' @inheritParams names
 `names<-.MarxanSolved`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@data@species) & is.character(value) & !any(is.na(value)))
+	stopifnot(length(value)==nrow(x@data@species) & !anyDuplicated(value) & is.character(value) & !any(is.na(value)))
 	x@data@species$name<-value
 	return(x)
 }
@@ -514,7 +514,7 @@ sppids.MarxanSolved<-function(x) {
 #' @rdname sppids
 #' @inheritParams sppids
 `sppids<-.MarxanSolved`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@data@species) & is.integer(value) & !any(is.na(value)))
+	stopifnot(length(value)==nrow(x@data@species) & !anyDuplicated(value) & is.integer(value) & !any(is.na(value)))
 	x@data@species$id<-value
 	return(x)
 }
@@ -530,7 +530,7 @@ puids.MarxanSolved<-function(x) {
 #' @rdname puids
 #' @inheritParams puids
 `puids<-.MarxanSolved`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@data@pu) & is.integer(value) & !any(is.na(value)))
+	stopifnot(length(value)==nrow(x@data@pu) & !anyDuplicated(value) & is.integer(value) & !any(is.na(value)))
 	x@data@pu$id<-value
 	return(x)
 }

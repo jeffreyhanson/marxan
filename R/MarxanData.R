@@ -669,7 +669,7 @@ names.MarxanData<-function(x) {
 #' @rdname names
 #' @inheritParams names
 `names<-.MarxanData`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@species) & is.character(value) & !any(is.na(value)))
+	stopifnot(length(value)==nrow(x@species) &!anyDuplicated(value) & is.character(value) & !any(is.na(value)))
 	x@species$name<-value
 	return(x)
 }
@@ -685,7 +685,7 @@ spfs.MarxanData<-function(x) {
 #' @rdname spfs
 #' @inheritParams spfs
 `spfs<-.MarxanData`<-function(x,value) {
-	stopifnot(is.numeric(value) & !any(is.na(value))))
+	stopifnot(is.numeric(value) & !any(is.na(value)))
 	x@species$spf<-value
 	return(x)
 }
@@ -732,7 +732,7 @@ sppids.MarxanData<-function(x) {
 #' @rdname sppids
 #' @inheritParams sppids
 `sppids<-.MarxanData`<-function(x, value) {
-	stopifnot(length(value)==nrow(x@species) & is.integer(value) & !any(is.na(value)))
+	stopifnot(length(value)==nrow(x@species) & !anyDuplicated(value) & is.integer(value) & !any(is.na(value)))
 	x@species$id<-value
 	return(x)
 }
@@ -748,7 +748,7 @@ puids.MarxanData<-function(x) {
 #' @rdname puids
 #' @inheritParams puids
 `puids<-.MarxanData`<-function(x, value) {
-	stopifnot(length(value)==nrow(x@pu) & is.integer(value) & !any(is.na(value)))
+	stopifnot(length(value)==nrow(x@pu) & !anyDuplicated(value) & is.integer(value) & !any(is.na(value)))
 	x@pu$id<-value
 	return(x)
 }
@@ -779,7 +779,7 @@ inistatus.MarxanData<-function(x) {
 #' @rdname inistatus
 #' @inheritParams inistatus
 `inistatus<-.MarxanData`<-function(x,value) {
-	stopifnot(is.integer(value) & !any(is.na(value)))	
+	stopifnot(is.integer(value) & !any(is.na(value)))
 	x@pu$status<-value
 	return(x)
 }
