@@ -1,9 +1,10 @@
 ## ----, results="hide", eval=FALSE----------------------------------------
+#  library(marxan)
 #  data(taspu, tasinvis)
 
 ## ----, results="hide", eval=FALSE----------------------------------------
 #  # create new MarxanOpts object, with default parameters except BLM and NUMITNS
-#  # note that NUMITNS is an integer and must be set using numbers with an L after them
+#  # note that NUMITNS is an integer and must be set using a number followed with an 'L'
 #  opts1<-MarxanOpts(BLM=100, NUMITNS=10L)
 #  
 #  # write to disk to a temporary directory
@@ -25,23 +26,30 @@
 #  # but used for S4 classes and not S3 classes.
 #  opts1@BLM
 #  
-#  # show PROP parameter with slot function
+#  # show PROP parameter with the slot function
 #  slot(opts1, 'PROP')
 
 ## ----, results="hide", eval=FALSE----------------------------------------
 #  # change BLM parameter with @ operator and show it
+#  opts1@BLM
 #  opts1@BLM<-100
 #  opts1@BLM
 #  
 #  # change HEURTYPE parameter with slot operator
+#  opts1@HEURTYPE
 #  slot(opts1, 'HEURTYPE')<-5L
 #  opts1@HEURTYPE
 #  
-#  # copy parameters in opts1 to opts3,
-#  # but change NCORES parameter to 2L
-#  opts3<-update(opts1, ~opt(NCORES=2L))
+#  # copy parameters in opts1,
+#  # change the NCORES and PROP parameters,
+#  # store results in opts3
+#  opts1@NCORES
+#  opts1@PROP
+#  opts3<-update(opts1, ~opt(NCORES=2L, PROP=0.5))
 #  opts1@NCORES
 #  opts3@NCORES
+#  opts1@PROP
+#  opts3@PROP
 
 ## ----, results="hide", eval=FALSE----------------------------------------
 #  ## create MarxanData object from pre-processed data
@@ -51,6 +59,7 @@
 #  puvspr.dat<-calcPuVsSpeciesData(taspu, tasinvis)
 #  bound.dat<-calcBoundaryData(taspu)
 #  polyset<-SpatialPolygons2PolySet(taspu)
+#  
 #  # make MarxanData object
 #  mdata1<-MarxanData(pu=pu.dat, species=spec.dat, puvspecies=puvspr.dat, boundary=bound.dat, polygons=polyset)
 #  
@@ -61,8 +70,12 @@
 #  ## create MarxanData object from data marxan files
 #  # write mdata1 to temporary folder
 #  write.MarxanData(mdata1, tempdir())
+#  
 #  # create new MarxanData object
 #  mdata3<-read.MarxanData(tempdir())
+#  
+#  ## show structure of MarxanData object
+#  str(mdata3)
 
 ## ----, results="hide", eval=FALSE----------------------------------------
 #  # show first 20 rows of species data
@@ -79,15 +92,16 @@
 #  slot(mdata1, 'species')$spf=5L
 #  spfs(mdata1)<-5L
 #  
-#  #  copy data in mdata1 to mdata2
-#  #  and change the target for species 1 to 10
-#  mdata2<-update(mdata1, ~spp(1, target=10))
+#  # copy data in mdata1,
+#  # change target for species 1 to 10,
+#  # store new MarxanData object in mdata2
+#  data2<-update(mdata1, ~spp(1, target=10))
 
 ## ----, results="hide", eval=FALSE----------------------------------------
 #  ## create new MarxanUnsolved object using existing objects
 #  mu1<-MarxanUnsolved(mopts1, mdata1)
 #  
-#  ## create new MarxanUnsolved object by reading data from file
+#  ## create new MarxanUnsolved object by reading parameters and data from files
 #  # write data to file
 #  write.MarxanUnsolved(mu1, tempdir())
 #  
@@ -95,11 +109,14 @@
 #  input.dat.path<-file.path(tempdir(), 'input.dat')
 #  mu2<-read.MarxanUnsolved(input.dat.path)
 #  
-#  # create new MarxanUnsvoled object by processing raw data
+#  ## create new MarxanUnsvoled object by processing raw data
 #  mu3<-marxan(taspus, tasinvis, targets='50%', solve=FALSE)
+#  
+#  ## show structure of MarxanUnsolved object
+#  str(mu3)
 
 ## ----, results="hide", eval=FALSE----------------------------------------
-#  # take mu3, copy its data,
+#  # copy the data in mu3,
 #  # then change the HEURTYPE parameter to 4,
 #  # change the CLUMPTYPE parameter to 1,
 #  # change the target for species 1 to 2,
@@ -108,18 +125,25 @@
 #  mu4<-update(mu3, ~opt(HEURTYPE=4, CLUMPTYPE=1) + spp(1, target=2) + pu(4, cost=10))
 
 ## ----, results="hide", eval=FALSE----------------------------------------
+#  ## create MarxanResults object
 #  # save MarxanUnsolved object to temporary directory
 #  write.MarxanUnsolved(mu1, tempdir())
 #  
-#  # copy marxan executable to temporary directory
+#  # find correct MARXAN program file and store it in options()$marxanExecutablePath
 #  findMarxanExecutablePath()
+#  
+#  # copy the MARXAN program file to the temporary directory
 #  file.copy(options()$marxanExecutablePath, file.path(tempdir(), basename(options()$marxanExecutablePath)))
 #  
-#  # run marxan
-#  system(paste0('"',file.path(tempdir(), basename(options()$marxanExecutablePath)),'" "',file.path(tempdir(), 'input.dat'),'"'))
+#  # run MARXAN
+#  system(paste0('"',file.path(tempdir(), basename(options()$marxanExecutablePath)),
+#  	'" "',file.path(tempdir(), 'input.dat'),'"'))
 #  
-#  # create MarxanResults object by reading results from disk
+#  # reading MARXAN outputs and store then in a new MarxanResults object
 #  mr1<-read.MarxanResults(tempdir())
+#  
+#  ## show structure for MarxanResults object
+#  str(mr1)
 
 ## ----, results="hide", eval=FALSE----------------------------------------
 #  # show summary data
@@ -127,14 +151,14 @@
 #  slot(mr1, 'summary')
 #  summary(mr1)
 #  
-#  # show best solution index
+#  # show index for best solution
 #  mr1@best
 #  slot(mr1, 'best')
 #  
-#  # show debug information
-#  mr1@debug
-#  slot(mr1, 'debug')
-#  debug(mr1)
+#  # show log information
+#  mr1@log
+#  slot(mr1, 'log')
+#  log(mr1)
 #  
 #  # access selections in all solutions
 #  mr1@selections
@@ -152,15 +176,18 @@
 #  selections(mr1, 3)
 
 ## ----, results="hide", eval=FALSE----------------------------------------
-#  # solved MarxanUnsolved object
-#  ms1<-solve(mu1)
+#  # generate a MarxanSolved object using the marxan function
+#  ms1<-marxan(taspus, tasinvis, targets='50%', solve=FALSE)
 #  
-#  # resolve a MarxanSolved object
-#  ms2<-solve(ms1, force_reset=TRUE)
+#  # solve a MarxanUnsolved object
+#  ms2<-solve(mu1)
+#  
+#  # re-solve a MarxanSolved object
+#  ms3<-solve(ms1, force_reset=TRUE)
 #  
 #  # update MarxanUnsolved object
-#  ms3<-update(mu1, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
+#  ms4<-update(mu1, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
 #  
 #  # update MarxanSolved object
-#  ms4<-update(ms3, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
+#  ms5<-update(ms4, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
 

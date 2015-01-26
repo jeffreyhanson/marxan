@@ -1,35 +1,41 @@
-marxan classes
+marxan R package classes
 ============
 
 ## Overview
-This package relies on five main classes. These are the `MarxanOpts`, `MarxanData`, `MarxanUnsolved`, `MarxanResults`, and `MarxanSolved` classes (Figure 1). Each class encapsulates a different aspect of the Marxan work-flow. To make the most of this package, users will need to be familiar with each of these classes. Briefly, the `MarxanOpts` class stores the Marxan input parameters. The `MarxanData` class stores Marxan input data relating to the planning units and the species. The `MarxanUnsolved` class combines `MarxanOpts` and `MarxanData` objects to represent an unsolved Marxan problem. The `MarxanResults` class stores the outputs from Marxan. The `MarxanSolved` class combines `MarxanOpts`, `MarxanData`, and `MarxanResults` class to represent the inputs and outputs from Marxan. All of these classes are associated with help files, for example `help('MarxanOpts-class')`. 
+This package relies on five main classes to encapsulate the MARXAN workflow. These are the `MarxanOpts`, `MarxanData`, `MarxanUnsolved`, `MarxanResults`, and `MarxanSolved` classes (Figure 1). To fully exploit this R package, users will need to be familiar with each of these classes. Briefly, the `MarxanOpts` class stores the MARXAN input parameters. The `MarxanData` class stores MARXAN input data relating to the planning units and species in given scenario. The `MarxanUnsolved` class combines `MarxanOpts` and `MarxanData` objects to represent an unsolved MARXAN problem. The `MarxanResults` class stores the outputs from MARXAN. The `MarxanSolved` class combines `MarxanOpts`, `MarxanData`, and `MarxanResults` classes to represent the inputs and outputs from MARXAN. Each of these classes is associated with help a file which can be accessed using the `help` function, for example `help('MarxanOpts-class')`. 
 
-![The relationship between the five main Marxan classes. The `MarxanOpts` and `MarxanData` classes are used to construct a `MarxanUnsolved` object. The `MarxanUnsolved` class is then processed by the Marxan program to generate outputs for the `MarxanResults` class. The `MarxanOpts`, `MarxanData`, and `MarxanResults` classes are used to construct the `MarxanSolved` class. Open rectangles denote classes, the filled in rectangle denotes the MARXAN program, and the arrows indicate dependencies.](images/figure1.png)
+![](images/figure1.png)
 
-The example data used in this tutorial is a simplified version of the data used in the "Introduction to Marxan" course. It can be loaded in R by running the code below:
+**Figure 1.** *The relationship between the five main Marxan classes. The `MarxanOpts` and `MarxanData` objects are used to construct a `MarxanUnsolved` object. The `MarxanUnsolved` class is then processed by the MARXAN program to generate outputs for a `MarxanResults` object. `MarxanOpts`, `MarxanData`, and `MarxanResults` objects are used to build a `MarxanSolved` object. Open rectangles denote classes, the filled in rectangle denotes the MARXAN program, and the arrows indicate dependencies.*
+
+The example data used in this tutorial is processed version of the data used in the "Introduction to MARXAN" course. It can be loaded in R by running the code below:
 ```{r, results="hide", eval=FALSE}
+library(marxan)
 data(taspu, tasinvis)
 ```
 
 ## MarxanOpts
-The `MarxanOpts` class represents the input parameters for Marxan (Figure 2). `MarxanOpts` objects are used to generate 'input.dat' files for Marxan. This class has slots that correspond to the names of input parameters in the 'input.dat' file, and an additional `NCORES` slot that refers to the number of processes to use for parallel processing. To ensure that Marxan outputs are compatible with other functions in this package, the user is unable to set parameters that affect which files are output by Marxan.
+The `MarxanOpts` class represents the input parameters for MARXAN (Figure 2). This class has slots that correspond to the names of input parameters in the 'input.dat' file, and an additional `NCORES` slot that refers to the number of processes to use for processing. `MarxanOpts` objects are used to generate 'input.dat' files for MARXAN. To ensure that MARXAN outputs are compatible with `MarxanResults` methods, many of the 'Save Files' parameters present in 'input.dat' are hard-coded into the `MarxanOpts` class.
 
-![The structure for the `MarxanOpts` class. The rectangle denotes the class, and ovals represent class slots. The normal text in each oval indicates the name of the slot, and the text in italics indicates the class for the object in the slot. Arrows indicate dependencies.](images/figure2.png)
+![](images/figure2.png)
 
-New `MarxanOpts` objects can be created in R by specifying desired input parameters, or by reading them from an existing 'input.dat' file.
+**Figure 2.** *The structure for the `MarxanOpts class`. The rectangle denotes the class of interest, and ovals represent slots. The normal text in each oval indicates the name of the slot, and the text in italics indicates the class for the object in the slot. Arrows indicate dependencies.*
+
+New `MarxanOpts` objects can be created in R by using the `MarxanOpts` function, or by using the `read.MarxanOpts` function to read an 'input.dat' file.
 ```{r, results="hide", eval=FALSE}
 # create new MarxanOpts object, with default parameters except BLM and NUMITNS
-# note that NUMITNS is an integer and must be set using numbers with an L after them
+# note that NUMITNS is an integer and must be set using a number followed with an 'L'
 opts1<-MarxanOpts(BLM=100, NUMITNS=10L)
 
 # write to disk to a temporary directory
 write.MarxanOpts(opts1, tempdir())
 
 # show the resulting input.dat file
-cat(paste(readLines(), collapse="\n"),"\n")
+input.dat.path<-file.path(tempdir(), 'input.dat')
+cat(paste(readLines(input.dat.path), collapse="\n"),"\n")
 
 # create new Marxanopts object by loading parameters from the input.dat
-opts2<-read.MarxanOpts()
+opts2<-read.MarxanOpts(input.dat.path)
 ```
 
 Once created, the parameters stored in a `MarxanOpts` object can be viewed.
@@ -43,41 +49,51 @@ str(opts2)
 # but used for S4 classes and not S3 classes.
 opts1@BLM
 
-# show PROP parameter with slot function
+# show PROP parameter with the slot function
 slot(opts1, 'PROP')
 ```
 
-The parameters stored in an existing `MarxanOpts` object can be changed.
+The parameters stored in an existing `MarxanOpts` object can be changed. This can be acheived using the `@` operator, `slot` function, or the `update` method. The `update` methods for `Marxan` classes are designed to conceptually similar to the `update` methods for statistical models (eg. `update.default`).
 ```{r, results="hide", eval=FALSE}
 # change BLM parameter with @ operator and show it
-opts1@BLM<-100
+opts1@BLM
+opts1@BLM<-500
 opts1@BLM
 
 # change HEURTYPE parameter with slot operator
+opts1@HEURTYPE
 slot(opts1, 'HEURTYPE')<-5L
 opts1@HEURTYPE
 
-# copy parameters in opts1 to opts3, 
-# but change NCORES parameter to 2L
-opts3<-update(opts1, ~opt(NCORES=2L))
+# copy parameters in opts1,
+# change the NCORES and PROP parameters,
+# store results in opts3
+opts1@NCORES
+opts1@PROP
+opts3<-update(opts1, ~opt(NCORES=2L, PROP=0.5))
 opts1@NCORES
 opts3@NCORES
+opts1@PROP
+opts3@PROP
 ```
 
 ## MarxanData
-The `MarxanData` class stores the input planning unit and species data for Marxan scenarios (Figure 3). All slots of this class are `data.frame` objects that correspond to a specific Marxan input data file. The `species` slot corresponds to 'spec.dat', the `pu` slot corresponds to 'pu.dat', the `puvspecies` slot corresponds to 'puvspr2.dat', the `puvspecies_spo` slot corresponds to 'puvspr2.dat' sorted by species id (an undocumented feature in Marxan used to speed up pre-processing), and the `boundary` slot corresponds to 'bound.dat'.
+The `MarxanData` class stores the input planning unit and species data for MARXAN scenarios (Figure 3). All slots of this class are `data.frame` objects that correspond to a specific MARXAN input data file. The `species` slot corresponds to 'spec.dat', the `pu` slot corresponds to 'pu.dat', the `puvspecies` slot corresponds to 'puvspr2.dat', the `puvspecies_spo` slot corresponds to 'puvspr2.dat' sorted by species id (an undocumented feature in Marxan used to speed up pre-processing), and the `boundary` slot corresponds to 'bound.dat'.
 
-![The structure for the `MarxanData` class. Conventions are detailed in Figure 2.](images/figure3.png)
+![](images/figure3.png)
 
-New `MarxanData` objects can be created in R by supplying pre-processed data, supplying raw data for processing, or by reading Marxan input data from files.
+**Figure 3.** *The structure for the `MarxanData` class. Conventions are detailed in Figure 2.*
+
+New `MarxanData` objects can be created by supplying pre-processed data to the `MarxanData` function, supplying raw data to the `format.MarxanData` function, or by reading MARXAN input data from files with the `read.MarxanData` function.
 ```{r, results="hide", eval=FALSE}
 ## create MarxanData object from pre-processed data
 # make pre-processed data
 pu.dat<-taspu@data
-spec.dat<-data.frame(id=unique(getValues(tasinvis)),spf=1,target=100)
+spec.dat<-data.frame(id=seq_len(nlayers(tasinvis)),spf=1,target=100)
 puvspr.dat<-calcPuVsSpeciesData(taspu, tasinvis)
 bound.dat<-calcBoundaryData(taspu)
 polyset<-SpatialPolygons2PolySet(taspu)
+
 # make MarxanData object
 mdata1<-MarxanData(pu=pu.dat, species=spec.dat, puvspecies=puvspr.dat, boundary=bound.dat, polygons=polyset)
 
@@ -88,11 +104,15 @@ mdata2<-format.MarxanData(taspu, tasinvis, targets=100, spf=1)
 ## create MarxanData object from data marxan files
 # write mdata1 to temporary folder
 write.MarxanData(mdata1, tempdir())
+
 # create new MarxanData object
 mdata3<-read.MarxanData(tempdir())
+
+## show structure of MarxanData object
+str(mdata3)
 ```
 
-Data in existing `MarxanData` objects can be viewed and changed using several functions and operators. While only functions to get and set species penalty factors and targets are shown below, functions exist to get and set all fields in the 'pu.dat' and 'spec.dat' tables. Generally, users are encouraged to use the `update` function. Be aware, that the set functions, eg. `targets(...)<-value` and `spfs(...)<-value` shown below, are extremely inefficient and should only be used for small problems.
+Data in existing `MarxanData` objects can be viewed and changed using the `@` operator and several functions. While only functions to get and set species penalty factors and targets are shown below, functions exist to get and set all fields in the 'pu.dat' and 'spec.dat' tables. Be aware, that the set functions shown below, eg. `targets(...)<-value` and `spfs(...)<-value`, are syntactic sugar: they are easy to use but also inefficient. Generally, users are encouraged to use the `update` method.
 ```{r, results="hide", eval=FALSE}
 # show first 20 rows of species data
 head(mdata1@species)
@@ -104,26 +124,29 @@ slot(mdata1, 'species')$target
 targets(mdata1)
 
 # change species spfs to 5
-mdata1@species$spf<-5L
-slot(mdata1, 'species')$spf=5L
-spfs(mdata1)<-5L
+mdata1@species$spf<-5
+slot(mdata1, 'species')$spf=5
+spfs(mdata1)<-5
 
-#  copy data in mdata1 to mdata2
-#  and change the target for species 1 to 10
-mdata2<-update(mdata1, ~spp(1, target=10))
+# copy data in mdata1,
+# change target for species 1 to 10,
+# store new MarxanData object in mdata2
+data2<-update(mdata1, ~spp(1, target=10))
 ```
 
 ## MarxanUnsolved 
-The `MarxanUnsolved` class stores the input parameters and data for Marxan (Figure 4). It has two slots, an `opts` slot containing a `MarxanOpts` object and a `data` slot containing a `MarxanData` object.
+The `MarxanUnsolved` class stores the input parameters and data for MARXAN (Figure 4). It has two slots: an `opts` slot containing a `MarxanOpts` object and a `data` slot containing a `MarxanData` object.
 
-![The structure for the `MarxanUnsolved` class. Conventions are detailed in Figure 2.](images/figure4.png)
+![](images/figure4.png)
 
-New `MarxanUnsolved` objects can be created using `MarxanOpts` and `MarxanData` objects, reading Marxan input data from file, or using the `marxan` function with argument `solve=FALSE`.
+**Figure 4.** *The structure for the `MarxanUnsolved` class. Conventions are detailed in Figure 2.*
+
+New `MarxanUnsolved` objects can be created by supplying `MarxanOpts` and `MarxanData` objects to the `MarxanUnsolved` function, reading MARXAN input parameters and data from files using `read.MarxanUnsolved`, or using the `marxan` function with argument `solve=FALSE`.
 ```{r, results="hide", eval=FALSE}
 ## create new MarxanUnsolved object using existing objects
 mu1<-MarxanUnsolved(mopts1, mdata1)
 
-## create new MarxanUnsolved object by reading data from file
+## create new MarxanUnsolved object by reading parameters and data from files
 # write data to file
 write.MarxanUnsolved(mu1, tempdir())
 
@@ -131,13 +154,16 @@ write.MarxanUnsolved(mu1, tempdir())
 input.dat.path<-file.path(tempdir(), 'input.dat')
 mu2<-read.MarxanUnsolved(input.dat.path)
 
-# create new MarxanUnsvoled object by processing raw data
+## create new MarxanUnsvoled object by processing raw data
 mu3<-marxan(taspus, tasinvis, targets='50%', solve=FALSE)
+
+## show structure of MarxanUnsolved object
+str(mu3)
 ```
 
 Similar to the `MarxanOpts` and `MarxanData` classes, the update function can be used to change the Marxan input data and parameters for `MarxanUnsolved` objects.
 ```{r, results="hide", eval=FALSE}
-# take mu3, copy its data,
+# copy the data in mu3,
 # then change the HEURTYPE parameter to 4,
 # change the CLUMPTYPE parameter to 1,
 # change the target for species 1 to 2,
@@ -147,42 +173,50 @@ mu4<-update(mu3, ~opt(HEURTYPE=4, CLUMPTYPE=1) + spp(1, target=2) + pu(4, cost=1
 ```
 
 ## MarxanResults
-The `MarxanResults` class stores all the outputs from Marxan (Figure 5). The `summary` slot contains the 'output_sum.csv', the `selections` slot contains the 'output_solutionsmatrix.csv', the `log` slot contains the `output_log.dat`, and the `best` slot contains index of the best solution. The `amountheld`, `occheld`, `mpm`, `sepacheived`, and `targetsmet` slots contain data from the fields in all the `output_mv*.dat` files merged into a `matrix`. Each row in these matrices refers to different solution; each column refers to a different species.
+The `MarxanResults` class stores all the outputs from MARXAN (Figure 5). The `summary` slot contains the 'output_sum.csv', the `selections` slot contains the 'output_solutionsmatrix.csv', the `log` slot contains the 'output_log.dat', and the `best` slot contains index of the best solution. The `amountheld`, `occheld`, `mpm`, `sepacheived`, and `targetsmet` slots contain data from fields in all the 'output_mv*.dat' files merged into `matrix` objects. Each row in these matrices refers to different solution; each column refers to a different species.
 
-![The structure for the `MarxanResults` class. Conventions are detailed in Figure 2.](images/figure5.png)
+![](images/figure5.png)
 
-New `MarxanResults` objects can created by reading Marxan outputs from disk. The code below is provided only for instructive purposes, users should generally use the `solve` and `marxan` functions.
+**Figure 5.** *The structure for the `MarxanResults` class. Conventions are detailed in Figure 2.*
+
+New `MarxanResults` objects can created by reading MARXAN outputs from files using the `read.MarxanResults` function. The code below is provided only for instructive purposes. For real problems, users are encouraged to use the `solve` and `marxan` functions.
 ```{r, results="hide", eval=FALSE}
+## create MarxanResults object
 # save MarxanUnsolved object to temporary directory
 write.MarxanUnsolved(mu1, tempdir())
 
-# copy marxan executable to temporary directory
+# find correct MARXAN program file and store it in options()$marxanExecutablePath
 findMarxanExecutablePath()
+
+# copy the MARXAN program file to the temporary directory
 file.copy(options()$marxanExecutablePath, file.path(tempdir(), basename(options()$marxanExecutablePath)))
 
-# run marxan
-system(paste0('"',file.path(tempdir(), basename(options()$marxanExecutablePath)),'" "',file.path(tempdir(), 'input.dat'),'"'))
+# run MARXAN
+system(paste0('"',file.path(tempdir(), basename(options()$marxanExecutablePath)),
+	'" "',file.path(tempdir(), 'input.dat'),'"'))
 
-# create MarxanResults object by reading results from disk
+# reading MARXAN outputs and store then in a new MarxanResults object
 mr1<-read.MarxanResults(tempdir())
+
+## show structure for MarxanResults object
+str(mr1)
 ```
 
-Data stored in a `MarxanResults` object can be accessed using the `@` operator, the slot function, and using various get methods. The code below used to access the solutions selections in the `selection` slot can also be used to access solution data in the `occheld`, `accountheld`, `mpm`, `sepacheived`, and `targetsheld` by using the corresponding slot name.
-
+Data stored in a `MarxanResults` object can be accessed using the `@` operator, the slot function, and using various get methods. The code below uses the `selections` method to access data stored in this slot, similar methods exist for the  `occheld`, `accountheld`, `mpm`, `sepacheived`, and `targetsheld` slot.
 ```{r, results="hide", eval=FALSE}
 # show summary data
 mr1@summary
 slot(mr1, 'summary')
 summary(mr1)
 
-# show best solution index
+# show index for best solution
 mr1@best
 slot(mr1, 'best')
 
-# show debug information
-mr1@debug
-slot(mr1, 'debug')
-debug(mr1)
+# show log information
+mr1@log
+slot(mr1, 'log')
+log(mr1)
 
 # access selections in all solutions
 mr1@selections
@@ -201,30 +235,35 @@ selections(mr1, 3)
 ```
 
 ## MarxanSolved
-The `MarxanSolved` class stores Marxan input parameters, data, and outputs. It has a `opts` slot that contains a `MarxanOpts` object, a `data` slot that contains a `MarxanData` object, and a `results` slot that contains a `MarxanResults` object.
+The `MarxanSolved` class stores MARXAN input parameters, data, and outputs. This is the main class that users will interact with. It has a `opts` slot that contains a `MarxanOpts` object, a `data` slot that contains a `MarxanData` object, and a `results` slot that contains a `MarxanResults` object.
 
-![The structure for the `MarxanSolved` class. Conventions are detailed in Figure 2.](images/figure6.png)
+![](images/figure6.png)
 
-New `MarxanSolved` objects can be created by solving a `MarxanUnsolved` and `MarxanSolved` objects, or by updating existing `MarxanUnsolved` and  `MarxanSolved` objects.
+**Figure 6.** *The structure for the `MarxanSolved` class. Conventions are detailed in Figure 2.*
+
+New `MarxanSolved` objects can be created by using the `marxan` function, solving a `MarxanUnsolved` and `MarxanSolved` objects with the `solve` method, or updating existing `MarxanUnsolved` and `MarxanSolved` objects with the `update` method.
 
 ```{r, results="hide", eval=FALSE}
-# solved MarxanUnsolved object
-ms1<-solve(mu1)
+# generate a MarxanSolved object using the marxan function
+ms1<-marxan(taspus, tasinvis, targets='50%', solve=FALSE)
 
-# resolve a MarxanSolved object
-ms2<-solve(ms1, force_reset=TRUE)
+# solve a MarxanUnsolved object
+ms2<-solve(mu1)
+
+# re-solve a MarxanSolved object
+ms3<-solve(ms1, force_reset=TRUE)
 
 # update MarxanUnsolved object
-ms3<-update(mu1, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
+ms4<-update(mu1, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
 
 # update MarxanSolved object
-ms4<-update(ms3, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
+ms5<-update(ms4, ~opt(HEURTYPE=2L) + spp(1, spf=5) + pu(4, cost=100))
 ```
 
-The data stored in the `MarxanSolved` object can be accessed using methods describe for the `MarxanOpts`, `MarxanData`, and `MarxanUnsolved` classes.
+The data stored in the `MarxanSolved` object can be accessed using methods describe for the `MarxanOpts`, `MarxanData`, and `MarxanUnsolved` classes. For example, the `selections` method can be used to access the selections for solutions stored in the `MarxanResults` object in the `results` slot stored in a `MarxanSolved` object.
+
 
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{marxan R package classes}
+%\VignetteIndexEntry{Quick start guide to the marxan R package}
 -->
-

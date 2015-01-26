@@ -190,7 +190,7 @@ spfs.MarxanUnsolved<-function(x) {
 #' @rdname spfs
 #' @inheritParams spfs
 `spfs<-.MarxanUnsolved`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
+	stopifnot(is.numeric(value) & !any(is.na(value)))
 	x@data@species$spf<-value
 	return(x)
 }
@@ -206,7 +206,7 @@ targets.MarxanUnsolved<-function(x) {
 #' @rdname targets
 #' @inheritParams targets
 `targets<-.MarxanUnsolved`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
+	stopifnot(is.numeric(value) & !any(is.na(value)))
 	x@data@species$target<-value
 	return(x)
 }
@@ -220,7 +220,7 @@ maxtargets.MarxanUnsolved<-function(x) {
 #' @export
 #' @describeIn maxtargets
 `maxtargets<-.MarxanUnsolved`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@data@species) & is.numeric(value) & !any(is.na(value)))
+	stopifnot(is.numeric(value) & !any(is.na(value)))
 	x@data@species$maxtargets<-value
 	return(x)
 }
@@ -267,7 +267,7 @@ costs.MarxanUnsolved<-function(x) {
 #' @export
 #' @rdname costs
 `costs<-.MarxanUnsolved`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@data@pu) & is.numeric(value) & !any(is.na(value)))
+	stopifnot(is.numeric(value) & !any(is.na(value)))
 	x@data@pu$costs<-value
 	return(x)
 }
@@ -284,7 +284,7 @@ inistatus.MarxanUnsolved<-function(x) {
 #' @rdname inistatus
 #' @inheritParams inistatus
 `inistatus<-.MarxanUnsolved`<-function(x,value) {
-	stopifnot(length(value)==nrow(x@data@pu) & is.numeric(value) & !any(is.na(value)))	
+	stopifnot(is.numeric(value) & !any(is.na(value)))	
 	x@data@pu$status<-value
 	return(x)
 }
