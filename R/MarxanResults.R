@@ -117,10 +117,10 @@ merge.MarxanResults<-function(x) {
 	return(x)
 }
 
-#' @rdname selection
-#' @inheritParams selection
+#' @rdname selections
+#' @inheritParams selections
 #' @export
-selection.MarxanResults<-function(x, y=NULL) {
+selections.MarxanResults<-function(x, y=NULL) {
 	if (is.null(y))
 		return(x@selections)
 	if (y==0)

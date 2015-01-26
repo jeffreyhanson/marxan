@@ -194,7 +194,7 @@ occheld<-function(x, ...) {UseMethod('occheld')}
 targetsmet<-function(x, ...) {UseMethod('targetsmet')}
 
 
-#' Extract solution selection
+#' Extract solution selections
 #'
 #' Extract selections for a given solution from a "MarxanResults or "MarxanSolved" object.
 #'
@@ -203,7 +203,7 @@ targetsmet<-function(x, ...) {UseMethod('targetsmet')}
 #' @return "matrix" or "numeric" vector with planning units statuses depending on arguments.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
-selection<-function(x, ...) {UseMethod('selection')}
+selections<-function(x, ...) {UseMethod('selections')}
 
 #' Extract minimum proportion met ratio
 #'

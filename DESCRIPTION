@@ -54,4 +54,4 @@ LinkingTo: Rcpp
 VignetteBuilder: knitr
 Suggests:
     testthat,
-	knitr
+    knitr

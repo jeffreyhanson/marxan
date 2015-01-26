@@ -44,10 +44,10 @@ solve.MarxanSolved<-function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@
 	return(solve(MarxanUnsolved(opts=x@opts,data=x@data), wd, seeds, clean))
 }
 
-#' @rdname selection
-#' @inheritParams selection
+#' @rdname selections
+#' @inheritParams selections
 #' @export
-selection.MarxanSolved<-function(x, y=NULL) {
+selections.MarxanSolved<-function(x, y=NULL) {
 	return(selection.MarxanResults(x@results, y))
 }
 
