@@ -229,60 +229,61 @@ data(taspu, tasinvis)
 
 <pre><code class="r"># create new MarxanOpts object, with default parameters except BLM and NUMITNS
 # note that NUMITNS is an integer and must be set using a number followed with an &#39;L&#39;
-opts1&lt;-MarxanOpts(BLM=100, NUMITNS=10L)
+mopts1&lt;-MarxanOpts(BLM=100, NUMITNS=10L)
 
 # write to disk to a temporary directory
-write.MarxanOpts(opts1, tempdir())
+write.MarxanOpts(mopts1, tempdir())
 
 # show the resulting input.dat file
-cat(paste(readLines(), collapse=&quot;\n&quot;),&quot;\n&quot;)
+input.dat.path&lt;-file.path(tempdir(), &#39;input.dat&#39;)
+cat(paste(readLines(input.dat.path), collapse=&quot;\n&quot;),&quot;\n&quot;)
 
 # create new Marxanopts object by loading parameters from the input.dat
-opts2&lt;-read.MarxanOpts()
+mopts2&lt;-read.MarxanOpts(input.dat.path)
 </code></pre>
 
 <p>Once created, the parameters stored in a <code>MarxanOpts</code> object can be viewed.</p>
 
 <pre><code class="r"># show all parameters and their values
-str(opts1)
-str(opts2)
+str(mopts1)
+str(mopts2)
 
 # show BLM parameter with @ operator
 # the @ operator is conceptually similar to the $ operator,
 # but used for S4 classes and not S3 classes.
-opts1@BLM
+mopts1@BLM
 
 # show PROP parameter with the slot function
-slot(opts1, &#39;PROP&#39;)
+slot(mopts1, &#39;PROP&#39;)
 </code></pre>
 
 <p>The parameters stored in an existing <code>MarxanOpts</code> object can be changed. This can be acheived using the <code>@</code> operator, <code>slot</code> function, or the <code>update</code> method. The <code>update</code> methods for <code>Marxan</code> classes are designed to conceptually similar to the <code>update</code> methods for statistical models (eg. <code>update.default</code>).</p>
 
 <pre><code class="r"># change BLM parameter with @ operator and show it
-opts1@BLM
-opts1@BLM&lt;-100
-opts1@BLM
+mopts1@BLM
+mopts1@BLM&lt;-500
+mopts1@BLM
 
 # change HEURTYPE parameter with slot operator
-opts1@HEURTYPE
-slot(opts1, &#39;HEURTYPE&#39;)&lt;-5L
-opts1@HEURTYPE
+mopts1@HEURTYPE
+slot(mopts1, &#39;HEURTYPE&#39;)&lt;-5L
+mopts1@HEURTYPE
 
-# copy parameters in opts1,
-# change the NCORES and PROP parameters,
-# store results in opts3
-opts1@NCORES
-opts1@PROP
-opts3&lt;-update(opts1, ~opt(NCORES=2L, PROP=0.5))
-opts1@NCORES
-opts3@NCORES
-opts1@PROP
-opts3@PROP
+# copy parameters in mopts1,
+# change the NUMREPS, NUMITNS, and NUMTEMP
+# store results in mopts3
+mopts1@NCORES
+mopts1@PROP
+mopts3&lt;-update(mopts1, ~opt(NUMREPS=10L, NUMREPS=10L, NUMTEMP=5L))
+mopts1@NCORES
+mopts3@NCORES
+mopts1@PROP
+mopts3@PROP
 </code></pre>
 
 <h2>MarxanData</h2>
 
-<p>The <code>MarxanData</code> class stores the input planning unit and species data for MARXAN scenarios (Figure 3). All slots of this class are <code>data.frame</code> objects that correspond to a specific MARXAN input data file. The <code>species</code> slot corresponds to &#39;spec.dat&#39;, the <code>pu</code> slot corresponds to &#39;pu.dat&#39;, the <code>puvspecies</code> slot corresponds to &#39;puvspr2.dat&#39;, the <code>puvspecies_spo</code> slot corresponds to &#39;puvspr2.dat&#39; sorted by species id (an undocumented feature in Marxan used to speed up pre-processing), and the <code>boundary</code> slot corresponds to &#39;bound.dat&#39;.</p>
+<p>The <code>MarxanData</code> class stores the input planning unit and species data for MARXAN scenarios (Figure 3). The main slots for this class are <code>data.frame</code> objects that correspond to a specific MARXAN input data file. The <code>species</code> slot corresponds to &#39;spec.dat&#39;, the <code>pu</code> slot corresponds to &#39;pu.dat&#39;, the <code>puvspecies</code> slot corresponds to &#39;puvspr2.dat&#39;, the <code>puvspecies_spo</code> slot corresponds to &#39;puvspr2.dat&#39; sorted by species id (an undocumented feature in Marxan used to speed up pre-processing), and the <code>boundary</code> slot corresponds to &#39;bound.dat&#39;. The remaining slots, <code>.cache</code>, <code>skipchecks</code>, and <code>polygons</code> are used internally in R. The <code>.cache</code> slot is an <code>environment</code> used to store processed data. The <code>skipchecks</code> slot is a <code>logical</code> value indicating if data integrity checks should be run. By default this is <code>FALSE</code> to ensure valid data is stored in a <code>MarxanData</code> object; however, this can be disabled to reduce pre-proccessing time. The <code>polygons</code> slot contains spatially explicit data for the planning units. </p>
 
 <p><img src="images/figure3.png" alt=""/></p>
 
@@ -293,7 +294,7 @@ opts3@PROP
 <pre><code class="r">## create MarxanData object from pre-processed data
 # make pre-processed data
 pu.dat&lt;-taspu@data
-spec.dat&lt;-data.frame(id=unique(getValues(tasinvis)),spf=1,target=100)
+spec.dat&lt;-data.frame(id=seq_len(nlayers(tasinvis)),spf=1,target=100)
 puvspr.dat&lt;-calcPuVsSpeciesData(taspu, tasinvis)
 bound.dat&lt;-calcBoundaryData(taspu)
 polyset&lt;-SpatialPolygons2PolySet(taspu)
@@ -328,14 +329,14 @@ slot(mdata1, &#39;species&#39;)$target
 targets(mdata1)
 
 # change species spfs to 5
-mdata1@species$spf&lt;-5L
-slot(mdata1, &#39;species&#39;)$spf=5L
-spfs(mdata1)&lt;-5L
+mdata1@species$spf&lt;-5
+slot(mdata1, &#39;species&#39;)$spf=5
+spfs(mdata1)&lt;-5
 
 # copy data in mdata1,
 # change target for species 1 to 10,
 # store new MarxanData object in mdata2
-data2&lt;-update(mdata1, ~spp(1, target=10))
+mdata2&lt;-update(mdata1, ~spp(1, target=10))
 </code></pre>
 
 <h2>MarxanUnsolved</h2>
@@ -349,7 +350,7 @@ data2&lt;-update(mdata1, ~spp(1, target=10))
 <p>New <code>MarxanUnsolved</code> objects can be created by supplying <code>MarxanOpts</code> and <code>MarxanData</code> objects to the <code>MarxanUnsolved</code> function, reading MARXAN input parameters and data from files using <code>read.MarxanUnsolved</code>, or using the <code>marxan</code> function with argument <code>solve=FALSE</code>.</p>
 
 <pre><code class="r">## create new MarxanUnsolved object using existing objects
-mu1&lt;-MarxanUnsolved(mopts1, mdata1)
+mu1&lt;-MarxanUnsolved(mopts3, mdata1)
 
 ## create new MarxanUnsolved object by reading parameters and data from files
 # write data to file
@@ -360,7 +361,7 @@ input.dat.path&lt;-file.path(tempdir(), &#39;input.dat&#39;)
 mu2&lt;-read.MarxanUnsolved(input.dat.path)
 
 ## create new MarxanUnsvoled object by processing raw data
-mu3&lt;-marxan(taspus, tasinvis, targets=&#39;50%&#39;, solve=FALSE)
+mu3&lt;-marxan(taspu, tasinvis, targets=&#39;50%&#39;, solve=FALSE)
 
 ## show structure of MarxanUnsolved object
 str(mu3)
@@ -374,7 +375,7 @@ str(mu3)
 # change the target for species 1 to 2,
 # change the cost for planning unit 4 to 10,
 # and store data in mu4
-mu4&lt;-update(mu3, ~opt(HEURTYPE=4, CLUMPTYPE=1) + spp(1, target=2) + pu(4, cost=10))
+mu4&lt;-update(mu3, ~opt(HEURTYPE=4L, CLUMPTYPE=1L) + spp(1, target=2) + pu(4, cost=10), solve=FALSE)
 </code></pre>
 
 <h2>MarxanResults</h2>
@@ -451,7 +452,7 @@ selections(mr1, 3)
 <p>New <code>MarxanSolved</code> objects can be created by using the <code>marxan</code> function, solving a <code>MarxanUnsolved</code> and <code>MarxanSolved</code> objects with the <code>solve</code> method, or updating existing <code>MarxanUnsolved</code> and <code>MarxanSolved</code> objects with the <code>update</code> method.</p>
 
 <pre><code class="r"># generate a MarxanSolved object using the marxan function
-ms1&lt;-marxan(taspus, tasinvis, targets=&#39;50%&#39;, solve=FALSE)
+ms1&lt;-marxan(taspu, tasinvis, targets=&#39;50%&#39;, NUMREPS=10L, NUMREPS=10L, NUMTEMP=5L)
 
 # solve a MarxanUnsolved object
 ms2&lt;-solve(mu1)
