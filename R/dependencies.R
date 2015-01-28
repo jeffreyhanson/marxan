@@ -13,6 +13,7 @@
 #' @importFrom ape axisPhylo
 
 #' @importFrom snow makeCluster
+#' @importFrom snow stopCluster
 #' @importFrom doSNOW registerDoSNOW
 
 #' @importFrom RColorBrewer brewer.pal

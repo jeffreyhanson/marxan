@@ -82,7 +82,7 @@ Here, we will generate a portfolio of reserve systems that represent 20% of each
 # argument to NCORES defines the number of threads for parallel processing
 # argument to NUMREPS controls the number of solutions in our portfolio
 # argument to BLM controls boundary length modifier
-results<-marxan(taspu2, tasinvis, targets="20%", spf=1, NUMREPS=100L, NCORES=2L, BLM=0)
+results<-marxan(taspu2, tasinvis, targets="20%", spf=1, NUMREPS=100L, NCORES=2L, BLM=0, lengthFactor=1e-8)
 ```
 
 Well, that was easy. Apparently it worked; we can see the text MARXAN normally prints when we run it. Before we do anything, let's check that our vegetation classes are adequately represented. 
@@ -148,8 +148,7 @@ print(max(results2.repr))
 
 ```
 
-The new portfolio of solutions is much better at representing our vegetation classes.
- To see what these solutions look like, let's make some geoplots of individual solutions in `results2`. Let's also make a geoplot showing which planning units were most frequently selected in all the solutions in `results2`.
+The new portfolio has solutions that are on average much better at representing the vegetation classes. To see what these solutions look like, let's make some geoplots of individual solutions in `results2`. Let's also make a geoplot showing which planning units were most frequently selected in all the solutions in `results2`.
 
 ```{r, eval=FALSE}
 # make a geoplot of the best solution
@@ -170,9 +169,9 @@ plot(results2, basemap='satellite', alpha=0.8)
 plot(results2, colramp='YlGnBu')
 ```
 
-That was neat. But all these solutions so far were made under the assumption that all planning units have equal acquisition cost and Tasmania does not have any protected areas. For instance, our solutions might indicate that we should protect several really costly planning units when instead, we could substitute several other cheap planning units and achieve the same level of representation for all the vegetation classes. Or, maybe several vegetation classes are already adequately represented in existing protected areas in Tasmania, so we don't actually need to buy any more planning units to adequately protected these classes.
+That was neat. But all the solutions so far were made under the assumption that all planning units have equal acquisition costs and that Tasmania does not have any protected areas. For instance, our solutions might indicate that we should protect several really costly planning units, when instead, we could substitute several other cheap planning units and achieve the same level of representation for all the vegetation classes. Or maybe, several vegetation classes are already adequately represented in the protected areas in Tasmania, so we don't actually need to buy any more planning units to adequately protect these classes.
 
-Similar to before, we will use the `update` function to re-use pre-processed data. This time we will use the `update` function change the planning unit status and cost values.
+Similar to before, we will use the `update` function to re-use pre-processed data. This time we will use the `update` function to change the planning unit status and cost values.
 
 ```{r, eval=FALSE}
 # get planning unit ids
@@ -191,7 +190,7 @@ pu.status<-taspu@data$status
 results3<-update(results2, ~pu(pu.ids, cost=pu.costs, status=pu.status))
 ```
 
-Now we have a third portfolio of solutions based on realistic planning unit data. Let's compare the previous portfolio based on unrealistic planning unit data with the new portfolio based on realistic planning unit data.
+Now we have a third portfolio. Let's compare the previous portfolio based on unrealistic planning unit data with the new portfolio based on realistic planning unit data.
 
 ```{r, eval=FALSE}
 # geoplot showing differences between the best solution in each portfolio
@@ -202,59 +201,70 @@ plot(results2, results3, i=0, j=0)
 plot(results2, results3, i=3, j=5)
 
 # geoplot showing difference in selection frequencies between the two objects
-# black colors indicate that units are already in a protected area
+# white colors indicate that units are already in a protected area
 # blue colours indicate that units were more often selected in results2
 # red  colours indicate that units were more often selected in results3
 plot(results2, results3)
 ```
 
-Explicitly considering real-world costs and existing protected areas has radically changed our prioritisations. This highlights the importance of collecting as much real-world data as possible. But the solutions in our prioritisation still have (at least) one remaining issue. 
+Explicitly considering real-world costs and existing protected areas has radically changed our prioritisations. This highlights the importance of incorporating real-world data into conservation planning. However, there still remains (at least) one issue with these solutions.
 
-All the solutions in our current portfolio, `results3`, all seem to be fairly fragmented. If implemented as protected areas, these solutions might be associated with poor connectivity and high maintenance costs. To reduce fragmentation, we can increase the boundary length modifier (BLM). But how can we pick an appropriate BLM while still making sure our vegetation classes are adequately represented? Let's generate six more portfolios, each using a different BLM, and plot the trade-off between shortfall and fragmentation using the best solutions in each portfolio.
+All the solutions in our current portfolio, `results3`, seem to be fairly fragmented. If implemented as protected areas, these solutions might be associated with poor connectivity and high maintenance costs. To reduce fragmentation, we can increase the boundary length modifier (BLM). However, in order to maintain adequate levels of representation for the vegetation classes, MARXAN will select more expensive planning units. How can we pick an appropriate BLM while still making sure the acquisition costs are adequate cost? Let's generate six more portfolios, each using a different BLM, and plot the trade-off between acquisition cost and fragmentation using the best solutions in each portfolio.
 
 ```{r, eval=FALSE}
 ## generate list of portfolios with different BLMS
 # make vector BLM parameters to use
-blm.pars=c(0, 100, 500, 1000, 1500, 2000)
+blm.pars=c(0, 0.0001, 0.0005, 0.001, 0.01, 1)
 
 # create list with different portfolio for each BLM
 results4<-list()
-for (i in seq_along(blm.parms)) {
-	results4[[i]]<-update(results3, ~opt(BLM=blm.pars[i]))
+for (i in seq_along(blm.pars)) {
+	results4[[i]]<-update(results3, ~opt(BLM=blm.pars[i], NUMREPS=10L))
 }
 
 ## extract data from portfolios
 # create empty vectors to store values
-bestsol.shortfall<-numeric(length(blm.pars))
-bestsol.con<-numeric(length(blm.pars))
+cost<-c()
+con<-c()
+blm<-c()
 
 # extract values for best solutions
 for (i in seq_along(blm.pars)) {
-	bestsol.ind<-results4[[i]]@best
-	bestsol.summary<-summary(results4[[i]])[results4,]
-	bestsol.shortfall[i]<-bestsol.summary["Shortfall"]
-	bestsol.con[i]<-bestsol.summary["Connectivity"]
+	cost<-append(cost, summary(results4[[i]])[["Cost"]])
+	con<-append(con, summary(results4[[i]])[["Connectivity"]])
+	blm<-append(blm, rep(blm.pars[i], nrow(summary(results4[[i]]))))
 }
 
-
 ## plot trade-off between shortfall and connectivity
+# get colours for legend
+legend.cols<-c("#FFFFB2", "#FED976", "#FEB24C", "#FD8D3C", "#F03B20", "#BD0026")
+pt.cols<-legend.cols[match(blm, blm.pars)]
+
+# plot trade-off data
 # higher shortfall values means worse representation
 # higher connectivity values mean more fragmentation
-plot(bestsol.shortfall~bestsol.con, xlab='Connectivity',
-ylab='Shortfall', title='Trade-off', type='b')
+plot(cost~con, bg=pt.cols, col='black', ylab='Cost', xlab='Connectivity', pch=21,
+	main='Trade-off between cost and connectivity')
+abline(lm(cost~con))
+
+# add legend
+legend("topright", legend=blm.pars, col='black', pt.bg=legend.cols, pch=21, title='BLM')
 ```
 
-Looking at this curve, the second portfolio in `results4` seems to achieve acceptable levels of representation while minimising fragmentation. Let's make a geoplot to compare it to `results3`.
+Looking at this curve and depending on the total budget, you might decide that second portfolio in `results4` achieves an acceptable level of representation and fragmentation. Let's generate another portfolio of solutions with BLM=0.0001, and then make some geoplots to compare it to `results3`.
 
 ```{r, eval=FALSE}
+# make new solutions with BLM=0.0001
+results5<-update(results3, ~opt(BLM=blm.pars[2]))
+
 # geoplot showing differences between the best solution in each portfolio
-plot(results4[[2]], results3, i=0, j=0)
+plot(results5, results3, i=0, j=0)
 
 # geoplot showing difference in selection frequencies between the two objects
-# black colors indicate that units are already in a protected area
-# blue colours indicate that units were more often selected in results4[[2]]
-# red  colours indicate that units were more often selected in results3
-plot(results4[[2]], results3)
+# black colours indicate that units are already in a protected area
+# blue colours indicate that units were more often selected in results4[[2]],
+# and red colours indicate that they were often selected in results3
+plot(results5, results3)
 ```
 
 So now, in our final portfolio, we have one hundred solutions. How can we compare them all and decide on a final prioritisation to implement? We don't time time to make 100 maps; while the maps this R package makes are pretty, they are not that pretty. Instead, we could make some dotcharts that let us compare various properties of the solutions.
@@ -264,14 +274,14 @@ So now, in our final portfolio, we have one hundred solutions. How can we compar
 # the score describes the overall value of the prioritisations based on our criteria
 # the lower the value, the better the solution
 # the best solution is coloured in red
-dotchart(results4[[2]], var='score')
+dotchart(results5, var='score')
 
 # make dotchart showing the connectivity of the solutions
 # solutions with lower values are more clustered
 # solutions with higher values are more fragmented
 # argument to n specifies the number of solutions to plot
 # argument to nbest specifies number of solutions to colour in red
-dotchart(results4[[2]], var='con', nbest=5, n=20)
+dotchart(results5, var='con', nbest=5, n=20)
 ```
 
 Dotcharts are useful if we want to know which solutions rank better according different performance metrics. However, they don't show us the how the solutions vary in their  planning unit selections or how well they represent different biodiversity features. For instance, maybe the solutions in our portfolio fall into two distinct groups: one group solutions that sites reserves in south-east Tasmania and another group that sites reserves in north-east Tasmania. Or maybe one group over-represents a subset of biodiversity features (eg. vegetation classes 1-10), while the other group of solutions over-represent another subset of features (eg. classes 20-50)? If we had some way of effectively grouping the solutions, then we wouldn't need to investigate all the solutions in our portfolio, we could just look at a few solutions from each group. So, how can we summarise the main themes of variation in our portfolio?
@@ -285,7 +295,7 @@ Fortunately, statisticians solved this problem a long time ago. We can use ordin
 # solutions that occupy nearby places in tree
 # have similar sets of planning units selected.
 # the best prioritisation is coloured in red.
-dendrogram(results4[[2]], type='dist', var='selections')
+dendrogram(results5, type='dist', var='selections')
 
 ## same dendrogram as above but with the best 10 prioritisations coloured in red
 # if all the red lines connect together at the bottom of the dendrogram
@@ -293,7 +303,7 @@ dendrogram(results4[[2]], type='dist', var='selections')
 # but if they connect near the top of the dendrogram then this means that
 # some of the best prioritisations have totally different sets of planning units
 # selected for protection.
-dendrogram(results4[[2]], type='dist', var='selections', nbest=10)
+dendrogram(results5, type='dist', var='selections', nbest=10)
 
 ## ordination plot showing differences between solutions based on the number of units
 ## occupied by each vegetation class (using MDS with Bray-Curtis distances)
@@ -304,16 +314,18 @@ dendrogram(results4[[2]], type='dist', var='selections', nbest=10)
 # similar levels of representation for the same species.
 # the size of the numbers indicate solution quality,
 # the bigger the number, the higher the solution score.
-ordiplot(results4[[2]], type='mds', var='occheld', method='bray')
+ordiplot(results5, type='mds', var='occheld', method='bray')
 
 # ordination plot showing differences between solutions based on the amount held 
 # by each vegetation class (using a principle components analysis)
 # labels are similar to the previous plot.
 # the arrows indicate the variable loadings.
-ordiplot(results4[[2]], type='pca', var='amountheld')
+ordiplot(results5, type='pca', var='amountheld')
 ```
 
-But how can we actually decide on which prioritisation to implement? I can't tell you that. I'm just a computer--a decision support tool. 
+But which prioritisation should we actually implement? You want me to tell you? 
+
+### I'm sorry, Dave. I'm afraid I can't do that. I'm just a computer--a decision support tool.
 
 <!--
 %\VignetteEngine{knitr::knitr}

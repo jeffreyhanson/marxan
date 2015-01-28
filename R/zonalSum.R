@@ -44,6 +44,8 @@ setMethod(
 			x<-rbind.fill(llply(seq_len(nlayers(y)), function(l) {
 				return(zonalSum.RasterLayerNotInMemory(bs, x, y[[l]], ids[l], registered=ncores>1))
 			}))
+			if (ncores>1)
+				clust<-stopCluster(clust)
 		}
 		# sort data and return
 		return(x[order(x$pu),])

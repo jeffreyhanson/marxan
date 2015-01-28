@@ -55,8 +55,10 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 	if (.Platform$OS.type=="unix")
 		laply(paste0('chmod +x "', file.path(coredirs, basename(options()$marxanExecutablePath)), '"'), system)
 	# set up parrallelisation
-	if (x@opts@NCORES>1)
-		registerDoSNOW(makeCluster(x@opts@NCORES, type="SOCK"))
+	if (x@opts@NCORES>1) {
+		clust<-makeCluster(x@opts@NCORES, type="SOCK")
+		registerDoSNOW(clust)
+	}
 	# run marxan
 	oldwd<-getwd()
 	suppressWarnings(status<-alply(
@@ -72,6 +74,10 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 		}
 	))
 	setwd(oldwd)
+	# end parallelisation
+	if (x@opts@NCORES>1) {
+		clust<-stopCluster(clust)
+	}
 	# check to see how it went
 	if (any(unlist(status, use.names=FALSE, recursive=FALSE)!=0))
 		stop("Marxan failed to execute.")

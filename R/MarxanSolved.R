@@ -277,11 +277,12 @@ setMethod(
 			basemap<-basemap.MarxanData(x@data, basemap, grayscale, force_reset)	
 		# main processing
 		cols<-character(nrow(x@data@pu))
-		cols[which(x@data@pu$status==2)]<-xlockedincol
-		cols[which(x@data@pu$status==2)]<-ylockedincol
-		cols[which(x@data@pu$status==3)]<-xlockedoutcol
-		cols[which(y@data@pu$status==3)]<-ylockedoutcol
 		if (is.null(i) || is.null(j)) {
+			cols[which(x@data@pu$status==2)]<-xlockedincol
+			cols[which(y@data@pu$status==2)]<-ylockedincol
+			cols[which(x@data@pu$status==3)]<-xlockedoutcol
+			cols[which(y@data@pu$status==3)]<-ylockedoutcol
+		
 			if (force_reset || !is.cached(x@results, "selectionfreqs"))
 				cache(x@results, "selectionfreqs", colMeans(x@results@selections))
 			xsc<-cache(x@results, "selectionfreqs")[which(nchar(cols)==0)]
@@ -309,13 +310,18 @@ setMethod(
 				i<-x@results@best
 			if (j==0)
 				j<-y@results@best
-				
 			cols2<-brewerCols(seq(0,1,length.out=4),colramp,alpha,n=4)
-			cols[which(x@results@selections[i,]==1 & x@results@selections[j,]==0)]<-cols2[1]
-			cols[which(x@results@selections[i,]==0 & x@results@selections[j,]==1)]<-cols2[2]
-			cols[which(x@results@selections[i,]==1 & x@results@selections[j,]==1)]<-cols2[3]
-			cols[which(x@results@selections[i,]==0 & x@results@selections[j,]==0)]<-cols2[4]
+			
+			cols[which(x@results@selections[i,]==1 & y@results@selections[j,]==0)]<-cols2[1]
+			cols[which(x@results@selections[i,]==0 & y@results@selections[j,]==1)]<-cols2[2]
+			cols[which(x@results@selections[i,]==1 & y@results@selections[j,]==1)]<-cols2[3]
+			cols[which(x@results@selections[i,]==0 & y@results@selections[j,]==0)]<-cols2[4]
 
+			cols[which(x@data@pu$status==2)]<-xlockedincol
+			cols[which(y@data@pu$status==2)]<-ylockedincol
+			cols[which(x@data@pu$status==3)]<-xlockedoutcol
+			cols[which(y@data@pu$status==3)]<-ylockedoutcol
+			
 			xrepr<-ifelse(i==x@results@best, '(best)', paste0('(',i,')'))
 			yrepr<-ifelse(i==y@results@best, '(best)', paste0('(',j,')'))
 
@@ -323,7 +329,7 @@ setMethod(
 				x@data@polygons,
 				cols,
 				basemap,
-				paste0("Difference in X solution ",i,ifelse(i==x@results@best, "(best)", ""), " and Y solution ",j, ifelse(j==y@results@best, " (best)", "")),
+				paste0("Difference in X solution ",i,ifelse(i==x@results@best, " (best)", ""), " and Y solution ",j, ifelse(j==y@results@best, " (best)", "")),
 				categoricalLegend(
 					c(cols2,xlockedincol,ylockedincol,xlockedoutcol,ylockedoutcol),
 					c("Selected in X",  "Selected in Y", "Both", "Neither", "Locked in X", "Locked in Y", paste("Locked out X"), paste("Locked out Y")),

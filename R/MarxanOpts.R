@@ -257,9 +257,11 @@ update.MarxanOpts<-function(x, formula) {
 	ops<-llply(as.list(attr(terms(formula),"variables"))[-1L], eval)
 	findInvalidMarxanOperations(ops)
 	ops<-ops[which(laply(ops, inherits, "MarxanOptsOperation"))]
-	for (i in seq_along(ops))
-		for (j in seq_along(ops[[i]]$value))
+	for (i in seq_along(ops)) {
+		for (j in seq_along(ops[[i]]$value)) {
 			slot(x, ops[[i]]$slot[[j]])<-ops[[i]]$value[[j]]
+		}
+	}
 	validObject(x, test=FALSE)
 	return(x)
 }
@@ -278,6 +280,7 @@ update.MarxanOpts<-function(x, formula) {
 opt<-function(...) {
 	args<-as.list(substitute(list(...)))[c(-1L)]
 	llply(names(args), match.arg, names(getSlots("MarxanOpts")))
+	args<-llply(args, eval, envir=parent.frame())
 	return(
 		structure(
 			list(names(args),args),

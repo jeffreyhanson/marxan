@@ -142,7 +142,7 @@ score.MarxanResults<-function(x, y=NULL) {
 
 #' @export
 summary.MarxanResults<-function(x) {
-	return(x@results@summary)
+	return(x@summary)
 }
 
 #' @export
@@ -377,7 +377,7 @@ dotchart.MarxanResults<-function(x, var="score", nbest=1, n=50) {
 		pch=16, 
 		labels=ord,
 		main="Solutions", 
-		xlab=gsub("_", " ", var, fixed=TRUE), 
+		xlab=gsub("_", " ", var, fixed=TRUE),
 		pt.cex=cex, 
 		lab.cex=0.8, 
 		color=replace(rep("black", n), (n-seq_len(nbest))+1, "red")

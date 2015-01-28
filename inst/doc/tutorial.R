@@ -59,7 +59,7 @@
 #  # argument to NCORES defines the number of threads for parallel processing
 #  # argument to NUMREPS controls the number of solutions in our portfolio
 #  # argument to BLM controls boundary length modifier
-#  results<-marxan(taspu2, tasinvis, targets="20%", spf=1, NUMREPS=100L, NCORES=2L, BLM=0)
+#  results<-marxan(taspu2, tasinvis, targets="20%", spf=1, NUMREPS=100L, NCORES=2L, BLM=0, lengthFactor=1e-8)
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  # histogram of proportion of vegetation classes adequately
@@ -157,7 +157,7 @@
 #  plot(results2, results3, i=3, j=5)
 #  
 #  # geoplot showing difference in selection frequencies between the two objects
-#  # black colors indicate that units are already in a protected area
+#  # white colors indicate that units are already in a protected area
 #  # blue colours indicate that units were more often selected in results2
 #  # red  colours indicate that units were more often selected in results3
 #  plot(results2, results3)
@@ -165,57 +165,68 @@
 ## ----, eval=FALSE--------------------------------------------------------
 #  ## generate list of portfolios with different BLMS
 #  # make vector BLM parameters to use
-#  blm.pars=c(0, 100, 500, 1000, 1500, 2000)
+#  blm.pars=c(0, 0.0001, 0.0005, 0.001, 0.01, 1)
 #  
 #  # create list with different portfolio for each BLM
 #  results4<-list()
-#  for (i in seq_along(blm.parms)) {
-#  	results4[[i]]<-update(results3, ~opt(BLM=blm.pars[i]))
+#  for (i in seq_along(blm.pars)) {
+#  	results4[[i]]<-update(results3, ~opt(BLM=blm.pars[i], NUMREPS=10L))
 #  }
 #  
 #  ## extract data from portfolios
 #  # create empty vectors to store values
-#  bestsol.shortfall<-numeric(length(blm.pars))
-#  bestsol.con<-numeric(length(blm.pars))
+#  cost<-c()
+#  con<-c()
+#  blm<-c()
 #  
 #  # extract values for best solutions
 #  for (i in seq_along(blm.pars)) {
-#  	bestsol.ind<-results4[[i]]@best
-#  	bestsol.summary<-summary(results4[[i]])[results4,]
-#  	bestsol.shortfall[i]<-bestsol.summary["Shortfall"]
-#  	bestsol.con[i]<-bestsol.summary["Connectivity"]
+#  	cost<-append(cost, summary(results4[[i]])[["Cost"]])
+#  	con<-append(con, summary(results4[[i]])[["Connectivity"]])
+#  	blm<-append(blm, rep(blm.pars[i], nrow(summary(results4[[i]]))))
 #  }
 #  
-#  
 #  ## plot trade-off between shortfall and connectivity
+#  # get colours for legend
+#  legend.cols<-c("#FFFFB2", "#FED976", "#FEB24C", "#FD8D3C", "#F03B20", "#BD0026")
+#  pt.cols<-legend.cols[match(blm, blm.pars)]
+#  
+#  # plot trade-off data
 #  # higher shortfall values means worse representation
 #  # higher connectivity values mean more fragmentation
-#  plot(bestsol.shortfall~bestsol.con, xlab='Connectivity',
-#  ylab='Shortfall', title='Trade-off', type='b')
+#  plot(cost~con, bg=pt.cols, col='black', ylab='Cost', xlab='Connectivity', pch=21,
+#  	main='Trade-off between cost and connectivity')
+#  abline(lm(cost~con))
+#  
+#  # add legend
+#  legend("topright", legend=blm.pars, col='black', pt.bg=legend.cols, pch=21, title='BLM')
 
 ## ----, eval=FALSE--------------------------------------------------------
+#  # make new solutions with BLM=0.0001
+#  results5<-update(results3, ~opt(BLM=blm.pars[2]))
+#  
 #  # geoplot showing differences between the best solution in each portfolio
-#  plot(results4[[2]], results3, i=0, j=0)
+#  plot(results5, results3, i=0, j=0)
 #  
 #  # geoplot showing difference in selection frequencies between the two objects
-#  # black colors indicate that units are already in a protected area
-#  # blue colours indicate that units were more often selected in results4[[2]]
-#  # red  colours indicate that units were more often selected in results3
-#  plot(results4[[2]], results3)
+#  # black colours indicate that units are already in a protected area
+#  # blue colours indicate that units were more often selected in results4[[2]],
+#  # and red colours indicate that they were often selected in results3
+#  plot(results5, results3)
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  # make dotchart showing the score of each solution
 #  # the score describes the overall value of the prioritisations based on our criteria
 #  # the lower the value, the better the solution
 #  # the best solution is coloured in red
-#  dotchart(results4[[2]], var='score')
+#  dotchart(results5, var='score')
 #  
 #  # make dotchart showing the connectivity of the solutions
 #  # solutions with lower values are more clustered
 #  # solutions with higher values are more fragmented
 #  # argument to n specifies the number of solutions to plot
 #  # argument to nbest specifies number of solutions to colour in red
-#  dotchart(results4[[2]], var='con', nbest=5, n=20)
+#  dotchart(results5, var='con', nbest=5, n=20)
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  ## dendrogram showing differences between solutions based on which planning units
@@ -224,7 +235,7 @@
 #  # solutions that occupy nearby places in tree
 #  # have similar sets of planning units selected.
 #  # the best prioritisation is coloured in red.
-#  dendrogram(results4[[2]], type='dist', var='selections')
+#  dendrogram(results5, type='dist', var='selections')
 #  
 #  ## same dendrogram as above but with the best 10 prioritisations coloured in red
 #  # if all the red lines connect together at the bottom of the dendrogram
@@ -232,7 +243,7 @@
 #  # but if they connect near the top of the dendrogram then this means that
 #  # some of the best prioritisations have totally different sets of planning units
 #  # selected for protection.
-#  dendrogram(results4[[2]], type='dist', var='selections', nbest=10)
+#  dendrogram(results5, type='dist', var='selections', nbest=10)
 #  
 #  ## ordination plot showing differences between solutions based on the number of units
 #  ## occupied by each vegetation class (using MDS with Bray-Curtis distances)
@@ -243,11 +254,11 @@
 #  # similar levels of representation for the same species.
 #  # the size of the numbers indicate solution quality,
 #  # the bigger the number, the higher the solution score.
-#  ordiplot(results4[[2]], type='mds', var='occheld', method='bray')
+#  ordiplot(results5, type='mds', var='occheld', method='bray')
 #  
 #  # ordination plot showing differences between solutions based on the amount held
 #  # by each vegetation class (using a principle components analysis)
 #  # labels are similar to the previous plot.
 #  # the arrows indicate the variable loadings.
-#  ordiplot(results4[[2]], type='pca', var='amountheld')
+#  ordiplot(results5, type='pca', var='amountheld')
 
