@@ -202,11 +202,11 @@ using namespace Rcpp;
 		      // check to see if more than 2 spatially identical lines
 		      ++it;
 		      if (it != range.second) {
-			it=range.first;
-			for (; it!=range.second; ++it) {
-			    warning_VSTR.push_back((it->second).getLID());
-			}
-		      }
+				it=range.first;
+				for (; it!=range.second; ++it) {
+					warning_VSTR.push_back((it->second).getLID());
+				}
+			   }
 		    }
 		  }
 		}

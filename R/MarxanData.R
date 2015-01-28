@@ -307,7 +307,7 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 			stop('Maximum targets have not been stored and so percent targets cannot be used,\nuse function maxtargets to set maximum targets')
 		tmp$target[rows]<-x@species$maxtargets[rows]*(as.numeric(gsub('%', '', x@species$target[rows], fixed=TRUE))/100)
 	}
-	write.table(tmp,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
+	write.table(tmp[,c('id','spf','target'),drop=FALSE],row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
 	write.table(x@puvspecies,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr.dat"))
 	write.table(x@puvspecies_spo,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr_sporder.dat"))
 	write.table(x@boundary,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"bound.dat"))

@@ -371,17 +371,19 @@ updateOperation<-function(x, arg, value) {
 
 # raster processing functions
 zonalSum.RasterLayerInMemory <- function(polys, rast, speciesName) {
-	tmp=rcpp_groupsum(getValues(polys),getValues(rast))
-	return(data.frame(species=speciesName, pu=attr(tmp, "ids"), amount=c(tmp)))
+	tmp<-rcpp_groupsum(getValues(polys),getValues(rast))
+	tmp<-data.frame(species=speciesName, pu=attr(tmp, "ids"), amount=c(tmp))
+	return(tmp[which(tmp$amount>0),,drop=FALSE])
 }
 
 zonalSum.RasterLayerNotInMemory <- function(bs, polys, rast, speciesName, ncores, registered) {
 	if (registered & .Platform$OS.type=="windows")
 		clusterExport(clust, c("bs","polys", "rast", "rcpp_groupsum"))
-	tmp=rcpp_groupcombine(llply(seq_len(bs$n), .parallel=registered, function(i) {
+	tmp<-rcpp_groupcombine(llply(seq_len(bs$n), .parallel=registered, function(i) {
 		return(rcpp_groupsum(getValues(polys, bs$row[i], bs$nrows[i]), getValues(rast, bs$row[i], bs$nrows[i])))
 	}))
-	return(data.frame(species=speciesName, pu=attr(tmp, "ids"), amount=c(tmp)))
+	tmp<-data.frame(species=speciesName, pu=attr(tmp, "ids"), amount=c(tmp))
+	return(tmp[which(tmp$amount>0),,drop=FALSE])
 }
 
 hashCall<-function(expr, skipargs=c(), env=parent.frame()) {
