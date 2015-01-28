@@ -16,6 +16,13 @@
 #  plot(results)
 
 ## ----, eval=FALSE--------------------------------------------------------
+#  # plot distribution of vegetation class 5
+#  spplot(results, 5, var='occ')
+#  
+#  # plot richness in planning units
+#  spplot(results, var='occ')
+
+## ----, eval=FALSE--------------------------------------------------------
 #  # generate new portfolio of reserve systems
 #  results2<-update(results, ~opt(BLM=500))
 

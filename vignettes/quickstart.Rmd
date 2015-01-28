@@ -24,6 +24,16 @@ plot(results, 0)
 plot(results)
 ```
 
+We can also plot distribution of features in the planning units.
+
+```{r, eval=FALSE}
+# plot distribution of vegetation class 5
+spplot(results, 5, var='occ')
+
+# plot richness in planning units
+spplot(results, var='occ')
+```
+
 The solutions in this portfolio are fairly fragmented. Let's generate some more solutions with a higher boundary length modifier (BLM).
 
 ```{r, eval=FALSE}

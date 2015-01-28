@@ -299,6 +299,16 @@ hist(rowMeans(targetsmet(results)), freq=TRUE, xlim=c(0,1), las=1,
 )
 </code></pre>
 
+<p>Now that we have formatted the data using the <code>marxan</code> function, we can also plot the distribution of the vegetation class in the planning units.</p>
+
+<pre><code class="r"># geoplot distribution of vegetation class 5
+spplot(results, 5, var=&#39;occ&#39;)
+
+# geoplot richness in planning units
+# with a satellite base map
+spplot(results, var=&#39;occ&#39;, basemap=&#39;satellite&#39;)
+</code></pre>
+
 <p>Unfortunately, all of the solutions in our portfolio have failed to meet the targets for the all vegetation classes. To fix this, we need to increase the species penalty factors (SPFs), and rerun MARXAN to generate a new portfolio of solutions.</p>
 
 <p>If you recall, earlier we used the <code>marxan</code> function because it can pre-process the raw planning unit and feature data, run MARXAN, and load the results back into R. As a consequence, the <code>results</code> object has all the pre-processed data we need for the next MARXAN run. To reduce processing time and avoid re-running the same geoprocessing operations, we can re-use the pre-processed data in <code>results</code>. To do this, we will use the <code>update</code> function, to copy the pre-processed data in <code>results</code>, change the species penalty factors, rerun MARXAN, and load the new results back into R.</p>

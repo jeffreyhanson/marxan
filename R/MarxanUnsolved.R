@@ -118,7 +118,7 @@ setMethod(
 	"spplot",
 	signature(obj='MarxanUnsolved'),
 	function(obj, y=obj@data@species$id, var='amount', basemap="none", colramp="YlOrRd", alpha=ifelse(basemap=="none", 1, 0.7), grayscale=FALSE, force_reset=FALSE) {
-		return(spplot.MarxanData(obj@data, y, var, basemap, colramp, alpha, grayscale, force_reset))
+		return(spplot(obj@data, y, var, basemap, colramp, alpha, grayscale, force_reset))
 	}
 )
 

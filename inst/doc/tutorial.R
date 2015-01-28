@@ -75,6 +75,14 @@
 #  )
 
 ## ----, eval=FALSE--------------------------------------------------------
+#  # geoplot distribution of vegetation class 5
+#  spplot(results, 5, var='occ')
+#  
+#  # geoplot richness in planning units
+#  # with a satellite base map
+#  spplot(results, var='occ', basemap='satellite')
+
+## ----, eval=FALSE--------------------------------------------------------
 #  # copy the MARXAN parameters and pre-processed data in results,
 #  # update the SPF parameter for all species,
 #  # run MARXAN,

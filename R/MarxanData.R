@@ -74,6 +74,7 @@ setClass("MarxanData",
 				stop('argument to species$target contains NA or non-finite values')
 				
 			if (!is.null(object@species$name)) {
+				object@species$name<-gsub("[[:punct:]]", "", object@species$name)
 				if (is.factor(object@species$name))
 					object@species$name<-as.character(object@species$name)
 				if (!inherits(object@species$name, 'character'))
@@ -306,8 +307,9 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 		if (is.null(x@species$maxtargets))
 			stop('Maximum targets have not been stored and so percent targets cannot be used,\nuse function maxtargets to set maximum targets')
 		tmp$target[rows]<-x@species$maxtargets[rows]*(as.numeric(gsub('%', '', x@species$target[rows], fixed=TRUE))/100)
+		tmp<-tmp[,which(names(tmp) != 'maxtarget'),drop=FALSE]
 	}
-	write.table(tmp[,c('id','spf','target'),drop=FALSE],row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
+	write.table(tmp,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"spec.dat"))
 	write.table(x@puvspecies,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr.dat"))
 	write.table(x@puvspecies_spo,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"puvspr_sporder.dat"))
 	write.table(x@boundary,row.names=FALSE,sep=",",quote=FALSE,file.path(dir,"bound.dat"))
@@ -610,13 +612,13 @@ setMethod(
 			basemap<-basemap.MarxanData(obj, basemap, grayscale, force_reset)
 		# main processing
 		rows<-which(obj@puvspecies$species %in% y)
-		pus<-obj@puvspecies$pu[rows]
-		if (var=='occ') {
-			values<-rep(1, length(rows))
-		} else {
-			values<-obj@puvspecies$amount[rows]
-		}
-		values<-rcpp_groupsum(pus, values)
+		raw_amount<-obj@puvspecies$amount[rows]
+		if (var=='occ')
+			raw_amount<-as.numeric(raw_amount>0)
+		raw_values<-rcpp_groupsum(obj@puvspecies$pu[rows], raw_amount)
+		raw_ids<-as.numeric(attr(raw_values,"ids"))
+		values<-numeric(nrow(obj@pu))
+		values[raw_ids]<-c(raw_values)
 		if (length(unique(values))>1) {
 			cols<-brewerCols(rescale(values, to=c(0,1)), colramp, alpha)
 		} else {
@@ -628,7 +630,7 @@ setMethod(
 			obj@polygons,
 			cols,
 			basemap,
-			paste0("Species ", ifelse(y=='occ', 'occupancy', 'amount'), " in planning units"),
+			paste0("Species ", ifelse(var=='occ', 'occupancy', 'amount'), " in planning units"),
 			continuousLegend(values,colramp,posx=c(0.3, 0.4),posy=c(0.1, 0.9)),
 			beside=TRUE
 		)

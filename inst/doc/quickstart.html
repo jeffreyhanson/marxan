@@ -212,7 +212,7 @@ library(marxan)
 data(taspu, tasinvis)
 </code></pre>
 
-<p>This data comes from the <a href="http://marxan.net/courses.html">&#39;Introduction to Marxan&#39;</a>. The <code>taspu</code> object stores data for the planning units, and the <code>tasinvis</code> object stores data for the 63 vegetation classes&ndash;the biodiversity features. Let&#39;s make some reserve systems and plot them.</p>
+<p>This data comes from the <a href="http://marxan.net/courses.html">&#39;Introduction to Marxan&#39;</a>. The <code>taspu</code> object stores data for the planning units, and the <code>tasinvis</code> object stores data for 63 vegetation classes&ndash;the biodiversity features in this example problem. Let&#39;s make some reserve systems and plot them.</p>
 
 <pre><code class="r"># make reserve systems
 results&lt;-marxan(taspu, tasinvis, targets=&quot;20%&quot;, NUMREPS=100L, BLM=0)
@@ -222,6 +222,15 @@ plot(results, 0)
 
 # geoplot for selection frequencies
 plot(results)
+</code></pre>
+
+<p>We can also plot distribution of features in the planning units.</p>
+
+<pre><code class="r"># plot distribution of vegetation class 5
+spplot(results, 5, var=&#39;occ&#39;)
+
+# plot richness in planning units
+spplot(results, var=&#39;occ&#39;)
 </code></pre>
 
 <p>The solutions in this portfolio are fairly fragmented. Let&#39;s generate some more solutions with a higher boundary length modifier (BLM).</p>
@@ -248,7 +257,7 @@ dotchart(results2, var=&#39;score&#39;)
 dotchart(results2, var=&#39;con&#39;)
 </code></pre>
 
-<p>Finally, let&#39;s use multivariate analyses to visualise compare the solutions in the second portfolio.</p>
+<p>Finally, let&#39;s use multivariate analyses to visualise and compare the solutions in the second portfolio.</p>
 
 <pre><code class="r"># dendrogram showing how similar solutions are to each other based on selections
 dendrogram(results2, type=&#39;dist&#39;, var=&#39;selections&#39;, nbest=10)
