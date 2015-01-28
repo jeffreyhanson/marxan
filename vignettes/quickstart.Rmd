@@ -11,7 +11,7 @@ library(marxan)
 data(taspu, tasinvis)
 ```
 
-This data comes from the ['Introduction to Marxan'](http://marxan.net/courses.html). The `taspu` object stores data for the planning units, and the `tasinvis` object stores data for the 63 vegetation classes--the biodiversity features. Let's make some reserve systems and plot them.
+This data comes from the ['Introduction to Marxan'](http://marxan.net/courses.html). The `taspu` object stores data for the planning units, and the `tasinvis` object stores data for 63 vegetation classes--the biodiversity features in this example problem. Let's make some reserve systems and plot them.
 
 ```{r, eval=FALSE}
 # make reserve systems
@@ -51,7 +51,7 @@ dotchart(results2, var='score')
 dotchart(results2, var='con')
 ```
 
-Finally, let's use multivariate analyses to visualise compare the solutions in the second portfolio.
+Finally, let's use multivariate analyses to visualise and compare the solutions in the second portfolio.
 
 ```{r, eval=FALSE}
 # dendrogram showing how similar solutions are to each other based on selections
