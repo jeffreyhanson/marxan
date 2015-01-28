@@ -529,12 +529,11 @@ spp<-function(x, name=NA, spf=NA, target=NA) {
 	if (length(x)!=length(target) & !identical(target, NA))
 		stop("argument to target must have same length as argument to x")
 	# generate command object
-	obj<-list(x=c(), value=list(), col=c())
+	obj<-list(x=x, value=list(), col=c())
 	for (i in c('name','spf','target')) {
 		if (!all(is.na(get(i)))) {
-			obj$x<-append(obj$x,x)
-			obj$value<-append(obj$value,get(i))
-			obj$col<-append(obj$col,rep(i,length(x)))
+			obj$value<-append(obj$value,list(get(i)))
+			obj$col<-append(obj$col,i)
 		}
 	}
 	class(obj)<-c("MarxanUpdateOperation", "MarxanSpeciesOperation",  "MarxanDataOperation")
@@ -571,12 +570,11 @@ pu<-function(id, cost=NA, status=NA) {
 	if (length(id)!=length(status) & !identical(status, NA))
 		stop("argument to status must have same length as argument to id")
 	# generate command object
-	obj<-list(id=c(), value=list(), col=c())	
+	obj<-list(id=id, value=list(), col=c())	
 	for (i in c('cost','status')) {
 		if (!all(is.na(get(i)))) {
-			obj$id<-append(obj$id,id)
-			obj$value<-append(obj$value,get(i))
-			obj$col<-append(obj$col,rep(i,length(id)))
+			obj$value<-append(obj$value,list(get(i)))
+			obj$col<-append(obj$col,i)
 		}
 	}
 	class(obj)<-c("MarxanUpdateOperation", "MarxanPuOperation",  "MarxanDataOperation")
