@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>marxan tutorial</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>marxan tutorial</h1>
+
+<h3>Overview</h3>
+
+<p>The marxan R package is designed to bring the entire Marxan workflow to R. It provides functions for preparing raw data for Marxan, running Marxan, and visualising Marxan results. It is designed to be fast: many of the computationally intensive operations are performed in C++ and have options to employ parallel processing. However, it also needs to be robust and flexible. Marxan users need to be able to change any aspect of a conservation planning scenario and the Marxan parameters with ease, but also be told off when they are doing something silly. To achieve this, the package makes extensive use of S4 classes as well as a combination of S3 and S4 dispatch methods.</p>
+
+<h3>Introduction to MaRxaning</h3>
+
+<p>First, let&#39;s load the &#39;marxan&#39; R package and some example data. The example data distributed with this package comes from the <a href="http://marxan.net/courses.html">&#39;Introduction to Marxan&#39;</a>.</p>
+
+<pre><code class="r"># load marxan R package
+library(marxan)
+
+# load example data
+data(taspu, tasinvis)
+</code></pre>
+
+<p>Biodiversity features are represented using <code>RasterStack</code> objects. A <code>RasterStack</code> represents a collection of <code>RasterLayers</code>. Each <code>RasterLayer</code> describes the distribution of a biodiversity feature. In our example data, the <code>tasinvis</code> object is a <code>RasterStack</code> object that contains 63 <code>RasterLayers</code>. Each <code>RasterLayer</code> describes the distribution of a vegetation class in Tasmania (Australia). Ones indicate the presence of a vegetation class in an area and zeros indicate the absence of this class in the area. Let&#39;s take a look at the first 12 vegetation classes:</p>
+
+<pre><code class="r"># plot first 12 vegetation classes
+# grey colors indicate absence
+# green colors indicate presence
+# try making the plotting window larger if 
+# you only see gray
+plot(tasinvis)
+</code></pre>
+
+<p>Planning units are represented using a <code>SpatialPolygons</code> object. Each polygon represents an individual planning unit. Here, in this example, the <code>taspu</code> object contains our planning units for Tasmania. This object has an the attribute table, and in it each unit is associated an id (&#39;id&#39; field), an acquisition cost (&#39;cost&#39; field), and a value indicating if the most of the unit is contained in an existing protected area (&#39;status&#39; field). Let&#39;s take a look at <code>taspu</code>:</p>
+
+<pre><code class="r"># the attribute table for a shapefile is stored
+# in the data slot which can be accessed with @data
+# print first 20 rows of attribute table
+head(taspu@data)
+
+# plot planning units
+plot(taspu)
+
+# plot planning units, 
+# and colour by acquisition cost
+spplot(taspu, &#39;cost&#39;)
+
+# plot planning units, 
+# and colour by present level of protection
+# 0 = not already protected
+# 2 = already protected
+spplot(taspu, &#39;status&#39;)
+</code></pre>
+
+<p>Clearly, there is huge variation in acquisiton cost and many of the planning units are already in existing protected areas. However, to keep things simple for the moment, let&#39;s assume that all planning units have equal costs and that there are no protected areas in Tasmania. To do this, let&#39;s make a copy of <code>taspu</code> called <code>taspu2</code>, and change all the costs to 1, and set all the status values to 0. We will then use this copy, <code>taspu2</code>, to make some reserve systems.</p>
+
+<pre><code class="r"># copy taspu
+taspu2&lt;-taspu
+
+# set costs
+taspu2@data$cost&lt;-1
+
+# set status values
+# note the &#39;L&#39; after the zero is used to indicate
+# that we mean the integer zero and not the decimal
+# place number zero
+taspu2@data$status&lt;-0L
+
+# show first 20 rows of taspu
+# to check they are the same as before
+head(taspu@data)
+
+# show first 20 rows of taspu2
+# to check they are different
+head(taspu2@data)
+</code></pre>
+
+<p>Now, let&#39;s make some reserve systems. We can do this using the <code>marxan</code> function&ndash; syntactic sugar for the conservation planner. This function automates the process of (1) taking planning unit and biodiversity feature data and turning it into input data for MARXAN, (2) saving the input data to a folder on the computer, (3) copying the MARXAN executable file to that folder, (4) running MARXAN, and finally (5) loading the MARXAN outputs into R. One line of R code; most of the Marxan workflow. </p>
+
+<p>Here, we will generate a portfolio of reserve systems that represent 20% of each vegetation class. We will also make use of parallel processing to greatly reduce run time. Note that some of the numbers below have an &#39;L&#39; character after them, this is because we are specifying an integer and not a decimal place number. For instance, we cannot have a portfolio with 6.5 solutions.</p>
+
+<pre><code class="r"># argument to targets is level of protection
+# argument to spf is the species penalty factor for each vegetation class
+# argument to NCORES defines the number of threads for parallel processing
+# argument to NUMREPS controls the number of solutions in our portfolio
+# argument to BLM controls boundary length modifier
+results&lt;-marxan(taspu2, tasinvis, targets=&quot;20%&quot;, spf=1, NUMREPS=100L, NCORES=2L, BLM=0)
+</code></pre>
+
+<p>Well, that was easy. Apparently it worked; we can see the text MARXAN normally prints when we run it. Before we do anything, let&#39;s check that our vegetation classes are adequately represented. </p>
+
+<pre><code class="r"># histogram of proportion of vegetation classes adequately
+# represented in each solution
+# if many of the solutions adequately represented the classes
+# most of the bins would be close to 1, whereas if 
+# the solutions failed to represent the classes most of the
+# bins would be close to zero
+hist(rowMeans(targetsmet(results)), freq=TRUE, xlim=c(0,1), las=1,
+    main=&#39;Histogram of representation in portfolio&#39;,
+    ylab=&#39;Frequency of solutions&#39;,
+    xlab=&#39;Proportion of veg. classes adequately represented&#39;
+)
+</code></pre>
+
+<p>Unfortunately, all of the solutions in our portfolio have failed to meet the targets for the all vegetation classes. To fix this, we need to increase the species penalty factors (SPFs), and rerun MARXAN to generate a new portfolio of solutions.</p>
+
+<p>If you recall, earlier we used the <code>marxan</code> function because it can pre-process the raw planning unit and feature data, run MARXAN, and load the results back into R. As a consequence, the <code>results</code> object has all the pre-processed data we need for the next MARXAN run. To reduce processing time and avoid re-running the same geoprocessing operations, we can re-use the pre-processed data in <code>results</code>. To do this, we will use the <code>update</code> function, to copy the pre-processed data in <code>results</code>, change the species penalty factors, rerun MARXAN, and load the new results back into R.</p>
+
+<pre><code class="r"># copy the MARXAN parameters and pre-processed data in results,
+# update the SPF parameter for all species,
+# run MARXAN,
+# load the solutions back into R,
+# store the solutions in results2
+results2&lt;-update(results, ~spp(1:63, spf=rep(1000,63))
+</code></pre>
+
+<p>Now we have a new portfolio of solutions, let&#39;s compare the proportion of vegetation classes adequately represented in each of the portfolios.</p>
+
+<pre><code class="r"># create 2 plotting areas in the one window
+par(mfrow=c(1,2))
+
+# histogram of first portfolio
+hist(rowMeans(targetsmet(results)), xlab=&quot;Level of representation with SPF=1&quot;)
+
+# histogram of second portfolio
+# if you see a giant single rectangle this means
+# all the solutions have the same level of representation
+hist(rowMeans(targetsmet(results)), xlab=&quot;Level of representation with SPF=100&quot;)
+</code></pre>
+
+<p>The new portfolio of solutions is much better at representing our vegetation classes.
+ To see what these solutions look like, let&#39;s make some geoplots of individual solutions in <code>results2</code>. Let&#39;s also make a geoplot showing which planning units were most frequently selected in all the solutions in <code>results2</code>.</p>
+
+<pre><code class="r"># make a geoplot of the best solution
+plot(results2, 0)
+
+# make a geoplot of the second solution,
+# with kickass google map background and transparent colors
+plot(results2, 2, basemap=&#39;satellite&#39;, alpha=0.8)
+
+# make a geoplot of planning unit selection frequencies,
+# planning units with darker colours were more often
+# selected for protection than those with lighter colours.
+plot(results2, basemap=&#39;satellite&#39;, alpha=0.8)
+
+# make a geoplot of selection frequencies using different colours
+# see Color Brewer (http://colorbrewer2.org/) for available 
+# colour ramps
+plot(results2, colramp=&#39;YlGnBu&#39;)
+</code></pre>
+
+<p>That was neat. But all these solutions so far were made under the assumption that all planning units have equal acquisition cost and Tasmania does not have any protected areas. For instance, our solutions might indicate that we should protect several really costly planning units when instead, we could substitute several other cheap planning units and achieve the same level of representation for all the vegetation classes. Or, maybe several vegetation classes are already adequately represented in existing protected areas in Tasmania, so we don&#39;t actually need to buy any more planning units to adequately protected these classes.</p>
+
+<p>Similar to before, we will use the <code>update</code> function to re-use pre-processed data. This time we will use the <code>update</code> function change the planning unit status and cost values.</p>
+
+<pre><code class="r"># get planning unit ids
+pu.ids&lt;-taspu@data$id
+
+# get planning unit costs 
+pu.costs&lt;-taspu@data$cost
+
+# get planning unit statuses
+pu.status&lt;-taspu@data$status
+
+# copy input parameters and data in results2, 
+# change planning unit costs and statuses
+# rerun MARXAN,
+# load outputs into R and store them in results3
+results3&lt;-update(results2, pu(id, cost=pu.costs, status=pu.status))
+</code></pre>
+
+<p>Now we have a third portfolio of solutions based on realistic planning unit data. Let&#39;s compare the previous portfolio based on unrealistic planning unit data with the new portfolio based on realistic planning unit data.</p>
+
+<pre><code class="r"># geoplot showing differences between the best solution in each portfolio
+plot(results2, results3, i=0, j=0)
+
+# geoplot showing differences between the third solution
+# in results2 and the fifth solution in results3
+plot(results2, results3, i=3, j=5)
+
+# geoplot showing difference in selection frequencies between the two objects
+# black colors indicate that units are already in a protected area
+# blue colours indicate that units were more often selected in results2
+# red  colours indicate that units were more often selected in results3
+plot(results2, results3)
+</code></pre>
+
+<p>Explicitly considering real-world costs and existing protected areas has radically changed our prioritisations. This highlights the importance of collecting as much real-world data as possible. But the solutions in our prioritisation still have (at least) one remaining issue. </p>
+
+<p>All the solutions in our current portfolio, <code>results3</code>, all seem to be fairly fragmented. If implemented as protected areas, these solutions might be associated with poor connectivity and high maintenance costs. To reduce fragmentation, we can increase the boundary length modifier (BLM). But how can we pick an appropriate BLM while still making sure our vegetation classes are adequately represented? Let&#39;s generate six more portfolios, each using a different BLM, and plot the trade-off between shortfall and fragmentation using the best solutions in each portfolio.</p>
+
+<pre><code class="r">## generate list of portfolios with different BLMS
+# make vector BLM parameters to use
+blm.pars=c(0, 100, 500, 1000, 1500, 2000)
+
+# create list with different portfolio for each BLM
+results4&lt;-list()
+for (i in seq_along(blm.parms)) {
+    results4[[i]]&lt;-update(results3, ~opt(BLM=blm.pars[i]))
+}
+
+## extract data from portfolios
+# create empty vectors to store values
+bestsol.shortfall&lt;-numeric(length(blm.pars))
+bestsol.con&lt;-numeric(length(blm.pars))
+
+# extract values for best solutions
+for (i in seq_along(blm.pars)) {
+    bestsol.ind&lt;-results4[[i]]@best
+    bestsol.summary&lt;-summary(results4[[i]])[results4,]
+    bestsol.shortfall[i]&lt;-bestsol.summary[&quot;Shortfall&quot;]
+    bestsol.con[i]&lt;-bestsol.summary[&quot;Connectivity&quot;]
+}
+
+
+## plot trade-off between shortfall and connectivity
+# higher shortfall values means worse representation
+# higher connectivity values mean more fragmentation
+plot(bestsol.shortfall~bestsol.con, xlab=&#39;Connectivity&#39;,
+ylab=&#39;Shortfall&#39;, title=&#39;Trade-off&#39;, type=&#39;b&#39;)
+</code></pre>
+
+<p>Looking at this curve, the second portfolio in <code>results4</code> seems to achieve acceptable levels of representation while minimising fragmentation. Let&#39;s make a geoplot to compare it to <code>results3</code>.</p>
+
+<pre><code class="r"># geoplot showing differences between the best solution in each portfolio
+plot(results4[[2]], results3, i=0, j=0)
+
+# geoplot showing difference in selection frequencies between the two objects
+# black colors indicate that units are already in a protected area
+# blue colours indicate that units were more often selected in results4[[2]]
+# red  colours indicate that units were more often selected in results3
+plot(results4[[2]], results3)
+</code></pre>
+
+<p>So now, in our final portfolio, we have one hundred solutions. How can we compare them all and decide on a final prioritisation to implement? We don&#39;t time time to make 100 maps; while the maps this R package makes are pretty, they are not that pretty. Instead, we could make some dotcharts that let us compare various properties of the solutions.</p>
+
+<pre><code class="r"># make dotchart showing the score of each solution
+# the score describes the overall value of the prioritisations based on our criteria
+# the lower the value, the better the solution
+# the best solution is coloured in red
+dotchart(results4[[2]], var=&#39;score&#39;)
+
+# make dotchart showing the connectivity of the solutions
+# solutions with lower values are more clustered
+# solutions with higher values are more fragmented
+# argument to n specifies the number of solutions to plot
+# argument to nbest specifies number of solutions to colour in red
+dotchart(results4[[2]], var=&#39;con&#39;, nbest=5, n=20)
+</code></pre>
+
+<p>Dotcharts are useful if we want to know which solutions rank better according different performance metrics. However, they don&#39;t show us the how the solutions vary in their  planning unit selections or how well they represent different biodiversity features. For instance, maybe the solutions in our portfolio fall into two distinct groups: one group solutions that sites reserves in south-east Tasmania and another group that sites reserves in north-east Tasmania. Or maybe one group over-represents a subset of biodiversity features (eg. vegetation classes 1-10), while the other group of solutions over-represent another subset of features (eg. classes 20-50)? If we had some way of effectively grouping the solutions, then we wouldn&#39;t need to investigate all the solutions in our portfolio, we could just look at a few solutions from each group. So, how can we summarise the main themes of variation in our portfolio?</p>
+
+<p>Fortunately, statisticians solved this problem a long time ago. We can use ordination techniques to create a few variables that describe commonalities among the solutions, and visualise the main sources of variation in a small number of dimensions.</p>
+
+<pre><code class="r">## dendrogram showing differences between solutions based on which planning units 
+## were selected (using Bray-Curtis distances by default)
+# the solutions are shown at the (bottom) tips of the tree.
+# solutions that occupy nearby places in tree
+# have similar sets of planning units selected.
+# the best prioritisation is coloured in red.
+dendrogram(results4[[2]], type=&#39;dist&#39;, var=&#39;selections&#39;)
+
+## same dendrogram as above but with the best 10 prioritisations coloured in red
+# if all the red lines connect together at the bottom of the dendrogram
+# this means that all the best prioritisations are really similar to each other,
+# but if they connect near the top of the dendrogram then this means that
+# some of the best prioritisations have totally different sets of planning units
+# selected for protection.
+dendrogram(results4[[2]], type=&#39;dist&#39;, var=&#39;selections&#39;, nbest=10)
+
+## ordination plot showing differences between solutions based on the number of units
+## occupied by each vegetation class (using MDS with Bray-Curtis distances)
+# we can also use multivariate techniques to see how the solutions vary
+# based on how well they represent different vegetation classes.
+# the numbers indicate solution indices.
+# solutions closer to each other in this plot have more
+# similar levels of representation for the same species.
+# the size of the numbers indicate solution quality,
+# the bigger the number, the higher the solution score.
+ordiplot(results4[[2]], type=&#39;mds&#39;, var=&#39;occheld&#39;, method=&#39;bray&#39;)
+
+# ordination plot showing differences between solutions based on the amount held 
+# by each vegetation class (using a principle components analysis)
+# labels are similar to the previous plot.
+# the arrows indicate the variable loadings.
+ordiplot(results4[[2]], type=&#39;pca&#39;, var=&#39;amountheld&#39;)
+</code></pre>
+
+<p>But how can we actually decide on which prioritisation to implement? I can&#39;t tell you that. I&#39;m just a computer&ndash;a decision support tool. </p>
+
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{marxan R package tutorial}
+-->
+
+</body>
+
+</html>

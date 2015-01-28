@@ -1,4 +1,4 @@
-marxan R package classes
+marxan classes
 ============
 
 ## Overview

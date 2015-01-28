@@ -25,12 +25,11 @@ test()
 library(devtools)
 install('C:/Users/jeff/Documents/GitHub/marxan')
 
-
-# local from github
+# install from github
 library(devtools)
 install_github('paleo13/marxan')
 
-# check vignettes
+# make vignettes
 library(devtools)
 setwd('C:/Users/jeff/Documents/GitHub/marxan')
 build_vignettes()

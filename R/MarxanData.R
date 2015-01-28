@@ -511,21 +511,35 @@ update.MarxanData<-function(x, formula, force_reset=TRUE) {
 #' spp(1, name='species1')
 #' spp(2, spf=5)
 spp<-function(x, name=NA, spf=NA, target=NA) {
-	if (is.na(name) & is.na(spf) & is.na(target))
+	# check for invalid values
+	if (all(is.na(name)) & all(is.na(spf)) & all(is.na(target)))
 		stop("no arguments were specified to change values.")
-	args<-structure(list(name,spf,target), .Names=c("name","spf","target"))
-	args<-args[which(!laply(args, is.na))]
-	return(
-		structure(
-			list(
-				x, 
-				args,
-				names(args)
-			),
-			.Names = c("x", "value", "col"),
-			class = c("MarxanUpdateOperation", "MarxanSpeciesOperation",  "MarxanDataOperation")
-		)
-	)
+	if (length(name)>1 & any(is.na(name)))
+		stop("argument to name must not have have any NA values if multiple values specified")
+	if (length(spf)>1 & any(is.na(spf)))
+		stop("argument to spf must not have have any NA values if multiple values specified")
+	if (length(target)>1 & any(is.na(target)))
+		stop("argument to target must not have have any NA values if multiple values specified")
+	if (any(is.na(x)))
+		stop("argument to x must not have have any NA values")
+	if (length(x)!=length(name) & !identical(name, NA))
+		stop("argument to name must have same length as argument to x")
+	if (length(x)!=length(spf) & !identical(spf, NA))
+		stop("argument to spf must have same length as argument to x")
+	if (length(x)!=length(target) & !identical(target, NA))
+		stop("argument to target must have same length as argument to x")
+	# generate command object
+	obj<-list(x=c(), value=list(), col=c())
+	for (i in c('name','spf','target')) {
+		if (!all(is.na(get(i)))) {
+			obj$x<-append(obj$x,x)
+			obj$value<-append(obj$value,get(i))
+			obj$col<-append(obj$col,rep(i,length(x)))
+		}
+	}
+	class(obj)<-c("MarxanUpdateOperation", "MarxanSpeciesOperation",  "MarxanDataOperation")
+	# return object
+	return(obj)
 }
 
 #' Update Marxan planning unit parameters
@@ -543,21 +557,31 @@ spp<-function(x, name=NA, spf=NA, target=NA) {
 #' pu(1, cost=3)
 #' pu(1, status=1)
 pu<-function(id, cost=NA, status=NA) {
-	if (is.na(cost) & is.na(status))
-		stop("no arguments were supplied to change values.")
-	args<-structure(list(cost,status), .Names=c("cost","status"))
-	args<-args[which(!laply(args, is.na))]		
-	return(
-		structure(
-			list(
-				id, 
-				args,
-				names(args)
-			),
-			.Names = c("id", "value", "col"),
-			class = c("MarxanUpdateOperation", "MarxanPuOperation",  "MarxanDataOperation")
-		)
-	)
+	# check for invalid values
+	if (all(is.na(cost)) & all(is.na(status)))
+		stop("no arguments were specified to change values.")
+	if (length(cost)>1 & any(is.na(cost)))
+		stop("argument to cost must not have have any NA values if multiple values specified")
+	if (length(status)>1 & any(is.na(status)))
+		stop("argument to status must not have have any NA values if multiple values specified")
+	if (any(is.na(id)))
+		stop("argument to id must not have have any NA values")
+	if (length(id)!=length(cost) & !identical(cost, NA))
+		stop("argument to cost must have same length as argument to id")
+	if (length(id)!=length(status) & !identical(status, NA))
+		stop("argument to status must have same length as argument to id")
+	# generate command object
+	obj<-list(id=c(), value=list(), col=c())	
+	for (i in c('cost','status')) {
+		if (!all(is.na(get(i)))) {
+			obj$id<-append(obj$id,id)
+			obj$value<-append(obj$value,get(i))
+			obj$col<-append(obj$col,rep(i,length(id)))
+		}
+	}
+	class(obj)<-c("MarxanUpdateOperation", "MarxanPuOperation",  "MarxanDataOperation")
+	# return object
+	return(obj)
 }
 
 
