@@ -59,7 +59,7 @@
 #  # argument to NCORES defines the number of threads for parallel processing
 #  # argument to NUMREPS controls the number of solutions in our portfolio
 #  # argument to BLM controls boundary length modifier
-#  results<-marxan(taspu2, tasinvis, targets="20%", spf=1, NUMREPS=100L, NCORES=2L, BLM=0, lengthFactor=1e-8)
+#  results<-marxan(taspu2, tasinvis, targets="20%", spf=1, NUMREPS=100L, NCORES=2L, BLM=0, lengthFactor=1e-5)
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  # histogram of proportion of vegetation classes adequately
@@ -80,7 +80,7 @@
 #  # run MARXAN,
 #  # load the solutions back into R,
 #  # store the solutions in results2
-#  results2<-update(results, ~spp(1:63, spf=rep(1000,63)))
+#  results2<-update(results, ~spp(1:63, spf=rep(1,63)))
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  # get levels of representation in each portfolio
@@ -111,8 +111,6 @@
 #  
 #  # print best level of representation
 #  print(max(results2.repr))
-#  
-#  
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  # make a geoplot of the best solution
@@ -165,7 +163,7 @@
 ## ----, eval=FALSE--------------------------------------------------------
 #  ## generate list of portfolios with different BLMS
 #  # make vector BLM parameters to use
-#  blm.pars=c(0, 0.0001, 0.0005, 0.001, 0.01, 1)
+#  blm.pars=c(0, 100, 250, 500, 750, 1000)
 #  
 #  # create list with different portfolio for each BLM
 #  results4<-list()
@@ -182,7 +180,7 @@
 #  # extract values for best solutions
 #  for (i in seq_along(blm.pars)) {
 #  	cost<-append(cost, summary(results4[[i]])[["Cost"]])
-#  	con<-append(con, summary(results4[[i]])[["Connectivity"]])
+#  	con<-append(con, summary(results4[[i]])[["Shortfall"]])
 #  	blm<-append(blm, rep(blm.pars[i], nrow(summary(results4[[i]]))))
 #  }
 #  

@@ -265,5 +265,5 @@ The data stored in the `MarxanSolved` object can be accessed using methods descr
 
 <!--
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Guide to Marxan S4 classes}
+%\VignetteIndexEntry{Guide to marxan S4 classes}
 -->

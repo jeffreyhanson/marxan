@@ -212,7 +212,7 @@ All the solutions in our current portfolio, `results3`, seem to be fairly fragme
 ```{r, eval=FALSE}
 ## generate list of portfolios with different BLMS
 # make vector BLM parameters to use
-blm.pars=c(0, 1, 100, 1000, 10000, 100000)
+blm.pars=c(0, 100, 250, 500, 750, 1000)
 
 # create list with different portfolio for each BLM
 results4<-list()
@@ -246,7 +246,7 @@ plot(cost~con, bg=pt.cols, col='black', ylab='Cost', xlab='Connectivity', pch=21
 abline(lm(cost~con))
 
 # add legend
-legend("topleft", legend=blm.pars, col='black', pt.bg=legend.cols, pch=21, title='BLM')
+legend("topright", legend=blm.pars, col='black', pt.bg=legend.cols, pch=21, title='BLM')
 ```
 
 Looking at this curve and depending on the total budget, you might decide that second portfolio in `results4` achieves an acceptable level of representation and fragmentation. Let's generate another portfolio of solutions with BLM=0.0001, and then make some geoplots to compare it to `results3`.

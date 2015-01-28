@@ -207,160 +207,55 @@ hr {
 
 <pre><code class="r"># load marxan R package
 library(marxan)
-</code></pre>
 
-<pre><code>## Loading required package: sp
-## Loading required package: rgdal
-## rgdal: version: 0.9-1, (SVN revision 518)
-## Geospatial Data Abstraction Library extensions to R successfully loaded
-## Loaded GDAL runtime: GDAL 1.11.1, released 2014/09/24
-## Path to GDAL shared files: C:/R/R-3.1.2/library/rgdal/gdal
-## GDAL does not use iconv for recoding strings.
-## Loaded PROJ.4 runtime: Rel. 4.8.0, 6 March 2012, [PJ_VERSION: 480]
-## Path to PROJ.4 shared files: C:/R/R-3.1.2/library/rgdal/proj
-## Loading required package: raster
-## 
-## Attaching package: &#39;marxan&#39;
-## 
-## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     dist, hclust
-## 
-## The following object is masked from &#39;package:graphics&#39;:
-## 
-##     dotchart
-</code></pre>
-
-<pre><code class="r"># load example data
+# load example data
 data(taspu, tasinvis)
 </code></pre>
 
-<p>This data comes from the <a href="http://marxan.net/courses.html">&#39;Introduction to Marxan&#39;</a>. <code>taspu</code> is a <code>SpatialPolygonsDataFrame</code> object that contains our planning units, and <code>tasinvis</code> is a <code>RasterLayer</code> that contains distribution data for 63 broad vegetation classes. Let&#39;s take a look at the data.</p>
+<p>This data comes from the <a href="http://marxan.net/courses.html">&#39;Introduction to Marxan&#39;</a>. The <code>taspu</code> object stores data for the planning units, and the <code>tasinvis</code> object stores data for the 63 vegetation classes&ndash;the biodiversity features. Let&#39;s make some reserve systems and plot them.</p>
 
-<pre><code class="r"># plot planning units
-plot(taspu)
+<pre><code class="r"># make reserve systems
+results&lt;-marxan(taspu, tasinvis, targets=&quot;20%&quot;, NUMREPS=100L, BLM=0)
 
-# plot vegetation data
-plot(tasinvis)
-</code></pre>
-
-<p>Each planning unit in the <code>taspu</code> object is associated with an id, an acquisition cost, and a value indicating if the most of the unit is already locked up in protected areas. This information is stored in the <code>data</code> slot.</p>
-
-<pre><code class="r"># print data in the attribute table for first 20 planning units
-head(taspu@data)
-
-# plot planning units with colours indicating cost
-spplot(taspu, &#39;cost&#39;)
-
-# plot planning units with colors indicating status
-# units with a status of 2 have most of their area in IUCN protected areas,
-# otherwise they have a status of 0
-spplot(taspu, &#39;status&#39;)
-</code></pre>
-
-<p>Now, let&#39;s make some reserve systems.</p>
-
-<pre><code class="r"># the NUMREPS=100L parameter tells marxan to generate 100 candidate reserve systems
-# the BLM=0 parameter indicates that fragmented prioritisations incur no additional penalties
-results&lt;-marxan(taspu, tasinvis, targets=&quot;50%&quot;, NUMREPS=100L, BLM=0)
-</code></pre>
-
-<p>Well, that was easy. Apparently it worked? All we see is text. How can visualise these solutions and assess their quality? We can make some geoplots.</p>
-
-<pre><code class="r">## make a geoplot of the best solution
+# geoplot for best solution
 plot(results, 0)
 
-## make a geoplot of the second solution
-# let&#39;s also add a kickass google map background
-# and make the planning unit colours transparent.
-plot(results, 2, basemap=&#39;satellite&#39;, alpha=0.8)
-
-## make a geoplot of planning unit selection frequencies
-# planning units with darker colours were more often
-# selected for protection than those with lighter colours.
-plot(results, basemap=&#39;satellite&#39;, alpha=0.8)
+# geoplot for selection frequencies
+plot(results)
 </code></pre>
 
-<p>We have one hundred solutions. How can we compare them? We don&#39;t want to make 100 maps; while they are pretty, they&#39;re not that pretty. Instead, we could make some dotcharts that let us compare various properties of the solutions.</p>
+<p>The solutions in this portfolio are fairly fragmented. Let&#39;s generate some more solutions with a higher boundary length modifier (BLM).</p>
 
-<pre><code class="r"># make dotchart showing the score of each solution
-# the score describes the overall value of the prioritisations based on our criteria
-# the lower the value, the better the solution
-# the best solution is coloured in red.
-dotchart(results, var=&#39;score&#39;)
-
-# make a dotchart showing the connectivity of the solutions
-# the connectivity describes how clustered the selected planning units are
-# a prioritisation with lots of planning units close together will have a low value
-# whereas a fragmented prioritisation will have a high value
-# we can specify arguments to limit the plot to the solutions in with the top 20
-# connectivity vlaues, and colour the best 5 in red.
-dotchart(results, var=&#39;con&#39;, nbest=5, n=20)
+<pre><code class="r"># generate new portfolio of reserve systems
+results2&lt;-update(results, ~opt(BLM=500))
 </code></pre>
 
-<p>How can we visualise the main components of variation in the solutions? In other words, how can we visualise the key differences and commonalities between the solutions? For instance, we would want to know if the all the solutions are very similar, or if they fall into several key groups. If they all fall into several groups, this means we don&#39;t have to look at all the solutions. Instead, we can look at some of the best solutions in each group to decide which candidate reserve system is the best. </p>
+<p>Now, let&#39;s compare solutions in the two portfolios.</p>
 
-<p>But how can we do this? Fortunately, statisticians solved this problem a long time ago. We can use ordination techniques to create a few variables that describe commonalities among the solutions, and visualise the main sources of variation in a manageable number of dimensions.</p>
-
-<pre><code class="r">## dendrogram showing differences between solutions based on which planning units 
-## were selected (using Bray-Curtis distances by default)
-# the solutions are shown at the tips of the tree.
-# solutions that occupy nearby places in tree
-# have similar sets of planning units selected.
-# the best prioritisation is coloured in red.
-dendrogram(results, type=&#39;dist&#39;, var=&#39;selections&#39;)
-
-## same dendrogram as above but with the best 10 prioritisations coloured in red
-# if all the red lines connect together at the bottom of the dendrogram
-# this means that all the best prioritisations are really similar to each other,
-# but if they connect near the top of the dendrogram then this means that
-# some of the best prioritisations have totally different sets of planning units
-# selected for protection.
-dendrogram(results, type=&#39;dist&#39;, var=&#39;selections&#39;, nbest=10)
-
-## ordination plot showing differences between solutions based on the number of units
-## occupied by each vegetation class (using MDS with Bray-Curtis distances)
-# we can also use multivariate techniques to see how the solutions vary
-# based on how well they represent different vegetation classes.
-# the numbers indicate solution indices.
-# solutions closer to each other in this plot have more
-# similar levels of representation for the same species.
-# the size of the numbers indicate solution quality,
-# the bigger the number, the higher the solution score.
-ordiplot(results, type=&#39;mds&#39;, var=&#39;occheld&#39;, method=&#39;bray&#39;)
-
-# ordination plot showing differences between solutions based on the amount held 
-# by each vegetation class (using a principle components analysis)
-# labels are similar to the previous plot.
-# the arrows indicate the variable loadings.
-ordiplot(results, type=&#39;pca&#39;, var=&#39;amountheld&#39;)
-</code></pre>
-
-<p>We can see that the all the solutions so far are fairly fragmented. This could be an issue, because such protected area networks may be associated with poor connectivity and higher maintenance costs. Let&#39;s try increasing the boundary length modifier, and generating more solutions. To do this&ndash;efficiently&ndash;we will use the <code>update</code> function.</p>
-
-<pre><code class="r"># use the update function to copy the data in results,
-# tweak the parameters, rerun marxan, and store the 
-# new solutions in results2.
-results2&lt;-update(results, ~opt(BLM=100))
-</code></pre>
-
-<p>Let&#39;s compare the solutions in different runs.</p>
-
-<pre><code class="r">## geoplot showing differences between the best solution in 
-## results and results2 
+<pre><code class="r"># geoplot comparing best solutions in each portfolio
 plot(results, results2, i=0, j=0)
 
-## geoplot showing differences between the third solution
-## in results and the fifth solution in results2
-plot(results, results2, i=3, j=5)
-
-## geoplot showing different in selection frequencies in the results and results2 objects
-# blue colours indicate that units were more often selected in
-# the scenario where we assumed equal costs and that Tasmania has no protected areas.
-# red  colours indicate that untis were more often selected
-# in the scenario where we used cost and protected area data
-# to get more informed prioritisations.
+# geoplot comparing selection frequencies
 plot(results, results2)
+</code></pre>
+
+<p>The solutions in the second portfolio seem to be better. How can we rank the solutions within this portfolio? Let&#39;s make some dotcharts.</p>
+
+<pre><code class="r"># dotchart ranking solutions based on overall score
+dotchart(results2, var=&#39;score&#39;)
+
+# dotchart ranking solutions based on connectivity
+dotchart(results2, var=&#39;con&#39;)
+</code></pre>
+
+<p>Finally, let&#39;s use multivariate analyses to visualise compare the solutions in the second portfolio.</p>
+
+<pre><code class="r"># dendrogram showing how similar solutions are to each other based on selections
+dendrogram(results2, type=&#39;dist&#39;, var=&#39;selections&#39;, nbest=10)
+
+# ordination plot show how similar solutions are to each other based on 
+# well they represent different features
+ordiplot(results2, type=&#39;mds&#39;, var=&#39;amountheld&#39;, method=&#39;bray&#39;)
 </code></pre>
 
 <!--

@@ -281,7 +281,7 @@ head(taspu2@data)
 # argument to NCORES defines the number of threads for parallel processing
 # argument to NUMREPS controls the number of solutions in our portfolio
 # argument to BLM controls boundary length modifier
-results&lt;-marxan(taspu2, tasinvis, targets=&quot;20%&quot;, spf=1, NUMREPS=100L, NCORES=2L, BLM=0, lengthFactor=1e-8)
+results&lt;-marxan(taspu2, tasinvis, targets=&quot;20%&quot;, spf=1, NUMREPS=100L, NCORES=2L, BLM=0, lengthFactor=1e-5)
 </code></pre>
 
 <p>Well, that was easy. Apparently it worked; we can see the text MARXAN normally prints when we run it. Before we do anything, let&#39;s check that our vegetation classes are adequately represented. </p>
@@ -308,7 +308,7 @@ hist(rowMeans(targetsmet(results)), freq=TRUE, xlim=c(0,1), las=1,
 # run MARXAN,
 # load the solutions back into R,
 # store the solutions in results2
-results2&lt;-update(results, ~spp(1:63, spf=rep(1000,63)))
+results2&lt;-update(results, ~spp(1:63, spf=rep(1,63)))
 </code></pre>
 
 <p>Now we have a new portfolio of solutions, let&#39;s compare the proportion of vegetation classes adequately represented in each of the portfolios.</p>
@@ -405,7 +405,7 @@ plot(results2, results3)
 
 <pre><code class="r">## generate list of portfolios with different BLMS
 # make vector BLM parameters to use
-blm.pars=c(0, 0.0001, 0.0005, 0.001, 0.01, 1)
+blm.pars=c(0, 100, 250, 500, 750, 1000)
 
 # create list with different portfolio for each BLM
 results4&lt;-list()
@@ -422,7 +422,7 @@ blm&lt;-c()
 # extract values for best solutions
 for (i in seq_along(blm.pars)) {
     cost&lt;-append(cost, summary(results4[[i]])[[&quot;Cost&quot;]])
-    con&lt;-append(con, summary(results4[[i]])[[&quot;Connectivity&quot;]])
+    con&lt;-append(con, summary(results4[[i]])[[&quot;Shortfall&quot;]])
     blm&lt;-append(blm, rep(blm.pars[i], nrow(summary(results4[[i]]))))
 }
 
