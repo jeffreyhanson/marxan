@@ -14,6 +14,7 @@
 
 #' @importFrom snow makeCluster
 #' @importFrom snow stopCluster
+#' @importFrom snow stopCluster.default
 #' @importFrom doSNOW registerDoSNOW
 
 #' @importFrom RColorBrewer brewer.pal
