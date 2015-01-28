@@ -33,3 +33,4 @@ install_github('paleo13/marxan')
 library(devtools)
 setwd('C:/Users/jeff/Documents/GitHub/marxan')
 build_vignettes()
+

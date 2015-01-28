@@ -80,19 +80,39 @@
 #  # run MARXAN,
 #  # load the solutions back into R,
 #  # store the solutions in results2
-#  results2<-update(results, ~spp(1:63, spf=rep(1000,63))
+#  results2<-update(results, ~spp(1:63, spf=rep(1000,63)))
 
 ## ----, eval=FALSE--------------------------------------------------------
+#  # get levels of representation in each portfolio
+#  results.repr<-rowMeans(targetsmet(results))
+#  results2.repr<-rowMeans(targetsmet(results2))
+#  
 #  # create 2 plotting areas in the one window
 #  par(mfrow=c(1,2))
 #  
 #  # histogram of first portfolio
-#  hist(rowMeans(targetsmet(results)), xlab="Level of representation with SPF=1")
+#  hist(results.repr, freq=TRUE, xlim=c(0,1), las=1,
+#  	ylab='Frequency of solutions',
+#  	xlab='Proportion of veg. classes adequately represented',
+#  	main="Level of representation with SPF=1"
+#  )
+#  
+#  # print best level of representation
+#  print(max(results.repr))
 #  
 #  # histogram of second portfolio
 #  # if you see a giant single rectangle this means
 #  # all the solutions have the same level of representation
-#  hist(rowMeans(targetsmet(results)), xlab="Level of representation with SPF=100")
+#  hist(results2.repr, freq=TRUE, xlim=c(0,1), las=1,
+#  	ylab='Frequency of solutions',
+#  	xlab='Proportion of veg. classes adequately represented',
+#  	main="Level of representation with SPF=100"
+#  )
+#  
+#  # print best level of representation
+#  print(max(results2.repr))
+#  
+#  
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  # make a geoplot of the best solution
@@ -126,7 +146,7 @@
 #  # change planning unit costs and statuses
 #  # rerun MARXAN,
 #  # load outputs into R and store them in results3
-#  results3<-update(results2, pu(id, cost=pu.costs, status=pu.status))
+#  results3<-update(results2, ~pu(pu.ids, cost=pu.costs, status=pu.status))
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  # geoplot showing differences between the best solution in each portfolio

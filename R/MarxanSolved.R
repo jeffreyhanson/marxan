@@ -323,10 +323,10 @@ setMethod(
 				x@data@polygons,
 				cols,
 				basemap,
-				paste0("Difference in solutions ",i,ifelse(i==x@results@best, " (best)", ""), " and ",j, ifelse(j==y@results@best, " (best)", "")),
+				paste0("Difference in X solution ",i,ifelse(i==x@results@best, "(best)", ""), " and Y solution ",j, ifelse(j==y@results@best, " (best)", "")),
 				categoricalLegend(
 					c(cols2,xlockedincol,ylockedincol,xlockedoutcol,ylockedoutcol),
-					c(paste("Selected in X",xrepr),  paste("Selected in Y",yrepr), "Both", "Neither", paste("Locked in X",xrepr), paste("Locked in Y",yrepr), paste("Locked out X",xrepr), paste("Locked out Y",yrepr)),
+					c("Selected in X",  "Selected in Y", "Both", "Neither", "Locked in X", "Locked in Y", paste("Locked out X"), paste("Locked out Y")),
 					ncol=4
 				),
 				beside=FALSE
