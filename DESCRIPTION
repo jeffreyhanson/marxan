@@ -50,9 +50,9 @@ Imports:
     testthat,
     data.table,
     doSNOW,
-	knitr
+	knitr,
+	rmarkdown
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Suggests:
     testthat,
-    knitr
