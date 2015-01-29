@@ -64,13 +64,12 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 	status<-alply(
 		data.frame(
 			file.path(coredirs, basename(options()$marxanExecutablePath)),
-			file.path(coredirs, 'input.dat'),
-			(verbose & seq_along(coredirs)==1),
+			replace(rep(FALSE, x@opts@NCORES), which(verbose & seq_along(coredirs)==1), ''),
 			stringsAsFactors=FALSE
 		), 1, .parallel=x@opts@NCORES>1, 
 		function(x) {
-			setwd(dirname(x[[2]]))
-			return(system2(x[[1]], c(shQuote(x[[2]]), '-s'), stdout=x[[3]]))
+			setwd(dirname(x[[1]]))
+			return(system2(x[[1]], c('input.dat', '-s'), stdout=x[[2]]))
 		}
 	)
 	setwd(oldwd)
