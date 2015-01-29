@@ -51,7 +51,10 @@ Imports:
     data.table,
     doSNOW,
 	knitr,
-	rmarkdown
+	rmarkdown,
+	RColorBrewer,
+	scales,
+	vegan
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Suggests:

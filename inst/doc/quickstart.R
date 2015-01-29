@@ -31,7 +31,7 @@
 #  plot(results, results2, i=0, j=0)
 #  
 #  # geoplot comparing selection frequencies
-#  plot(results, results2)
+#  plot(results, results2, basemap='satelliet', alpha=0.4)
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  # dotchart ranking solutions based on overall score

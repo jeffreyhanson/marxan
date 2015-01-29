@@ -48,7 +48,7 @@ Now, let's compare solutions in the two portfolios.
 plot(results, results2, i=0, j=0)
 
 # geoplot comparing selection frequencies
-plot(results, results2)
+plot(results, results2, basemap='satelliet', alpha=0.4)
 ```
 
 The solutions in the second portfolio seem to be better. How can we rank the solutions within this portfolio? Let's make some dotcharts.

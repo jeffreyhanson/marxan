@@ -126,12 +126,12 @@
 #  
 #  # make a geoplot of the second solution,
 #  # with kickass google map background and transparent colors
-#  plot(results2, 2, basemap='satellite', alpha=0.8)
+#  plot(results2, 2, basemap='satellite', alpha=0.4)
 #  
 #  # make a geoplot of planning unit selection frequencies,
 #  # planning units with darker colours were more often
 #  # selected for protection than those with lighter colours.
-#  plot(results2, basemap='satellite', alpha=0.8)
+#  plot(results2, basemap='satellite', alpha=0.4)
 #  
 #  # make a geoplot of selection frequencies using different colours
 #  # see Color Brewer (http://colorbrewer2.org/) for available
@@ -197,6 +197,9 @@
 #  legend.cols<-c("#FFFFB2", "#FED976", "#FEB24C", "#FD8D3C", "#F03B20", "#BD0026")
 #  pt.cols<-legend.cols[match(blm, blm.pars)]
 #  
+#  # reset plotting window
+#  par(mfrow=c(1,1))
+#  
 #  # plot trade-off data
 #  # higher shortfall values means worse representation
 #  # higher connectivity values mean more fragmentation
@@ -221,9 +224,6 @@
 #  plot(results5, results3)
 
 ## ----, eval=FALSE--------------------------------------------------------
-#  # reset plotting window
-#  par(mfrow=c(1,1))
-#  
 #  # make dotchart showing the score of each solution
 #  # the score describes the overall value of the prioritisations based on our criteria
 #  # the lower the value, the better the solution
