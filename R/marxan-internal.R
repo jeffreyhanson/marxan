@@ -268,8 +268,8 @@ prettyGeoplot<-function(polygons, col, basemap, main, fun, beside=TRUE) {
 brewerCols<-function(values, pal, alpha=1, n=NULL) {
 	if (is.null(n))
 		n<-brewer.pal.info$maxcolors[which(rownames(brewer.pal.info)==pal)]
-	suppressWarnings(r<-colorRamp(brewer.pal(n, pal), alpha=TRUE)(values))
-	# suppressWarnings(r<-colorRamp(brewer.pal(n, pal))(values))
+	# suppressWarnings(r<-colorRamp(brewer.pal(n, pal), alpha=TRUE)(values))
+	suppressWarnings(r<-colorRamp(brewer.pal(n, pal))(values))
 	return(rgb(r, maxColorValue=255, alpha=rescale(alpha, from=c(0,1), to=c(0,255))))
 }
 
