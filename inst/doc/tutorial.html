@@ -469,7 +469,10 @@ plot(results5, results3)
 
 <p>So now, in our final portfolio, we have one hundred solutions. How can we compare them all and decide on a final prioritisation to implement? We don&#39;t time time to make 100 maps; while the maps this R package makes are pretty, they are not that pretty. Instead, we could make some dotcharts that let us compare various properties of the solutions.</p>
 
-<pre><code class="r"># make dotchart showing the score of each solution
+<pre><code class="r"># reset plotting window
+par(mfrow=c(1,1))
+
+# make dotchart showing the score of each solution
 # the score describes the overall value of the prioritisations based on our criteria
 # the lower the value, the better the solution
 # the best solution is coloured in red

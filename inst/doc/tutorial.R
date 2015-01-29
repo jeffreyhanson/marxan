@@ -221,6 +221,9 @@
 #  plot(results5, results3)
 
 ## ----, eval=FALSE--------------------------------------------------------
+#  # reset plotting window
+#  par(mfrow=c(1,1))
+#  
 #  # make dotchart showing the score of each solution
 #  # the score describes the overall value of the prioritisations based on our criteria
 #  # the lower the value, the better the solution
