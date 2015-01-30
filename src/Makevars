@@ -1,7 +1,9 @@
+GCC_FLAGS=-std=c++0x
+CLANG_FLAGS=-std=c++0x -stdlib=libc++
+
 ifeq "$(CXX)" "g++"
-PKG_CXXFLAGS+=-std=c++0x
+PKG_CXXFLAGS+=GCC_FLAGS
 else ifeq "$(CXX)" "clang++"
-PKG_CXXFLAGS+=-std=c++0x
-PKG_CXXFLAGS+=-stdlib=libc++
+PKG_CXXFLAGS+=CLANG_FLAGS
 endif
 
