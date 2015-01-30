@@ -1,3 +1,4 @@
+CC=gcc
 CXX=g++ 
-PKG_CXX=g++ 
-PKG_CXXFLAGS= -std=c++0x
+SHLIB_CXXLD=g++
+PKG_CXXFLAGS+=-std=c++0x
