@@ -1,8 +1,8 @@
 ifeq "$(CXX)" "g++"
-  echo "G++ compiler detected"
+  echo "g++ compiler detected"
   PKG_CXXFLAGS+=-std=c++0x
 else ifeq "$(CXX)" "clang++"
-  echo "CLANG++ compiler detected"
+  echo "clang++ compiler detected"
   PKG_CXXFLAGS+=-std=c++0x -stdlib=libc++
 else
   echo "default compiler not recognised"

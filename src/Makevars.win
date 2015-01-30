@@ -1,5 +1,5 @@
-ifeq "$(CXX)" "g++"
-  echo "G++ compiler detected"
+ifeq($(CXX),g++)
+  echo "g++ compiler detected"
   PKG_CXXFLAGS+=-std=c++0x
 else
   echo "default compiler not recognised"
