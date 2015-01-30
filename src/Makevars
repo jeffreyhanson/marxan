@@ -5,7 +5,7 @@ PKG_CXXFLAGS+=$(GCC_FLAGS)
 else ifeq "$(CXX)" "clang++"
 PKG_CXXFLAGS+=$(CLANG_FLAGS)
 endif
-echo "CXX = "
-echo $(CXX)
-echo "PKG_CXX = "
-echo $(PKG_CXX)
+# echo "CXX = "
+# echo $(CXX)
+# echo "PKG_CXX = "
+# echo $(PKG_CXX)
