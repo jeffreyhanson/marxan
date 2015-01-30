@@ -1,6 +1,7 @@
 ifeq "$(CXX)" "g++"
 PKG_CXXFLAGS+=-std=c++0x
 else ifeq "$(CXX)" "clang++"
-PKG_CXXFLAGS+=-std=c++0x -stdlib=libc++
+PKG_CXXFLAGS+=-std=c++0x
+PKG_CXXFLAGS+=-stdlib=libc++
 endif
 
