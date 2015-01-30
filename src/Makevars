@@ -1,9 +1,9 @@
-MAC_CODE="Apple_Terminal"
+LINUX_CODE="linux,gcc,gxx,gfortran,?"
+MAC_CODE="osx,gcc,gxx,gfortran,?"
 GCC_FLAGS=HAHAHAHAHAHAHA
-CLANG_FLAGS=-std=c++0x
-CLANG_FLAGS+=-stdlib=libc++
-ifeq "${TERM_PROGRAM}" "$(MAC_CODE)"
+CLANG_FLAGS=-std=c++0x --stdlib=libc++
+ifeq "$(R_SYSTEM_ABI)" "$(MAC_CODE)"
 PKG_CXXFLAGS+=$(CLANG_FLAGS)
-else
+else ifeq "$(R_SYSTEM_ABI)" "LINUX_CODE"
 PKG_CXXFLAGS+=$(GCC_FLAGS)
 endif
