@@ -1,5 +1,10 @@
-GCC_FLAGS=HAHAHAAHAHAH
+GCC_FLAGS=-std=c++0x
 CLANG_FLAGS=-std=c++0x --stdlib=libc++
+
+echo "CXX = "
+echo $(CXX)
+echo "PKG_CXX = "
+echo $(PKG_CXX)
 
 ifeq "$(CXX)" "g++"
 PKG_CXXFLAGS+=$(GCC_FLAGS)
