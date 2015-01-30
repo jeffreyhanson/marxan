@@ -1,11 +1,7 @@
-GCC_FLAGS=-std=c++0x
-CLANG_FLAGS=-std=c++0x --stdlib=libc++
-ifeq "$(CXX)" "g++"
-PKG_CXXFLAGS+=$(GCC_FLAGS)
-else ifeq "$(CXX)" "clang++"
+GCC_FLAGS='-std=c++0x'
+CLANG_FLAGS='-std=c++0x --stdlib=libc++'
+ifeq "$(TERM_POGRAM)" "Apple_Terminal
 PKG_CXXFLAGS+=$(CLANG_FLAGS)
+else
+PKG_CXXFLAGS+=$(GCC_FLAGS)
 endif
-# echo "CXX = "
-# echo $(CXX)
-# echo "PKG_CXX = "
-# echo $(PKG_CXX)
