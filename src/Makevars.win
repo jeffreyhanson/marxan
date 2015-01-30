@@ -1,7 +1,5 @@
 ifeq($(CXX),g++)
-	echo "g++ compiler detected"
-	PKG_CXXFLAGS+=-std=c++0x
-else
-	echo "default compiler not recognised"
+echo "g++ compiler detected"
+PKG_CXXFLAGS+=-std=c++0x
 endif
 
