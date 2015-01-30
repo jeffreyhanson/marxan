@@ -1,5 +1,5 @@
 MAC_CODE=Apple_Terminal
-GCC_FLAGS=-std=c++0x
+GCC_FLAGS=HAHAHAHAHAHAHA
 CLANG_FLAGS=-std=c++0x
 CLANG_FLAGS+=-stdlib=libc++
 ifeq "$(TERM_PROGRAM)" "$(MAC_CODE)"
