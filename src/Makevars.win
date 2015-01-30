@@ -1,4 +1,10 @@
-CC=gcc
-CXX=g++ 
-SHLIB_CXXLD=g++
-PKG_CXXFLAGS+=-std=c++0x
+ifeq "$(CXX)" "g++"
+	echo "G++ compiler detected"
+	PKG_CXXFLAGS+=-std=c++0x
+else ifeq "$(CXX)" "clang++"
+	echo "CLANG++ compiler detected"
+	PKG_CXXFLAGS+=-std=c++0x -stdlib=libc++
+else
+	echo "default compiler not recognised"
+endif
+
