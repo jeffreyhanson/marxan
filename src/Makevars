@@ -1,4 +1,4 @@
-GCC_FLAGS=-std=c++0x
+GCC_FLAGS=HAHAHAAHAHAH
 CLANG_FLAGS=-std=c++0x --stdlib=libc++
 
 ifeq "$(CXX)" "g++"
