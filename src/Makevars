@@ -1,9 +1,9 @@
-LINUX_CODE="linux,gcc,gxx,gfortran,?"
-MAC_CODE="osx,gcc,gxx,gfortran,?"
+LINUX_CODE=linux,gcc,gxx,gfortran,?
+MAC_CODE=osx,gcc,gxx,gfortran,?
 GCC_FLAGS=HAHAHAHAHAHAHA
 CLANG_FLAGS=-std=c++0x --stdlib=libc++
 ifeq "$(R_SYSTEM_ABI)" "$(MAC_CODE)"
 PKG_CXXFLAGS+=$(CLANG_FLAGS)
-else ifeq "$(R_SYSTEM_ABI)" "LINUX_CODE"
+else ifeq "$(R_SYSTEM_ABI)" "$(LINUX_CODE)"
 PKG_CXXFLAGS+=$(GCC_FLAGS)
 endif
