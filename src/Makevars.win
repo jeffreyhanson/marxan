@@ -1,5 +1,4 @@
-	ifeq($(CXX),g++)
-echo "g++ compiler detected"
+ifeq($(CXX),g++)
 PKG_CXXFLAGS+=-std=c++0x
 endif
 
