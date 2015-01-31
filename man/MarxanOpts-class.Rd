@@ -22,7 +22,7 @@ This class is used to store Marxan input parameters.
 
 \item{\code{COOLFAC}}{"numeric" Cooling factor for annealing. Defaults to 0.}
 
-\item{\code{NUMTEMP}}{"integer" Number of temperature decreases for annealing. Defaults to 10000L.}
+\item{\code{NUMTEMP}}{"integer" Number of temperature decreases for annealing. Defaults to 100000L.}
 
 \item{\code{COSTTHRESH}}{"numeric" Cost threshold. Defaults to 0.}
 

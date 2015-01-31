@@ -61,7 +61,7 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 	}
 	# run marxan
 	oldwd<-getwd()
-	status<-alply(
+	suppressWarnings(status<-alply(
 		data.frame(
 			file.path(coredirs, basename(options()$marxanExecutablePath)),
 			replace(rep(FALSE, x@opts@NCORES), which(verbose & seq_along(coredirs)==1), ''),
@@ -71,7 +71,7 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 			setwd(dirname(x[[1]]))
 			return(system2(x[[1]], c('input.dat', '-s'), stdout=x[[2]]))
 		}
-	)
+	))
 	setwd(oldwd)
 	# end parallelisation
 	if (x@opts@NCORES>1) {

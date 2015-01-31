@@ -11,7 +11,7 @@ NULL
 #' @slot NUMITNS "integer" Number of iterations for annealing. Defaults to 1000000L.
 #' @slot STARTTEMP "numeric" Initial temperature for annealing. Default to -1.
 #' @slot COOLFAC "numeric" Cooling factor for annealing. Defaults to 0.
-#' @slot NUMTEMP "integer" Number of temperature decreases for annealing. Defaults to 10000L.
+#' @slot NUMTEMP "integer" Number of temperature decreases for annealing. Defaults to 100000L.
 #' @slot COSTTHRESH "numeric" Cost threshold. Defaults to 0.
 #' @slot THRESHPEN1 "numeric" Size of cost threshold penalty. Defaults to 0.
 #' @slot THRESHPEN2 "numeric" Shape of cost threshold penalty. Defaults to 0.

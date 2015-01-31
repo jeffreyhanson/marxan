@@ -50,11 +50,11 @@ Imports:
     testthat,
     data.table,
     doSNOW,
-	knitr,
-	rmarkdown,
-	RColorBrewer,
-	scales,
-	vegan
+    knitr,
+    rmarkdown,
+    RColorBrewer,
+    scales,
+    vegan
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Suggests:

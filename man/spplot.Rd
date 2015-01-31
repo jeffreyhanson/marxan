@@ -14,7 +14,7 @@
 
 \S4method{spplot}{MarxanSolved}(obj, y = obj@data@species$id,
   var = "amount", basemap = "none", colramp = "YlOrRd",
-  alpha = ifelse(basemap == "none", 1, 0.7), grayscale = FALSE,
+  alpha = ifelse(basemap == "none", 1, 0.4), grayscale = FALSE,
   force_reset = FALSE)
 
 \S4method{spplot}{MarxanUnsolved}(obj, y = obj@data@species$id,
