@@ -702,6 +702,22 @@ findGdalInstallationPaths<-function (search_path = NULL, rescan = FALSE, ignore.
 		message("GDAL version ", unlist(getOption("gdalUtils_gdalPath")[[1]]$version))
 	}
 }
-findGdalInstallationPaths()
+
+# generic MarxanOpts contructor function
+MarxanOptsConstructor<-function(x, args, ignore.extra) {
+	x<-new(x)W
+	extra<-which(!names(args) %in% slotNames(x))
+	if (length(extra)>0) {		
+		if (ignore.extra) {
+			args<-args[-extra]
+		} else {
+			stop("These are not valid or changeable ",class(x)," parameters: ",paste(names(extra), collapse=","))
+		}
+	}
+	for (i in seq_along(args)) {
+		slot(x, names(args)[[i]])=args[[i]]
+	}
+	return(x)
+}
 
 

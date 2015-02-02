@@ -294,3 +294,116 @@ inistatus.MarxanUnsolved<-function(x) {
 	return(x)
 }
 
+
+#' @export
+lpsolvemodel<-function(x, problem='ILP') {
+	## calculations
+	# prelim calcs
+	softSpp<-which(is.finite(x@data@species$spf))
+	firmSpp<-which(!is.finite(x@data@species$spf))
+	edge<-which(x@data@boundary$id1==x@data@boundary$id2)
+	notEdge<-which(x@data@boundary$id1!=x@data@boundary$id2)
+	puLockedIn<-which(x@data@pu$status==2)
+	puLockedOut<-which(x@data@pu$status==3)
+	# decision variables
+	sf.vars<-paste0('sf',x@data@species$id[soft.spp])
+	pu.vars<-paste0('pu',x@data@pu$id)
+	puxorpu.vars<-paste0('pu',x@data@boundary$id1[not.edge],'_pu',x@data@boundary$id2[not.edge])
+			
+	## parse model text
+	# init
+	mod.fun<-paste0(x@data@pu$cost, ' ', pu.vars)
+	mod.constrs<-c()
+	# species with soft constraints
+	if (length(softSpp)>0) {
+		mod.fun<-c(paste0(speciesDF$spf[soft.spp], ' ', sf.vars))
+		mod.constrs<-c(mod.constrs,'/* soft constraints for species with finite spfs */')
+		for (i in seq_along(softSpp)) {
+			currRows<-which(x@data@puvspecies==x@data@species$id[softSpp[i]])
+			currU<-sum(x@data@puvspecies$amount[currRows])+1
+			currPUs<-paste0('pu',x@data@puvspecies$pu[currRows])
+			currTarget<-x@data@species$target[i]-1e-5
+			currRepr<-paste(paste0(x@data@puvspecies$amount[currRows],' ',currPUs), collapse' + ')
+			mod.constrs<-c(
+				mod.constrs,
+				paste0(currRepr, ' + ', currTarget+1, ' ',sf.vars[i],' >= ', currTarget+1,';'),
+				paste0(currRepr, ' + ',currU,' ',sf.vars[i],' <= ', currTarget+currU,';')
+			)
+		}
+	}
+	# species with hard constraints
+	if (length(firmSpp)>0) {
+		mod.constrs<-c(mod.constrs, '/* hard constraints for species with infinite spfs */')
+		for (i in seq_along(firmSpp)) {
+			currRows<-which(x@data@puvspecies==x@data@species$id[firmSpp[i]])
+			currPUs<-paste0('pu',x@data@puvspecies$pu[currRows])
+			currRepr<-paste(paste0(x@data@puvspecies$amount[currRows],' ',currPUs), collapse' + ')
+			mod.constrs<-c(
+				mod.constrs,
+				paste0(currRepr, '>=', x@data@species$target[i],';')
+			)
+		}
+	}
+	# lock pus in solution
+	if (length(puLockedIn)>0) {
+		mod.constrs<-c(
+			mod.constrs,
+			'/* lock pus in optimal solution */',
+			paste0('pu',x@data@pu[puLockedIn],' = 1;')
+		)
+	}
+	# lock pus out solution
+	if (length(puLockedOut)>0) {
+		mod.constrs<-c(
+			mod.constrs,
+			'/* lock pus out optimal solution */',
+			paste0('pu',x@data@pu[puLockedOut],' = 0;')
+		)
+	}
+	# solution boundary data
+	if (!isTRUE(all.equal(x@opts@BLM,0))) {
+		if (length(edge)>0)
+			mod.fun<-c(
+				mod.fun,
+				paste0(x@opts@BLM*x@boundary$boundary[edge], ' pu', x@boundary$id1[edge])
+			)
+		if (length(notEdge)>0) {
+			mod.fun<-c(
+				mod.fun,
+				paste0(x@opts@BLM*x@boundary@boundary[notEdge], ' ', puxorpu.vars)
+			)
+			mod.constrs<-c(
+				mod.constrs,
+				'/* pu boundary constraints for ILP */',
+				paste0(puxorpu.vars,' <= pu',boundDF$id1[notEdge],' + pu',boundDF$id2[notEdge]),
+				paste0(puxorpu.vars,' >= pu',boundDF$id1[notEdge],' - pu',boundDF$id2[notEdge]),
+				paste0(puxorpu.vars,' >= -pu',boundDF$id1[notEdge],' + pu',boundDF$id2[notEdge]),
+				paste0(puxorpu.vars,' <= 2 - pu',boundDF$id1[notEdge],' + pu',boundDF$id2[notEdge])
+			)
+		}
+	}
+	# decision variable types
+	switch(problem,
+		'ILP'={
+			mod.vtypes<-paste0('bin: ',paste(sf.vars, pu.vars, puxorpu.vars ,sep=' '))
+		},
+		'LP'={
+			puFree<-which(x@data$pu$status<2)
+			mod.constrs<-c(
+				'/* pu decision variable limits */'
+				paste0('pu',x@data@pu[puFree],' >= 0;'),
+				paste0('pu',x@data@pu[puFree],' <= 1;'),
+			)
+			mod.vtypes<-paste0('sec: ',paste(sf.vars, pu.vars, puxorpu.vars ,sep=' '),';')
+		}
+	)
+	# compile full model
+	return(c(
+		'/* marxan model */\n\n/* objective function */',
+		paste0('min: ',paste(mod.fun, collapse=' + '),';'),
+		mod.constrs,
+		'/* decision variable types */',
+		mod.vtypes,
+		'/* end */'
+	))
+}

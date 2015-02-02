@@ -638,6 +638,48 @@ setMethod(
 )
 
 
+
+
+#' Construct Gurobi model object
+#'
+#' This function is used in generate a Gurobi object matrix for data in a "MarxanData" object.
+#'
+#' @param x "MarxanData" object.
+#' @param force_reset "logical" should cached data be used if present?
+#' @export
+#' @return "list" object.
+#' @seealso \code{\link{MarxanData-class}}, \code{\link{MarxanData}}, \code{\link[Matrix]{sparseMatrix}}, \code{\link[gurobi]{gurobi}}
+gurobiModel<-function(x, problem, force_reset) {
+	# retrieve cached object
+	if (force_reset || !is.cached(x, 'gurobiModel')) {
+		# get orp pre-calculation data 
+		orpLST<-orpData(x, force_reset)
+		# cache data
+		cache(
+			x,
+			'gurobiModel',
+			list(
+				A=sparseMatrix(i=orpLST$sppIds, j=orpLST$puIds, x=x@puvspecies$amount[orpLST$puvspecies_rows]),
+				obj=x@pu$cost[orpLST$pu_rows],
+				sense=rep(">=", length(orpLST$sppIds))
+				rhs=orpLST$targets
+			)
+		)
+	}
+	ret<-cache(x, 'gurobiModel')
+	if (problem=='ILP') {
+		ret$vtypes<-rep('B', ncol(ret$A))
+	} else if (problem=='LP') {
+		ret$vtypes<-rep('S', ncol(ret$A))
+		ret$lb<-rep(0, ncol(ret$A))
+		ret$ub<-rep(1, ncol(ret$A))
+	}
+	return(ret)
+}
+
+
+
+
 #' @describeIn is.cached
 setMethod(
 	f="is.cached", 
