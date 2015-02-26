@@ -122,7 +122,7 @@ If you recall, earlier we used the `marxan` function because it can pre-process 
 # run MARXAN,
 # load the solutions back into R,
 # store the solutions in results2
-results2<-update(results, ~spp(1:63, spf=rep(1,63)))
+results2<-update(results, ~spp(1:63, spf=rep(100,63)))
 ```
 
 Now we have a new portfolio of solutions, let's compare the proportion of vegetation classes adequately represented in each of the portfolios.
@@ -241,7 +241,7 @@ blm<-c()
 # extract values for best solutions
 for (i in seq_along(blm.pars)) {
 	cost<-append(cost, summary(results4[[i]])[["Cost"]])
-	con<-append(con, summary(results4[[i]])[["Shortfall"]])
+	con<-append(con, summary(results4[[i]])[["Connectivity"]])
 	blm<-append(blm, rep(blm.pars[i], nrow(summary(results4[[i]]))))
 }
 
@@ -268,7 +268,7 @@ Looking at this curve and depending on the total budget, you might decide that s
 
 ```{r, eval=FALSE}
 # make new solutions with BLM=0.0001
-results5<-update(results3, ~opt(BLM=blm.pars[2]))
+results5<-update(results3, ~opt(BLM=0.0001))
 
 # geoplot showing differences between the best solution in each portfolio
 plot(results5, results3, i=0, j=0)
