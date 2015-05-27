@@ -6,67 +6,51 @@
 using namespace Rcpp;
 
 // rcpp_calcBoundaryDF
-Rcpp::List rcpp_calcBoundaryDF(Rcpp::DataFrame df, double tolerance = 0.001, double lengthFactor = 1.0, double edgeFactor = 1.0);
+Rcpp::List rcpp_calcBoundaryDF(Rcpp::DataFrame df, double tolerance, double lengthFactor, double edgeFactor);
 RcppExport SEXP marxan_rcpp_calcBoundaryDF(SEXP dfSEXP, SEXP toleranceSEXP, SEXP lengthFactorSEXP, SEXP edgeFactorSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::DataFrame >::type df(dfSEXP );
-        Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP );
-        Rcpp::traits::input_parameter< double >::type lengthFactor(lengthFactorSEXP );
-        Rcpp::traits::input_parameter< double >::type edgeFactor(edgeFactorSEXP );
-        Rcpp::List __result = rcpp_calcBoundaryDF(df, tolerance, lengthFactor, edgeFactor);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
+    Rcpp::traits::input_parameter< double >::type lengthFactor(lengthFactorSEXP);
+    Rcpp::traits::input_parameter< double >::type edgeFactor(edgeFactorSEXP);
+    __result = Rcpp::wrap(rcpp_calcBoundaryDF(df, tolerance, lengthFactor, edgeFactor));
+    return __result;
 END_RCPP
 }
 // rcpp_groupcombine
 NumericVector rcpp_groupcombine(std::vector<NumericVector> group_sums);
 RcppExport SEXP marxan_rcpp_groupcombine(SEXP group_sumsSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< std::vector<NumericVector> >::type group_sums(group_sumsSEXP );
-        NumericVector __result = rcpp_groupcombine(group_sums);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::vector<NumericVector> >::type group_sums(group_sumsSEXP);
+    __result = Rcpp::wrap(rcpp_groupcombine(group_sums));
+    return __result;
 END_RCPP
 }
 // rcpp_groupsum
 NumericVector rcpp_groupsum(IntegerVector cat_vec, NumericVector val_vec);
 RcppExport SEXP marxan_rcpp_groupsum(SEXP cat_vecSEXP, SEXP val_vecSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type cat_vec(cat_vecSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type val_vec(val_vecSEXP );
-        NumericVector __result = rcpp_groupsum(cat_vec, val_vec);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type cat_vec(cat_vecSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type val_vec(val_vecSEXP);
+    __result = Rcpp::wrap(rcpp_groupsum(cat_vec, val_vec));
+    return __result;
 END_RCPP
 }
 // rcpp_Polygons2PolySet
-Rcpp::DataFrame rcpp_Polygons2PolySet(Rcpp::List polys, std::size_t n_preallocate = 10000);
+Rcpp::DataFrame rcpp_Polygons2PolySet(Rcpp::List polys, std::size_t n_preallocate);
 RcppExport SEXP marxan_rcpp_Polygons2PolySet(SEXP polysSEXP, SEXP n_preallocateSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::List >::type polys(polysSEXP );
-        Rcpp::traits::input_parameter< std::size_t >::type n_preallocate(n_preallocateSEXP );
-        Rcpp::DataFrame __result = rcpp_Polygons2PolySet(polys, n_preallocate);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::List >::type polys(polysSEXP);
+    Rcpp::traits::input_parameter< std::size_t >::type n_preallocate(n_preallocateSEXP);
+    __result = Rcpp::wrap(rcpp_Polygons2PolySet(polys, n_preallocate));
+    return __result;
 END_RCPP
 }

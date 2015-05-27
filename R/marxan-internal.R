@@ -386,6 +386,7 @@ zonalSum.RasterLayerNotInMemory <- function(bs, polys, rast, speciesName, ncores
 	return(tmp[which(tmp$amount>0),,drop=FALSE])
 }
 
+# function to hash function call 
 hashCall<-function(expr, skipargs=c(), env=parent.frame()) {
 	expr<-expr[c((skipargs*-1L)-1L)]
 	expr<-expr[which(names(expr)!="force_reset")]

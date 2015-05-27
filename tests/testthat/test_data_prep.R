@@ -5,21 +5,23 @@ library(testthat)
 
 # rasterize
 test_that("native rasterize function and GDAL interface produce different output", {
-	template<-disaggregate(raster(matrix(1:9, ncol=3), xmn=0, xmx=1, ymn=0, ymx=1, crs=CRS('+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ')),fact=5)
-	polys<-rasterToPolygons(template, n=4, dissolve=TRUE)
-	purast1<-rasterize(polys, template)
-	purast2<-rasterize.gdal(polys, template, field='layer')
-	expect_equal(getValues(purast1), getValues(purast2))
+	if (is.gdalInstalled()) {
+		template<-disaggregate(raster(matrix(1:9, ncol=3), xmn=0, xmx=1, ymn=0, ymx=1, crs=CRS('+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ')),fact=5)
+		polys<-rasterToPolygons(template, n=4, dissolve=TRUE)
+		purast1<-rasterize(polys, template)
+		purast2<-rasterize.gdal(polys, template, field='layer')
+		expect_equal(getValues(purast1), getValues(purast2))
+	}
 })
 
 # zonal sum
-test_that("Zonal sum functions produce different output", {
+test_that("Zonal sum functions do not produce same output", {
 	purast<-disaggregate(raster(matrix(1:9, ncol=3)),fact=5)
 	species<-purast*abs(rnorm(ncell(purast)))
-	zs1<-zonal(species, purast)
+	zs1<-zonal(species, purast, fun='sum')
 	zs2<-zonalSum(purast, species[[1]], ncores=2)
 	zs3<-zonalSum(purast, species[[1]])
-	expect_equal(zs1[,2], round(zs2[[3]],5), round(zs3[[3]],5))
+	expect_equal(round(zs1[,2],5), round(zs2[[3]],5), round(zs3[[3]],5))
 })
 
 # convert SpatialPolygons to PolySet

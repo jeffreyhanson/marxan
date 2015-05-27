@@ -4,19 +4,19 @@ setwd('C:/Users/jeff/Documents/GitHub/marxan')
 compileAttributes()
 
 # document code
-setwd('C:/Users/jeff/Documents/GitHub/marxan')
+setwd('C:/Users/jhanson/Documents/GitHub/marxan')
 library(devtools)
 library(roxygen2)
 document()
 
 # find obvious errors
-setwd('C:/Users/jeff/Documents/GitHub/marxan')
+setwd('C:/Users/jhanson/Documents/GitHub/marxan')
 library(devtools)
 library(roxygen2)
 load_all() 
 
 # formal package tests
-setwd('C:/Users/jeff/Documents/GitHub/marxan')
+setwd('C:/Users/jhanson/Documents/GitHub/marxan')
 library(devtools)
 library(roxygen2)
 test()
