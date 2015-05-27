@@ -224,7 +224,7 @@ setMethod(
 #'  calcBoundaryData(planningunits),
 #'  SpatialPolygons2PolySet(planningunits)
 #' )
-MarxanData<-function(pu, species, puvspecies, boundary, polygons=NULL, puvspecies_spo=NULL, skipchecks=FALSE, .cache=new.env()) {
+MarxanData<-function(pu, species, puvspecies, boundary, polygons=NULL, puvspecies_spo=NULL, skipchecks=FALSE, .cache=new.env(), ...) {
 	# convert factors to characters
 	if (inherits(species$name, "factor"))
 		species$name<-as.character(species$name)
