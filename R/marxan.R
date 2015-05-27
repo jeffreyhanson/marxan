@@ -51,7 +51,7 @@ marxan.SpatialPolygons<-function(polygons, rasters, ..., solve=TRUE) {
 #' @rdname marxan
 #' @inheritParams marxan
 #' @export
-marxan.data.frame<-function(pu,species,puvspecies,boundary, ..., solve=TRUE) {
+marxan.data.frame<-function(pu,species,puvspecies,boundary=NULL, ..., solve=TRUE) {
 	x<-MarxanUnsolved(
 		MarxanOpts(..., ignore.extra=TRUE),
 		MarxanData(pu=pu, species=species, puvspecies=puvspecies, boundary=boundary, ...)

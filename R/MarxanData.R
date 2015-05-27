@@ -22,7 +22,7 @@ setClass("MarxanData",
 		species="data.frame",
 		puvspecies="data.frame",
 		puvspecies_spo="data.frame",
-		boundary="data.frame",
+		boundary="data.frameOrNULL",
 		skipchecks="logical",
 		.cache="environment"
 	),
@@ -140,23 +140,25 @@ setClass("MarxanData",
 				stop('argument to puvspecies_spo$amount contains NA or non-finite values')			
 
 			# boundary
-			if (any(!c('id1','id2','boundary') %in% names(object@boundary)))
-				stop("argument to boundary is missing one of these columns: 'id1', 'id2', or 'boundary'")			
+			if (!is.null(object@boundary)) {
+				if (any(!c('id1','id2','boundary') %in% names(object@boundary)))
+					stop("argument to boundary is missing one of these columns: 'id1', 'id2', or 'boundary'")			
 
-			if (!inherits(object@boundary$id1, 'integer'))
-				stop('argument to boundary$id1 is not integer')
-			if (any(!is.finite(object@boundary$id1)))
-				stop('argument to boundary$id1 contains NA or non-finite values')					
+				if (!inherits(object@boundary$id1, 'integer'))
+					stop('argument to boundary$id1 is not integer')
+				if (any(!is.finite(object@boundary$id1)))
+					stop('argument to boundary$id1 contains NA or non-finite values')					
 
-			if (!inherits(object@boundary$id2, 'integer'))
-				stop('argument to boundary$id2 is not integer')
-			if (any(!is.finite(object@boundary$id2)))
-				stop('argument to boundary$id2 contains NA or non-finite values')					
+				if (!inherits(object@boundary$id2, 'integer'))
+					stop('argument to boundary$id2 is not integer')
+				if (any(!is.finite(object@boundary$id2)))
+					stop('argument to boundary$id2 contains NA or non-finite values')					
 
-			if (!inherits(object@boundary$boundary, 'numeric'))
-				stop('argument to boundary$boundary is not numeric')
-			if (any(!is.finite(object@boundary$boundary)))
-				stop('argument to boundary$boundary contains NA or non-finite values')					
+				if (!inherits(object@boundary$boundary, 'numeric'))
+					stop('argument to boundary$boundary is not numeric')
+				if (any(!is.finite(object@boundary$boundary)))
+					stop('argument to boundary$boundary contains NA or non-finite values')					
+			}
 			
 			# cross table dependencies
 			if (!all(object@boundary$id1 %in% object@pu$id))

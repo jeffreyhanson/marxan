@@ -4,6 +4,7 @@ NULL
 # set union classes
 suppressWarnings(setOldClass("PolySet"))
 suppressWarnings(setClassUnion("PolySetOrNULL", c("PolySet", "NULL")))
+suppressWarnings(setClassUnion("data.frameOrNULL", c("data.frame", "NULL")))
 
 # misc hidden functions
 marxanURL="http://www.uq.edu.au/marxan/get-marxan-software"

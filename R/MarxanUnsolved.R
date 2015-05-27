@@ -39,6 +39,14 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 	# check inputs are valid
 	stopifnot(file.exists(wd))
 	stopifnot(length(seeds)==x@opts@NCORES)
+	if (is.null(x@data@boundary) && x@opts@BLM!=0) {
+		if (!is.null(x@data@polygons)) {
+			warning('The BLM is non-zero and the MarxanData object has no planning unit boundary data,\n boundary data is being calculated..')
+			x@data@boundary<-calcBoundaryData(is.null(x@data@polygons))
+		} else {
+			stop('The BLM is non-zero and the MarxanData object has no boundary or polygon data')
+		}
+	}
 	# set up marxan dir structure
 	wd<-file.path(wd, paste0('M',paste(sample(letters, 10),collapse="")))
 	coredirs<-file.path(wd,seq_len(x@opts@NCORES))
