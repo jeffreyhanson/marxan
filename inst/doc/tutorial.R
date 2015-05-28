@@ -1,11 +1,11 @@
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # load marxan R package
 #  library(marxan)
 #  
 #  # load example data
 #  data(taspu, tasinvis)
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # plot first 12 vegetation classes
 #  # grey colors indicate absence
 #  # green colors indicate presence
@@ -13,7 +13,7 @@
 #  # you only see gray
 #  plot(tasinvis)
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # the attribute table for a shapefile is stored
 #  # in the data slot which can be accessed with @data
 #  # print first 20 rows of attribute table
@@ -32,7 +32,7 @@
 #  # 2 = already protected
 #  spplot(taspu, 'status')
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # copy taspu
 #  taspu2<-taspu
 #  
@@ -53,7 +53,7 @@
 #  # to check they are different
 #  head(taspu2@data)
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # argument to targets is level of protection
 #  # argument to spf is the species penalty factor for each vegetation class
 #  # argument to NCORES defines the number of threads for parallel processing
@@ -61,7 +61,7 @@
 #  # argument to BLM controls boundary length modifier
 #  results<-marxan(taspu2, tasinvis, targets="20%", spf=1, NUMREPS=100L, NCORES=2L, BLM=0, lengthFactor=1e-5)
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # histogram of proportion of vegetation classes adequately
 #  # represented in each solution
 #  # if many of the solutions adequately represented the classes
@@ -74,7 +74,7 @@
 #  	xlab='Proportion of veg. classes adequately represented'
 #  )
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # geoplot distribution of vegetation class 5
 #  spplot(results, 5, var='occ')
 #  
@@ -82,15 +82,15 @@
 #  # with a satellite base map
 #  spplot(results, var='occ', basemap='satellite')
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # copy the MARXAN parameters and pre-processed data in results,
 #  # update the SPF parameter for all species,
 #  # run MARXAN,
 #  # load the solutions back into R,
 #  # store the solutions in results2
-#  results2<-update(results, ~spp(1:63, spf=rep(1,63)))
+#  results2<-update(results, ~spp(1:63, spf=rep(100,63)))
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # get levels of representation in each portfolio
 #  results.repr<-rowMeans(targetsmet(results))
 #  results2.repr<-rowMeans(targetsmet(results2))
@@ -120,7 +120,7 @@
 #  # print best level of representation
 #  print(max(results2.repr))
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # make a geoplot of the best solution
 #  plot(results2, 0)
 #  
@@ -138,7 +138,7 @@
 #  # colour ramps
 #  plot(results2, colramp='YlGnBu')
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # get planning unit ids
 #  pu.ids<-taspu@data$id
 #  
@@ -154,7 +154,7 @@
 #  # load outputs into R and store them in results3
 #  results3<-update(results2, ~pu(pu.ids, cost=pu.costs, status=pu.status))
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # geoplot showing differences between the best solution in each portfolio
 #  plot(results2, results3, i=0, j=0)
 #  
@@ -168,7 +168,7 @@
 #  # red  colours indicate that units were more often selected in results3
 #  plot(results2, results3)
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  ## generate list of portfolios with different BLMS
 #  # make vector BLM parameters to use
 #  blm.pars=c(0, 100, 250, 500, 750, 1000)
@@ -188,7 +188,7 @@
 #  # extract values for best solutions
 #  for (i in seq_along(blm.pars)) {
 #  	cost<-append(cost, summary(results4[[i]])[["Cost"]])
-#  	con<-append(con, summary(results4[[i]])[["Shortfall"]])
+#  	con<-append(con, summary(results4[[i]])[["Connectivity"]])
 #  	blm<-append(blm, rep(blm.pars[i], nrow(summary(results4[[i]]))))
 #  }
 #  
@@ -210,9 +210,9 @@
 #  # add legend
 #  legend("topright", legend=blm.pars, col='black', pt.bg=legend.cols, pch=21, title='BLM')
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # make new solutions with BLM=0.0001
-#  results5<-update(results3, ~opt(BLM=blm.pars[2]))
+#  results5<-update(results3, ~opt(BLM=0.0001))
 #  
 #  # geoplot showing differences between the best solution in each portfolio
 #  plot(results5, results3, i=0, j=0)
@@ -223,7 +223,7 @@
 #  # and red colours indicate that they were often selected in results3
 #  plot(results5, results3)
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  # make dotchart showing the score of each solution
 #  # the score describes the overall value of the prioritisations based on our criteria
 #  # the lower the value, the better the solution
@@ -237,7 +237,7 @@
 #  # argument to nbest specifies number of solutions to colour in red
 #  dotchart(results5, var='con', nbest=5, n=20)
 
-## ----, eval=FALSE--------------------------------------------------------
+## ---- eval=FALSE---------------------------------------------------------
 #  ## dendrogram showing differences between solutions based on which planning units
 #  ## were selected (using Bray-Curtis distances by default)
 #  # the solutions are shown at the (bottom) tips of the tree.

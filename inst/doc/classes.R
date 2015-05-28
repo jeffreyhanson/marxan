@@ -1,8 +1,8 @@
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  library(marxan)
 #  data(taspu, tasinvis)
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  # create new MarxanOpts object, with default parameters except BLM and NUMITNS
 #  # note that NUMITNS is an integer and must be set using a number followed with an 'L'
 #  mopts1<-MarxanOpts(BLM=100, NUMITNS=10L)
@@ -17,7 +17,7 @@
 #  # create new Marxanopts object by loading parameters from the input.dat
 #  mopts2<-read.MarxanOpts(input.dat.path)
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  # show all parameters and their values
 #  str(mopts1)
 #  str(mopts2)
@@ -30,7 +30,7 @@
 #  # show PROP parameter with the slot function
 #  slot(mopts1, 'PROP')
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  # change BLM parameter with @ operator and show it
 #  mopts1@BLM
 #  mopts1@BLM<-500
@@ -52,7 +52,7 @@
 #  mopts1@PROP
 #  mopts3@PROP
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  ## create MarxanData object from pre-processed data
 #  # make pre-processed data
 #  pu.dat<-taspu@data
@@ -78,7 +78,7 @@
 #  ## show structure of MarxanData object
 #  str(mdata3)
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  # show first 20 rows of species data
 #  head(mdata1@species)
 #  head(slot(mdata1, 'species'))
@@ -98,7 +98,7 @@
 #  # store new MarxanData object in mdata2
 #  mdata2<-update(mdata1, ~spp(1, target=10))
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  ## create new MarxanUnsolved object using existing objects
 #  mu1<-MarxanUnsolved(mopts3, mdata1)
 #  
@@ -116,7 +116,7 @@
 #  ## show structure of MarxanUnsolved object
 #  str(mu3)
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  # copy the data in mu3,
 #  # then change the HEURTYPE parameter to 4,
 #  # change the CLUMPTYPE parameter to 1,
@@ -125,7 +125,7 @@
 #  # and store data in mu4
 #  mu4<-update(mu3, ~opt(HEURTYPE=4L, CLUMPTYPE=1L) + spp(1, target=2) + pu(4, cost=10), solve=FALSE)
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  ## create MarxanResults object
 #  # save MarxanUnsolved object to temporary directory
 #  write.MarxanUnsolved(mu1, tempdir())
@@ -146,7 +146,7 @@
 #  ## show structure for MarxanResults object
 #  str(mr1)
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  # show summary data
 #  mr1@summary
 #  slot(mr1, 'summary')
@@ -176,7 +176,7 @@
 #  slot(mr1, 'selections')[3,]
 #  selections(mr1, 3)
 
-## ----, results="hide", eval=FALSE----------------------------------------
+## ---- results="hide", eval=FALSE-----------------------------------------
 #  # generate a MarxanSolved object using the marxan function
 #  ms1<-marxan(taspu, tasinvis, targets='50%', NUMREPS=10L, NUMREPS=10L, NUMTEMP=5L)
 #  

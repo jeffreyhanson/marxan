@@ -318,7 +318,7 @@ spplot(results, var=&#39;occ&#39;, basemap=&#39;satellite&#39;)
 # run MARXAN,
 # load the solutions back into R,
 # store the solutions in results2
-results2&lt;-update(results, ~spp(1:63, spf=rep(1,63)))
+results2&lt;-update(results, ~spp(1:63, spf=rep(100,63)))
 </code></pre>
 
 <p>Now we have a new portfolio of solutions, let&#39;s compare the proportion of vegetation classes adequately represented in each of the portfolios.</p>
@@ -432,7 +432,7 @@ blm&lt;-c()
 # extract values for best solutions
 for (i in seq_along(blm.pars)) {
     cost&lt;-append(cost, summary(results4[[i]])[[&quot;Cost&quot;]])
-    con&lt;-append(con, summary(results4[[i]])[[&quot;Shortfall&quot;]])
+    con&lt;-append(con, summary(results4[[i]])[[&quot;Connectivity&quot;]])
     blm&lt;-append(blm, rep(blm.pars[i], nrow(summary(results4[[i]]))))
 }
 
@@ -458,7 +458,7 @@ legend(&quot;topright&quot;, legend=blm.pars, col=&#39;black&#39;, pt.bg=legend.
 <p>Looking at this curve and depending on the total budget, you might decide that second portfolio in <code>results4</code> achieves an acceptable level of representation and fragmentation. Let&#39;s generate another portfolio of solutions with BLM=0.0001, and then make some geoplots to compare it to <code>results3</code>.</p>
 
 <pre><code class="r"># make new solutions with BLM=0.0001
-results5&lt;-update(results3, ~opt(BLM=blm.pars[2]))
+results5&lt;-update(results3, ~opt(BLM=0.0001))
 
 # geoplot showing differences between the best solution in each portfolio
 plot(results5, results3, i=0, j=0)
