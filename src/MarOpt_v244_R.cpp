@@ -102,6 +102,7 @@ int fOptimiseConnectivityIn = 0;
 
 Rcpp::List rcpp_Marxan(Rcpp::S4 MarxanData,Rcpp::S4 MarxanOpts)
 {
+		
     int iSparseMatrixFileLength = 0, iSparseMatrixFileLength_sporder = 0; //, iProbSparseMatrixFileLength = 0;
     int puno,spno,gspno;
     struct sgenspec *gspec;
