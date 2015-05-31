@@ -29,64 +29,6 @@ MarxanUnsolved<-function(opts, data) {
 	return(new("MarxanUnsolved", opts=opts, data=data))
 }
 
-#' @rdname solve
-#' @inheritParams solve
-#' @export
-solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x@opts@NCORES), clean=TRUE, verbose=TRUE) {
-	# check that Marxan is installed properly
-	findMarxanExecutablePath()
-	stopifnot(is.marxanInstalled())
-	# check inputs are valid
-	stopifnot(file.exists(wd))
-	stopifnot(length(seeds)==x@opts@NCORES)
-	# set up marxan dir structure
-	wd<-file.path(wd, paste0('M',paste(sample(letters, 10),collapse="")))
-	coredirs<-file.path(wd,seq_len(x@opts@NCORES))
-	dir.create(file.path(wd, 'input'),recursive=TRUE, showWarnings=TRUE)
-	laply(coredirs, dir.create, recursive=TRUE, showWarnings=TRUE)
-	# sink to disk marxan files
-	write.MarxanData(x@data,dir=file.path(wd, 'input'))
-	# create input files
-	for (i in seq_along(coredirs))
-		write.MarxanOpts(x@opts, file.path(wd, 'input'), coredirs[i], seed=seeds[i])
-	# copy marxan to core dir
-	file.copy(options()$marxanExecutablePath, file.path(coredirs, basename(options()$marxanExecutablePath)))
-	# run chmod on marxan executable if windows
-	if (.Platform$OS.type=="unix")
-		laply(paste0('chmod +x "', file.path(coredirs, basename(options()$marxanExecutablePath)), '"'), system)
-	# set up parrallelisation
-	if (x@opts@NCORES>1) {
-		clust<-makeCluster(x@opts@NCORES, type="SOCK")
-		registerDoSNOW(clust)
-	}
-	# run marxan
-	oldwd<-getwd()
-	suppressWarnings(status<-alply(
-		data.frame(
-			file.path(coredirs, basename(options()$marxanExecutablePath)),
-			replace(rep(FALSE, x@opts@NCORES), which(verbose & seq_along(coredirs)==1), ''),
-			stringsAsFactors=FALSE
-		), 1, .parallel=x@opts@NCORES>1, 
-		function(x) {
-			setwd(dirname(x[[1]]))
-			return(system2(x[[1]], c('input.dat', '-s'), stdout=x[[2]]))
-		}
-	))
-	setwd(oldwd)
-	# end parallelisation
-	if (x@opts@NCORES>1) {
-		clust<-stopCluster(clust)
-	}
-	# check to see how it went
-	if (any(unlist(status, use.names=FALSE, recursive=FALSE)!=0))
-		stop("Marxan failed to execute.")
-	# if succesful; import and merge results
-	x=new("MarxanSolved", data=x@data, opts=x@opts, results=merge.MarxanResults(llply(coredirs, read.MarxanResults)))
-	# clean dir
-	if (clean)
-		unlink(wd, recursive=TRUE, force=FALSE)
-	return(x)
-}
 
 #' @export
 print.MarxanUnsolved=function(x) {
@@ -133,39 +75,6 @@ update.MarxanUnsolved<-function(x, formula, solve=TRUE, force_reset=TRUE) {
 		m<-solve.MarxanUnsolved(m)
 	return(m)
 }
-
-
-#' Read Marxan input data and parameters
-#'
-#' This function saves "MarxanUnsolved" objects to disk.
-#'
-#' @param path "character" path for input file to load.
-#' @param skipchecks "logical" should data integrity checks be skipped?
-#' @export
-#' @seealso \code{\link{MarxanUnsolved}}, \code{\link{MarxanUnsolved-class}}, \code{\link{read.MarxanOpts}}, \code{\link{read.MarxanData}}.
-read.MarxanUnsolved<-function(path, skipchecks=FALSE) {
-	return(
-		MarxanUnsolved(
-			read.MarxanOpts(path),
-			read.MarxanData(path, skipchecks=skipchecks)
-		)
-	)
-}
-
-
-#' Write Marxan input data and parameters
-#'
-#' This function saves "MarxanUnsolved" objects to disk.
-#'
-#' @param x "MarxanUnsolved" object to save.
-#' @param dir "character" directory path for location to save data.
-#' @export
-#' @seealso \code{\link{MarxanUnsolved}}, \code{\link{MarxanUnsolved-class}}, \code{\link{write.MarxanOpts}}, \code{\link{write.MarxanData}}.
-write.MarxanUnsolved<-function(x, dir=getwd()) {
-	write.MarxanData(x@data, dir)
-	write.MarxanOpts(x@opts, dir)
-}
-
 
 #' @export
 #' @rdname names
@@ -262,7 +171,6 @@ puids.MarxanUnsolved<-function(x) {
 	return(x)
 }
 
-
 #' @export
 #' @rdname costs
 costs.MarxanUnsolved<-function(x) {
@@ -276,7 +184,6 @@ costs.MarxanUnsolved<-function(x) {
 	x@data@pu$costs<-value
 	return(x)
 }
-
 
 #' @export
 #' @rdname inistatus
@@ -294,8 +201,31 @@ inistatus.MarxanUnsolved<-function(x) {
 	return(x)
 }
 
-
 #' @export
+gurobimoodel<-function(x, problem='ILP') {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
 lpsolvemodel<-function(x, problem='ILP') {
 	## calculations
 	# prelim calcs
@@ -303,65 +233,40 @@ lpsolvemodel<-function(x, problem='ILP') {
 	firmSpp<-which(!is.finite(x@data@species$spf))
 	edge<-which(x@data@boundary$id1==x@data@boundary$id2)
 	notEdge<-which(x@data@boundary$id1!=x@data@boundary$id2)
+	puFree<-which(x@data$pu$status<2)
 	puLockedIn<-which(x@data@pu$status==2)
 	puLockedOut<-which(x@data@pu$status==3)
 	# decision variables
-	sf.vars<-paste0('sf',x@data@species$id[soft.spp])
+	sf.vars<-paste0('sf',x@data@species$id[softSpp])
 	pu.vars<-paste0('pu',x@data@pu$id)
-	puxorpu.vars<-paste0('pu',x@data@boundary$id1[not.edge],'_pu',x@data@boundary$id2[not.edge])
+	puxorpu.vars<-paste0('bl_pu',x@data@boundary$id1[noEdge],'_pu',x@data@boundary$id2[notEdge])
 			
 	## parse model text
 	# init
-	mod.fun<-paste0(x@data@pu$cost, ' ', pu.vars)
+	mod.fun<-paste0(x@data@pu$cost[puFree], ' ', pu.vars[puFree])
 	mod.constrs<-c()
-	# species with soft constraints
-	if (length(softSpp)>0) {
-		mod.fun<-c(paste0(speciesDF$spf[soft.spp], ' ', sf.vars))
-		mod.constrs<-c(mod.constrs,'/* soft constraints for species with finite spfs */')
-		for (i in seq_along(softSpp)) {
-			currRows<-which(x@data@puvspecies==x@data@species$id[softSpp[i]])
-			currU<-sum(x@data@puvspecies$amount[currRows])+1
-			currPUs<-paste0('pu',x@data@puvspecies$pu[currRows])
-			currTarget<-x@data@species$target[i]-1e-5
-			currRepr<-paste(paste0(x@data@puvspecies$amount[currRows],' ',currPUs), collapse' + ')
-			mod.constrs<-c(
-				mod.constrs,
-				paste0(currRepr, ' + ', currTarget+1, ' ',sf.vars[i],' >= ', currTarget+1,';'),
-				paste0(currRepr, ' + ',currU,' ',sf.vars[i],' <= ', currTarget+currU,';')
-			)
-		}
-	}
-	# species with hard constraints
-	if (length(firmSpp)>0) {
-		mod.constrs<-c(mod.constrs, '/* hard constraints for species with infinite spfs */')
-		for (i in seq_along(firmSpp)) {
-			currRows<-which(x@data@puvspecies==x@data@species$id[firmSpp[i]])
-			currPUs<-paste0('pu',x@data@puvspecies$pu[currRows])
-			currRepr<-paste(paste0(x@data@puvspecies$amount[currRows],' ',currPUs), collapse' + ')
-			mod.constrs<-c(
-				mod.constrs,
-				paste0(currRepr, '>=', x@data@species$target[i],';')
-			)
-		}
-	}
-	# lock pus in solution
-	if (length(puLockedIn)>0) {
-		mod.constrs<-c(
-			mod.constrs,
-			'/* lock pus in optimal solution */',
-			paste0('pu',x@data@pu[puLockedIn],' = 1;')
-		)
-	}
-	# lock pus out solution
-	if (length(puLockedOut)>0) {
-		mod.constrs<-c(
-			mod.constrs,
-			'/* lock pus out optimal solution */',
-			paste0('pu',x@data@pu[puLockedOut],' = 0;')
-		)
-	}
+
 	# solution boundary data
 	if (!isTRUE(all.equal(x@opts@BLM,0))) {
+		# lock pus in solution
+		if (length(puLockedIn)>0) {
+			mod.fun<-c(mod.fun,paste0(x@data@pu$cost[puLockedIn], ' ', pu.vars[puLockedIn]))
+			mod.constrs<-c(
+				mod.constrs,
+				'/* lock pus in optimal solution */',
+				paste0('pu',x@data@pu[puLockedIn],' = 1;')
+			)
+		}
+		# lock pus out solution
+		if (length(puLockedOut)>0) {
+			mod.fun<-c(mod.fun,paste0(x@data@pu$cost[puLockedOut], ' ', pu.vars[puLockedOut]))
+			mod.constrs<-c(
+				mod.constrs,
+				'/* lock pus out optimal solution */',
+				paste0('pu',x@data@pu[puLockedOut],' = 0;')
+			)
+		}
+		# exposed edge constraints
 		if (length(edge)>0)
 			mod.fun<-c(
 				mod.fun,
@@ -382,13 +287,67 @@ lpsolvemodel<-function(x, problem='ILP') {
 			)
 		}
 	}
+
+	# species with soft constraints
+	if (length(softSpp)>0) {
+		mod.fun<-c(paste0(speciesDF$spf[softSpp], ' ', sf.vars))
+		mod.constrs<-c(mod.constrs,'/* soft constraints for species with finite spfs */')
+		for (i in seq_along(softSpp)) {
+			currRows<-which(x@data@puvspecies==x@data@species$id[softSpp[i]])
+			currU<-sum(x@data@puvspecies$amount[currRows])+1
+			currPUs<-paste0('pu',x@data@puvspecies$pu[currRows])
+			currTarget<-x@data@species$target[i]-1e-5
+			currRepr<-paste(paste0(x@data@puvspecies$amount[currRows],' ',currPUs), collapse' + ')
+			mod.constrs<-c(
+				mod.constrs,
+				paste0(currRepr, ' + ', currTarget+1, ' ',sf.vars[i],' >= ', currTarget+1,';'),
+				paste0(currRepr, ' + ',currU,' ',sf.vars[i],' <= ', currTarget+currU,';')
+			)
+		}
+	}
+	
+	# species with hard constraints
+	if (length(firmSpp)>0) {
+		mod.constrs<-c(mod.constrs, '/* hard constraints for species with infinite spfs */')
+		for (i in seq_along(firmSpp)) {
+			currRows<-which(x@data@puvspecies==x@data@species$id[firmSpp[i]])
+			currPUs<-paste0('pu',x@data@puvspecies$pu[currRows])
+			currRepr<-paste(paste0(x@data@puvspecies$amount[currRows],' ',currPUs), collapse' + ')
+			mod.constrs<-c(
+				mod.constrs,
+				paste0(currRepr, '>=', x@data@species$target[i],';')
+			)
+		}
+	}
+
+	# cost constraints
+	if (!isTRUE(all.equal(x@COSTTHRESH, 0))) {
+		currMaxCost<-paste0(x@data@pu$cost[puFree], ' ', pu.vars[puFree])
+		if (!isTRUE(all.equal(x@opts@BLM,0))) {
+			if (length(puLockedIn)>0)
+				currMaxCost<-c(
+					currMaxCost,
+					paste0(x@data@pu$cost[puLockedIn], ' ', pu.vars[puLockedIn])
+				)
+			if (length(puLockedOut)>0)
+				currMaxCost<-c(
+					currMaxCost,
+					paste0(x@data@pu$cost[puLockedOut], ' ', pu.vars[puLockedOut])
+				)
+		}
+		mod.constrs<-c(
+			mod.constrs,
+			'/* pu cost constraints*/',
+			paste0(paste(currRepr, collapse=' + '), '<=', x@opts@COSTTHRESH,';')
+		)
+	}
+	
 	# decision variable types
 	switch(problem,
 		'ILP'={
 			mod.vtypes<-paste0('bin: ',paste(sf.vars, pu.vars, puxorpu.vars ,sep=' '))
 		},
 		'LP'={
-			puFree<-which(x@data$pu$status<2)
 			mod.constrs<-c(
 				'/* pu decision variable limits */'
 				paste0('pu',x@data@pu[puFree],' >= 0;'),

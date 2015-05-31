@@ -1,9 +1,9 @@
-#' @include RcppExports.R marxan-internal.R misc.R MarxanOpts.R
+#' @include RcppExports.R marxan-internal.R misc.R Opts.R
 NULL
 
-#' MarxanOptsLPSOLVE: An S4 class to represent Marxan input parameters for lpsolve
+#' OptsLpsolve: An S4 class to store input parameters for lpsolve
 #'
-#' This class is used to store input parameters for solving the Marxan problem with lpsolve.
+#' This class is used to store input parameters for lpsolve.
 #'
 #' @slot anti.degen "character" determining anti-degeneracy handling. Defaults to \code{c('infeasible','stalling','fixedvars')}.
 #' @slot basis.crash "character" specifying basis crash mode. Defaults to 'none'.
@@ -33,8 +33,8 @@ NULL
 #' @slot timeout "integer" maximum number of seconds allotted for processing. If algorithm fails to solve within this time it will stop. If \code{0}, then algorithm run until solved. Defaults to \code{3000L} (10 minutes).
 #' @slot seealso \code{\link[lpSolveAPI]{lp.control.options}}
 #' @export
-setClass("MarxanOptsLPSOLVE",
-	contains="MarxanOpts"
+setClass("OptsLpsolve",
+	contains="Opts"
 	representation(
 		anti.degen="character",
 		basis.crash="character",
@@ -100,14 +100,14 @@ setClass("MarxanOptsLPSOLVE",
 	}
 )
 
-#' Create "MarxanOptsLPSOLVE" object
+#' Create "OptsLpsolve" object
 #'
-#' This function creates a new "MarxanOptsLPSOLVE" object.
+#' This function creates a new "OptsLpsolve" object.
 #'
-#' @param ... arguments to set slots in a "MarxanOptsLPSOLVE" object.
+#' @param ... arguments to set slots in a "OptsLpsolve" object.
 #' @param ignore.extra "logical" Should extra arguments be ignored? Defaults to \code{FALSE}.
 #' @details
-#' The slots of class "MarxanOpts" are shown below for reference.
+#' The slots of class "OptsLpsolve" are shown below for reference.
 #' \tabular{cccl}{
 #' \strong{Name} \tab \strong{Class} \tab \strong{Default} \tab \strong{Description}\cr
 #' anti.degen \tab "character" \tab \code{c('infeasible','stalling','fixedvars')} \tab names of anti-degeneracy handling operations \cr
@@ -137,26 +137,25 @@ setClass("MarxanOptsLPSOLVE",
 #' simplextype \tab "character" \tab \code{c('dual','primal')} \tab name of simplex type to use in each phase of the algorithm \cr
 #' timeout \tab "integer" \tab \code{3000L} \tab maximum number of seconds allotted for processing; if algorithm fails to solve within this time it will stop \cr
 #' }
-#' The slots for the 'MarxanOpts' super-class are also shown below for reference.
+#' The slots for the 'Opts' super-class are also shown below for reference.
 #' \tabular{cccl}{
 #' \strong{Name} \tab \strong{Class} \tab \strong{Default} \tab \strong{Description}\cr
 #' BLM \tab "numeric" \tab 100 \tab boundary length modifier \cr
 #' PROP \tab "numeric" \tab 0 \tab proportion of planning units in initial reserve system \cr
 #' COSTTHRESH \tab "numeric" \tab 0 \tab cost threshold \cr
 #' MISSLEVEL \tab "numeric" \tab 1 \tab amount of target below which it is counted as 'missing' \cr
-#' CLUMPTYPE \tab "integer" \tab 0L \tab clumping penalty type \cr
 #' NCORES \tab "integer" \tab 1L \tab number of cores to use for processing \cr
 #' VERBOSITY \tab "integer" \tab 1L \tab amount of output displayed on the program screen \cr
 #' }
-#' @return "MarxanOptsLPSOLVE" object
-#' @seealso \code{\link{MarxanOpts-class}}.
+#' @return "OptsLpsolve" object
+#' @seealso code{\link{OptsLpsolve-class}}, \code{\link{Opts-class}}.
 #' @export
 #' @examples
-#' x<-MarxanOptsLPSOLVE(NCORES=4, scalelimit=3)
-MarxanOptsLPSOLVE<-function(..., ignore.extra=FALSE) {
+#' x<-OptsLpsolve(NCORES=4, scalelimit=3)
+OptsLpsolve<-function(..., ignore.extra=FALSE) {
 	return(
-		MarxanOptsConstructor(
-			'MarxanOptsLPSOLVE',
+		constructOpts(
+			'OptsLpsolve',
 			as.list(substitute(list(...)))[c(-1L)],
 			ignore.extra
 		)
@@ -164,16 +163,17 @@ MarxanOptsLPSOLVE<-function(..., ignore.extra=FALSE) {
 }
 
 #' @export
-print.MarxanOptsLPSOLVE<-function(x, header=TRUE) {
+print.OptsLpsolve<-function(x, header=TRUE) {
 	if (header)
-		cat("MarxanOptsLPSOLVE object.\n")
+		cat("OptsLpsolve object.\n")
 }
 
 #' @export
 setMethod(
 	'show',
-	'MarxanOptsLPSOLVE',
+	'OptsLpsolve',
 	function(object)
-		print.MarxanOptsLPSOLVE(object)
+		print.OptsLpsolve(object)
 )
+
 

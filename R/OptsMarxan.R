@@ -1,9 +1,9 @@
-#' @include RcppExports.R marxan-internal.R misc.R MarxanOpts.R
+#' @include RcppExports.R marxan-internal.R misc.R Opts.R
 NULL
 
-#' MarxanOptsMARXAN: An S4 class to represent Marxan input parameters for MARXAN
+#' OptsMarxan: An S4 class to store input parameters for MARXAN
 #'
-#' This class is used to store input parameters to solve the Marxan problem with MARXAN.
+#' This class is used to store input parameters for MARXAN.
 #'
 #' @slot NUMREPS "integer" Number of replicate runs. Defaults to 100L.
 #' @slot NUMITNS "integer" Number of iterations for annealing. Defaults to 1000000L.
@@ -13,11 +13,14 @@ NULL
 #' @slot THRESHPEN1 "numeric" Size of cost threshold penalty. Defaults to 0.
 #' @slot THRESHPEN2 "numeric" Shape of cost threshold penalty. Defaults to 0.
 #' @slot ITIMPTYPE "integer" Iterative improvement type. Defaults to 1L.
+#' @slot CLUMPTYPE "integer" Clumpring role. Defaults to 0L.
 #' @slot HEURTYPE "integer" Heuristic type. Defaults to 1L.
+#' @seealso \code{\link{Opts-class}}, \code{\link{OptsMarxan-class}}.
 #' @export
-setClass("MarxanOptsMARXAN",
-	contains="MarxanOpts",
+setClass("OptsMarxan",
+	contains="Opts",
 	representation(
+		PROP="numeric",
 		NUMREPS="integer",
 		NUMITNS="integer",
 		STARTTEMP="numeric",
@@ -26,9 +29,16 @@ setClass("MarxanOptsMARXAN",
 		THRESHPEN1="numeric",
 		THRESHPEN2="numeric",
 		ITIMPTYPE="integer",
-		HEURTYPE="integer"
+		CLUMPTYPE="integer"
+		
+		# check for valid parameters
+		#' @slot PROP "numeric" Proportion of planning units in initial reserve system. Defaults to 0.
+		if (object@PROP > 1 || object@PROP < 0)
+			stop('argument to PROP is not a numeric between 0 and 1')	
+		
 	),
 	prototype=list(
+		PROP=1,
 		NUMREPS=100L,
 		NUMITNS=1000000L,
 		STARTTEMP=-1,
@@ -37,7 +47,7 @@ setClass("MarxanOptsMARXAN",
 		THRESHPEN1=0,
 		THRESHPEN2=0,
 		ITIMPTYPE=1L,
-		HEURTYPE=1L
+		CLUMPTYPE=0L
 	),
 	validity=function(object) {
 		# check for NA or non-finite values
@@ -54,14 +64,14 @@ setClass("MarxanOptsMARXAN",
 	}
 )
 
-#' Create "MarxanOptsMARXAN" object
+#' Create "OptsMarxan" object
 #'
-#' This function creates a new "MarxanOptsMARXAN" object.
+#' This function creates a new "OptsMarxan" object.
 #'
-#' @param ... arguments to set slots in a "MarxanOptsMARXAN" object.
+#' @param ... arguments to set slots in a "OptsMarxan" object.
 #' @param ignore.extra "logical" Should extra arguments be ignored? Defaults to \code{FALSE}.
 #' @details
-#' The slots of class "MarxanOptsMARXAN" are shown below for reference.
+#' The slots of class "OptsMarxan" are shown below for reference.
 #' \tabular{cccl}{
 #' \strong{Name} \tab \strong{Class} \tab \strong{Default} \tab \strong{Description}\cr
 #' NUMREPS \tab "integer" \tab 100L \tab number of replicate runs\cr
@@ -74,7 +84,7 @@ setClass("MarxanOptsMARXAN",
 #' ITIMPTYPE \tab "integer" \tab 1L \tab iterative improvement type\cr
 #' HEURTYPE \tab "integer" \tab 0L \tab heuristic type\cr
 #' }
-#' The slots for the 'MarxanOpts' super-class are also shown below for reference.
+#' The slots for the 'Opts' super-class are also shown below for reference.
 #' \tabular{cccl}{
 #' \strong{Name} \tab \strong{Class} \tab \strong{Default} \tab \strong{Description}\cr
 #' BLM \tab "numeric" \tab 100 \tab boundary length modifier \cr
@@ -85,15 +95,15 @@ setClass("MarxanOptsMARXAN",
 #' NCORES \tab "integer" \tab 1L \tab number of cores to use for processing \cr
 #' VERBOSITY \tab "integer" \tab 1L \tab amount of output displayed on the program screen \cr
 #' }
-#' @return "MarxanOptsMARXAN" object
-#' @seealso \code{\link{MarxanOptsMARXAN-class}},  \code{\link{read.MarxanOptsMARXAN}}, \code{\link{write.MarxanOptsMARXAN}}.
+#' @return "OptsMarxan" object
+#' @seealso \code{\link{Opts-class}}, \code{\link{OptsMarxan-class}},  \code{\link{read.OptsMarxan}}, \code{\link{write.OptsMarxan}}.
 #' @export
 #' @examples
-#' x<-MarxanOptsMARXAN(NCORES=4, NUMREPS=2, NUMITNS=5)
-MarxanOptsMARXAN<-function(..., ignore.extra=FALSE) {
+#' x<-OptsMarxan(NCORES=4, NUMREPS=2, NUMITNS=5)
+OptsMarxan<-function(..., ignore.extra=FALSE) {
 	return(
-		MarxanOptsConstructor(
-			'MarxanOptsMARXAN',
+		constructOpts(
+			'OptsMarxan',
 			as.list(substitute(list(...)))[c(-1L)],
 			ignore.extra
 		)
@@ -105,17 +115,17 @@ MarxanOptsMARXAN<-function(..., ignore.extra=FALSE) {
 #' This function reads MARXAN parameter settings from an input file.
 #'
 #' @param path "character" directory path for location to save input parameters file.
-#' @seealso \code{\link{MarxanOptsMARXAN-class}},  \code{\link{MarxanOptsMARXAN}}, \code{\link{write.MarxanOptsMARXAN}}.
+#' @seealso \code{\link{OptsMarxan-class}},  \code{\link{OptsMarxan}}, \code{\link{write.OptsMarxan}}.
 #' @export
 #' @examples
-#' x<-MarxanOptsMARXAN()
-#' write.MarxanOptsMARXAN(x, file.path(tempdir(), 'input.dat'))
-#' y<-read.MarxanOptsMARXAN(file.path(tempdir(), 'input.dat'))
+#' x<-MarxanOptsMarxan()
+#' write.OptsMarxan(x, file.path(tempdir(), 'input.dat'))
+#' y<-read.OptsMarxan(file.path(tempdir(), 'input.dat'))
 #' stopifnot(identical(x,y))
-read.MarxanOptsMARXAN<-function(path) {
-	x<-new('MarxanOptsMARXAN')
+read.OptsMarxan<-function(path) {
+	x<-new('OptsMarxan')
 	marxanOptsFile=readLines(path)
-	sl<-getSlots("MarxanOptsMARXAN")
+	sl<-getSlots("OptsMarxan")
 	for (i in seq_along(sl)) {
 		pos<-grep(names(sl)[i],marxanOptsFile)
 		if (length(pos)!=0)
@@ -129,18 +139,18 @@ read.MarxanOptsMARXAN<-function(path) {
 #'
 #' This function writes MARXAN parameter settings to a file.
 #'
-#' @param x "MarxanOptsMARXAN" object.
+#' @param x "OptsMarxan" object.
 #' @param inputdir "character" directory path for of input data files.
 #' @param outputdir "character" directory path for location where Marxan input file and result data files are saved.
 #' @param seed "integer" seed for random number generation in Marxan.
-#' @seealso \code{\link{MarxanOptsMARXAN-class}},  \code{\link{MarxanOptsMARXAN}}, \code{\link{read.MarxanOptsMARXAN}}.
+#' @seealso \code{\link{OptsMarxan-class}},  \code{\link{OptsMarxan}}, \code{\link{read.OptsMarxan}}.
 #' @export
 #' @examples
-#' x<-MarxanOptsMARXAN()
-#' write.MarxanOptsMARXAN(x, file.path(tempdir(), 'input.dat'))
-#' y<-read.MarxanOptsMARXAN(file.path(tempdir(), 'input.dat'))
+#' x<-OptsMarxan()
+#' write.OptsMarxan(x, file.path(tempdir(), 'input.dat'))
+#' y<-read.OptsMarxan(file.path(tempdir(), 'input.dat'))
 #' stopifnot(identical(x,y))
-write.MarxanOptsMARXAN<-function(x,inputdir,outputdir=inputdir,seed=sample.int(n=10000L,size=1L)) {
+write.OptsMarxan<-function(x,inputdir,outputdir=inputdir,seed=sample.int(n=10000L,size=1L),verbose=1, start=1) {
 	cat(
 'Input file for Annealing program.
 
@@ -192,26 +202,26 @@ Program control.
 RUNMODE 1
 MISSLEVEL ',x@MISSLEVEL,'
 ITIMPTYPE ',x@ITIMPTYPE,'
-HEURTYPE ',x@HEURTYPE,'
+HEURTYPE ',start,'
 CLUMPTYPE ',x@CLUMPTYPE,'
-VERBOSITY ',x@VERBOSITY,'
+VERBOSITY ',verbose,'
 
 ',file=file.path(outputdir, 'input.dat'), sep=""
 	)
 }
 
 #' @export
-print.MarxanOptsMARXAN<-function(x, header=TRUE) {
+print.OptsMarxan<-function(x, header=TRUE) {
 	if (header)
-		cat("MarxanOptsMARXAN object.\n")
+		cat("OptsMarxan object.\n")
 }
 
 #' @export
 setMethod(
 	'show',
-	'MarxanOptsMARXAN',
+	'OptsMarxan',
 	function(object)
-		print.MarxanOptsMARXAN(object)
+		print.OptsMarxan(object)
 )
 
 

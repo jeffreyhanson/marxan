@@ -1,9 +1,9 @@
-#' @include RcppExports.R marxan-internal.R misc.R MarxanOpts.R
+#' @include RcppExports.R marxan-internal.R misc.R Opts.R
 NULL
 
-#' MarxanOptsGUROBI: An S4 class to represent Marxan input parameters for Gurobi
+#' OptsGurobi: An S4 class to store input parameters for Gurobi
 #'
-#' This class is used to store input parameters for solving the Marxan problem with Gurobi.
+#' This class is used to store input parameters for Gurobi.
 #'
 #' @slot BarlterLimit "integer" Limits the number of barrier iterations performed. Defaults to \code{Inf}.
 #' @slot CutOff "numeric" Indicates that you aren't interested in solutions whose objective values are worse than the specified value. Defaults to \code{-Inf}.
@@ -90,8 +90,8 @@ NULL
 #' @slot PreSparsify "integer" The presolve sparsify reduction. Defaults to \code{-1L}. 
 #' @seealso \code{\url{http://www.gurobi.com/documentation/5.6/reference-manual/parameters}}
 #' @export
-setClass("MarxanOptsGurobi",
-	contains="MarxanOpts"
+setClass("OptsGurobi",
+	contains="Opts"
 	representation(
 		BarlterLimit="integer",
 		CutOff="numeric",
@@ -354,14 +354,14 @@ setClass("MarxanOptsGurobi",
 	}
 )
 
-#' Create "MarxanOptsGurobi" object
+#' Create "OptsGurobi" object
 #'
-#' This function creates a new "MarxanOptsGurobi" object.
+#' This function creates a new "OptsGurobi" object.
 #'
-#' @param ... arguments to set slots in a "MarxanOptsGurobi" object.
+#' @param ... arguments to set slots in a "OptsGurobi" object.
 #' @param ignore.extra "logical" Should extra arguments be ignored? Defaults to \code{FALSE}.
 #' @details
-#' The slots of class "MarxanOptsGurobi" are shown below for reference.
+#' The slots of class "OptsGurobi" are shown below for reference.
 #' \tabular{cccl}{
 #' \strong{Name} \tab \strong{Class} \tab \strong{Default} \tab \strong{Description}\cr
 #' BarlterLimit \tab "integer" \tab Inf \tab limits the number of barrier iterations performed \cr
@@ -448,26 +448,25 @@ setClass("MarxanOptsGurobi",
 #' PreSOS2BigM \tab "numeric" \tab 0 \tab the automatic reformulation of SOS2 constraints into binary form \cr
 #' PreSparsify \tab "integer" \tab -1L \tab the presolve sparsify reduction \cr
 #' }
-#' The slots for the 'MarxanOpts' super-class are also shown below for reference.
+#' The slots for the 'Opts' super-class are also shown below for reference.
 #' \tabular{cccl}{
 #' \strong{Name} \tab \strong{Class} \tab \strong{Default} \tab \strong{Description}\cr
 #' BLM \tab "numeric" \tab 100 \tab boundary length modifier \cr
 #' PROP \tab "numeric" \tab 0 \tab proportion of planning units in initial reserve system \cr
 #' COSTTHRESH \tab "numeric" \tab 0 \tab cost threshold \cr
 #' MISSLEVEL \tab "numeric" \tab 1 \tab amount of target below which it is counted as 'missing' \cr
-#' CLUMPTYPE \tab "integer" \tab 0L \tab clumping penalty type \cr
 #' NCORES \tab "integer" \tab 1L \tab number of cores to use for processing \cr
 #' VERBOSITY \tab "integer" \tab 1L \tab amount of output displayed on the program screen \cr
 #' }
-#' @return "MarxanOptsGurobi" object
-#' @seealso \code{\link{MarxanOpts-class}}.
+#' @return "OptsGurobi" object
+#' @seealso \code{\link{OptsGurobi-class}}.
 #' @export
 #' @examples
-#' x<-MarxanOptsGurobi(NCORES=4, PreSparsify=1)
-MarxanOptsGurobi<-function(..., ignore.extra=FALSE) {
+#' x<-OptsGurobi(NCORES=4, PreSparsify=1)
+OptsGurobi<-function(..., ignore.extra=FALSE) {
 	return(
-		MarxanOptsConstructor(
-			'MarxanOptsGurobi',
+		constructOpts(
+			'OptsGurobi',
 			as.list(substitute(list(...)))[c(-1L)],
 			ignore.extra
 		)
@@ -475,17 +474,17 @@ MarxanOptsGurobi<-function(..., ignore.extra=FALSE) {
 }
 
 #' @export
-print.MarxanOptsGurobi<-function(x, header=TRUE) {
+print.OptsGurobi<-function(x, header=TRUE) {
 	if (header)
-		cat("MarxanOptsGurobi object.\n")
+		cat("OptsGurobi object.\n")
 }
 
 #' @export
 setMethod(
 	'show',
-	'MarxanOptsGurobi',
+	'OptsGurobi',
 	function(object)
-		print.MarxanOptsGurobi(object)
+		print.OptsGurobi(object)
 )
 
 
