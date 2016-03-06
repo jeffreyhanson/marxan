@@ -1,0 +1,44 @@
+language: r
+sudo: required
+warnings_are_errors: true
+
+os:
+  - linux
+  - osx
+
+env:
+  global:
+    - NOT_CRAN=true
+    - _R_CHECK_FORCE_SUGGESTS_=False
+
+before_install: 
+  - echo "TRAVIS_OS_NAME = $TRAVIS_OS_NAME"
+  - echo "options(repos = c(CRAN='http://cran.rstudio.com'))" > ~/.Rprofile
+  
+r_binary_packages:
+  - sp
+  - rgdal
+  - raster
+  - Rcpp
+  - plyr
+  - gdalUtils
+  - shape
+  - ape
+  - fastcluster
+  - PBSmapping
+  - RgoogleMaps
+  - testthat
+  - data.table
+  - doSNOW
+  - RColorBrewer
+  - scales
+  - vegan
+
+r_packages:
+  - covr
+  - rmarkdown
+  - testthat
+  
+after_success:
+  - Rscript -e 'covr::codecov()'
+ 

@@ -1,3 +1,12 @@
+marxan 1.0.1
+--------
+* Fixed bug in boundary data calculations.
+* Fixed bug with n_preallocate in SpatialPolygons2Polyset
+* Pass CRAN manual checks - still failing some checks
+* Automated tests using Travis CI and AppVeyor.
+* Replace Makevars files with SystemRequirements in DESCRIPTION
+
+
 marxan 1.0.0
 --------
 * First major release.

@@ -11,15 +11,16 @@ NULL
 #' @param y "RasterLayer", "RasterStack", or "RasterBrick" object.
 #' @param ids "integer" vector of species ids in \code{y}. Defaults to indices of \code{y}.
 #' @param ncores "integer" Number of cores to use for processing data. Defaults to 1.
+#' @param ... not used.
 #' @return "data.frame" with "integer" 'species', "integer" 'pu', and "numeric" 'amount' columns.
 #' @note This function is designed to be used to generate inputs for Marxan. The column names are appropriate for the 'puvspr.dat' file. Data is sorted by values in 'pu' column.
 #' @seealso \code{\link[raster]{zonal}}.
 #' @export
 #' @examples
-#' data(species, planningunits)
-#' rast<-rasterize(planningunits, species[[1]], 'sum')
-#' zonalSum(planningunitsraster, species[[1]])
-#' zonalSum(planningunitsraster, species)
+#' data(tasinvis, taspu)
+#' rast<-rasterize(taspu, tasinvis[[1]], 'sum')
+#' zonalSum(rast, tasinvis[[1]])
+#' zonalSum(rast, tasinvis)
 setGeneric("zonalSum", function(x, y, ...) standardGeneric("zonalSum"))
 
 #' @rdname zonalSum

@@ -15,7 +15,7 @@ NULL
 #' @slot best "integer" with index of best solution.
 #' @slot log "character" with Marxan log  file (otuput_log.dat). 
 #' @export
-#' @seealso \code{\link{MarxanResults}}, \code{\link{read.MarxanResults}}, \code{\link{write.MarxanResults}}.
+#' @seealso \code{\link{MarxanResults}}, \code{\link{read.MarxanResults}}.
 setClass("MarxanResults",
 	representation(
 		summary="data.frame",
@@ -384,7 +384,7 @@ dotchart.MarxanResults<-function(x, var="score", nbest=1, n=50) {
 	)
 }
 
-#' @describeIn is.cached
+#' @rdname is.cached
 setMethod(
 	f="is.cached", 
 	signature(x="MarxanResults", name="character"), 
@@ -393,7 +393,7 @@ setMethod(
 	}
 )
 
-#' @describeIn cache
+#' @rdname cache
 setMethod(
 	f="cache", 
 	signature(x="MarxanResults", name="character", y="ANY"), 
@@ -402,7 +402,7 @@ setMethod(
 	}
 )
 
-#' @describeIn cache
+#' @rdname cache
 setMethod(
 	f="cache", 
 	signature(x="MarxanResults", name="character", y="missing"), 

@@ -25,13 +25,17 @@ is.gdalInstalled<-function() {
 #' @param x "SpatialPolygonsDataFrame" object.
 #' @param y "RasterLayer" with dimensions, extent, and resolution to be used as a template for new raster.
 #' @param field "character" column name with values to burn into the output raster. If not supplied, default behaviour is to burn polygon indices into the "RasterLayer".
+#' @param ... not used.
 #' @export
 #' @return "RasterLayer" object.
 #' @seealso \code{\link[raster]{rasterize}}, \code{\link{is.gdalInstalled}}.
 #' @examples
-#' data(species,planningunits)
-#' x<-rasterize.gdal(planningunits[1:5,],species[[1]])
+#' data(taspu,tasinvis)
+#' x<-rasterize.gdal(taspu[1:5,],tasinvis[[1]])
 setGeneric('rasterize.gdal', function(x,y, ...) standardGeneric('rasterize.gdal'))
+
+#' @rdname rasterize.gdal
+#' @export
 setMethod(
 	'rasterize.gdal',
 	signature(x="SpatialPolygonsDataFrame", y="RasterLayer"),
@@ -52,6 +56,7 @@ setMethod(
 #'
 #' This function determines if Marxan is installed on the computer, and will update \code{\link[base]{options}}.
 #'
+#' @param verbose should messages be printed?
 #' @return "logical" Is it installed?
 #' @seealso \code{\link[base]{options}}, \code{\link{findMarxanExecutablePath}}.
 #' @export

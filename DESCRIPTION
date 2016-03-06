@@ -13,18 +13,18 @@ Description: This R package contains decision support tools for reserve
     Most of the functions that involve intensive data processing use code
     compiled in C++, provide options to run processing in parallel, or can make
     use of other software to reduce run time.
-License: GNU AFFERO GENERAL PUBLIC LICENSE (version 3)
+License: AGPL-3 
 URL: https://github.com/paleo13/marxan
 LazyData: true
 Collate:
     'dependencies.R'
     'RcppExports.R'
     'marxan-internal.R'
-    'misc.R'
-    'generics.R'
     'zonalSum.R'
+    'misc.R'
     'calcPuVsSpeciesData.R'
     'calcBoundaryData.R'
+    'generics.R'
     'MarxanData.R'
     'MarxanOpts.R'
     'MarxanResults.R'
@@ -47,15 +47,23 @@ Imports:
     fastcluster,
     PBSmapping,
     RgoogleMaps,
-    testthat,
     data.table,
     doSNOW,
-    knitr,
-    rmarkdown,
     RColorBrewer,
     scales,
+    snow,
     vegan
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Suggests:
+    rmarkdown,
     testthat,
+    knitr
+BinaryFiles: 'bin/MarOpt_v243_Linux32',
+    'bin/MarOpt_v243_Linux64',
+    'bin/MarOpt_v243_Mac32',
+    'bin/MarOpt_v243_Mac64',
+    'bin/Marxan.exe',
+    'bin/Marxan_x64.exe'
+SystemRequirements: C++11
+RoxygenNote: 5.0.1

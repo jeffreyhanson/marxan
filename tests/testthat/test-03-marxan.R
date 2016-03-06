@@ -1,8 +1,4 @@
-library(rgdal)
-library(raster)
-library(maptools)
-library(plyr)
-library(data.table)
+conrext('03-marxan')
 
 # test main marxan function
 test_that("main marxan function doesn't work", {

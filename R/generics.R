@@ -11,6 +11,7 @@ NULL
 #' @param seeds "integer" vector of seeds to initialise Marxan 's random number generator.
 #' @param clean "logical" delete files once processing completed?
 #' @param force_reset "logical" should Marxan solutions be recalculated even if "MarxanSolved" object supplied?
+#' @param verbose "logical" should messages be printed during optimisation?
 #' @return "MarxanSolved" object
 #' @note This function is used to solve a MarxanUnsolved object that has all of its inputs generated. The marxan function (without lower case 'm') provides a more general interface for generating inputs and outputs for Marxan.
 #' @name solve
@@ -22,6 +23,7 @@ NULL
 #'
 #' @param x "MarxanResults or "MarxanSolved" object.
 #' @param y "NULL" to return all scores, "integer" 0 to return score for best solution, "integer" value greater than 0 for \code{y}'th solution score.
+#' @param ... not used.
 #' @return "matrix" or "numeric" vector with solution score(s) depending on arguments.
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
 #' @export
@@ -32,6 +34,8 @@ score<-function(x, ...) {UseMethod('score')}
 #' This function returns or assigns the species penalty factors for speces in a Marxan object.
 #'
 #' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param value "numeric" new species penalty factors.
+#' @param ... not used.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
 #' @export
 #' @seealso \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
@@ -47,6 +51,7 @@ spfs<-function(x, ...) {UseMethod('spfs')}
 #' This function returns or assigns the targets for species in a Marxan object.
 #'
 #' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param value "numeric" new targets.
 #' @param ... not used.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
 #' @export
@@ -64,6 +69,8 @@ targets<-function(x, ...) {UseMethod('targets')}
 #' This function returns or assigns the maximum targets for species in a Marxan object. Maximum targets are necessary for setting percent based targets.
 #'
 #' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param ... not used.
+#' @param value "numeric" with new maximum targets.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
 #' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
@@ -78,6 +85,8 @@ maxtargets<-function(x, ...) {UseMethod('targets')}
 #' This function returns or assigns the species ids for a Marxan object.
 #'
 #' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param value "integer" new species ids.
+#' @param ... not used.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
 #' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
@@ -95,6 +104,8 @@ sppids<-function(x, ...) {UseMethod('sppids')}
 #' This function returns or assigns the planning unit ids for a Marxan object.
 #'
 #' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param value "integer" new planning unit ids.
+#' @param ... not used.
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
 #' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
@@ -111,6 +122,7 @@ puids<-function(x, ...) {UseMethod('puids')}
 #' This function returns or assigns the planing unit costs for a Marxan object.
 #'
 #' @param x any "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param value "numeric" value of new costs.
 #' @param ... not used
 #' @note This generic method does not work on "MaranResults" objects because they do not store this information.
 #' @export
@@ -126,6 +138,8 @@ costs<-function(x, ...) {UseMethod('costs')}
 #' This function returns or assigns the planing unit initial statuses for a Marxan object.
 #'
 #' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param value "integer" values for initial status.
+#' @param ... not used.
 #' @note This generic method does not work on "MaranOpts" or "MaranResults" objects because they do not store this information.
 #' @export
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
@@ -134,13 +148,14 @@ inistatus<-function(x, ...) {UseMethod('inistatus')}
 #' @export
 #' @rdname inistatus
 #' @inheritParams inistatus
-`inistatus<-`<-function(object,value) {UseMethod('inistatus<-')}
+`inistatus<-`<-function(x,value) {UseMethod('inistatus<-')}
 
 #' Species names
 #'
 #' This function returns or assigns the species names for a Marxan object.
 #'
 #' @param x any "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
+#' @param value "character" new species names.
 #' @note This generic method does not work on "MaranOpts" or "MaranResults" objects because they do not store this information.
 #' @seealso \code{\link{MarxanOpts-class}}, \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanSolved-class}}
 #' @name names
@@ -165,6 +180,7 @@ log.default<-base::log
 #'
 #' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param y "NULL" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for \code{y}'th solution value.
+#' @param ... not used.
 #' @return "matrix" or "numeric" vector depending on arguments.
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
 #' @export
@@ -177,6 +193,7 @@ amountheld<-function(x, ...) {UseMethod('amountheld')}
 #'
 #' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param y "NULL" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for \code{y}'th solution value.
+#' @param ... not used.
 #' @return "matrix" or "numeric" vector depending on arguments.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
@@ -188,6 +205,7 @@ occheld<-function(x, ...) {UseMethod('occheld')}
 #'
 #' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param y "NULL" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for \code{y}'th solution value.
+#' @param ... not used.
 #' @return "matrix" or "logical" vector depending on arguments.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved}}, \code{\link{marxan}}
@@ -200,6 +218,7 @@ targetsmet<-function(x, ...) {UseMethod('targetsmet')}
 #'
 #' @param x "MarxanResults or "MarxanSolved" object.
 #' @param y "NULL" to return all solution selections, "integer" 0 to return selection for best solution, "integer" value greater than 0 for \code{y}'th solution selection.
+#' @param ... not used.
 #' @return "matrix" or "numeric" vector with planning units statuses depending on arguments.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}.
@@ -223,6 +242,7 @@ mpm<-function(x, ...) {UseMethod('mpm')}
 #'
 #' @param x "MarxanResults or "MarxanSolved" object.
 #' @param y "NULL" to return all values, "integer" 0 to return values for best solution, "integer" value greater than 0 for \code{y}'th solution values.
+#' @param ... not used.
 #' @return "matrix" or "numeric" vector with values depending on arguments.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{marxan}}
@@ -262,6 +282,7 @@ pca<-function(x, ...) {UseMethod("pca")}
 #' @param x "MarxanResults" or "MarxanSolved" object.
 #' @param var "character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param method "character" name of distance metric to use for calculations (see \code{\link[vegan]{vegdist}})
+#' @param ... not used.
 #' @param force_reset "logical" should analysis be run even if it is stored in the cache?
 #' @return "dist"  with dissimilarity indices.
 #' @export
@@ -336,10 +357,11 @@ ordiplot<-function(x, ...) UseMethod("ordiplot")
 #' \item if 'occ': number of \code{y} species in planning units is shown.
 #' }
 #' @param basemap "character" name of google base map. Defaults to "none".
-#' @param colramp "character" name of color ramp. See color palettes available in \code{\link[RColorBrewer]{brewer.pal.ino}}
+#' @param colramp "character" name of color ramp. See color palettes available in \code{\link[RColorBrewer]{brewer.pal.info}}
 #' @param alpha "numeric" between 0 and 1 describing how transparent the colors should be. Defaults to 1 if \code{basemap}='none', otherwise defaults to 0.7.
 #' @param grayscale "logical" Shoould be basemap be gray scaled?
 #' @param force_reset "logical" should base map image be downloaded even if it is stored in the cache?
+#' @param ... not used.
 #' @export
 #' @seealso \code{\link{MarxanData-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{MarxanData-class}}, \code{\link[RgoogleMaps]{GetMap}}, \code{\link[RgoogleMaps]{PlotOnStaticMap}}
 setGeneric('spplot',function(obj,...) standardGeneric('spplot'))
@@ -354,7 +376,7 @@ setGeneric('spplot',function(obj,...) standardGeneric('spplot'))
 #' @param type "character" use 'nmds' or 'pca' or 'dist' for analysis?
 #' @param var "character" should solutions be compared based on selections ('selections'), or the amount held ('amountheld'), number of occurances ('occheld'), or whether the targets have been met for each species ('targetsmet')?
 #' @param nbest "integer" color the n best solutions in "red".
-#' @param ... arguments to \code{\link[vegan]{monoMDS}}, \code{\link[stats]{prcomp}}, \code{\link{nmds.MarxanResults}}, and \code{\link{pca.MarxanResults}}.
+#' @param ... arguments to \code{\link[vegan]{monoMDS}}, \code{\link[stats]{prcomp}}, \code{\link{mds.MarxanResults}}, and \code{\link{pca.MarxanResults}}.
 #' @param force_reset "logical" should analysis be rerun even if it is stored in the cache?
 #' @return "prcomp" or "monoMDS" object.
 #' @export
@@ -368,7 +390,8 @@ dendrogram<-function(x, ...) UseMethod("dendrogram")
 #' @param x "MarxanResults" or "MarxanSolved".
 #' @param var "character" What variable should be used to compare solutions?
 #' @param n "integer" Number of solutions to plot. Defaults to 50.
-#' @param nbest "integer" Color the n best solutions in "red".
+#' @param nbest "integer" Color the \code{n}-best solutions in "red".
+#' @param ... not used.
 #' @note Supported variables are shown below.
 #' \tabular{ccl}{
 #' 	Short name \tab Full name \tab Description\cr
@@ -398,6 +421,7 @@ dotchart.default<-graphics::dotchart
 #' @param basemap "character" name of base map to display. Valid names are "roadmap", "mobile", "satellite", "terrain", "hybrid", "mapmaker-roadmap", "mapmaker-hybrid".
 #' @param grayscale "logical" should base map be gray scale?
 #' @param force_reset "logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.
+#' @param ... not used.
 #' @return "list" with google map data.
 #' @export
 #' @seealso \cite{\link[RgoogleMaps]{GetMap.bbox}}, \cite{\link{plot}}
@@ -413,12 +437,17 @@ basemap<-function(x, ...) {UseMethod("basemap")}
 #' 	\item if "missing": function plots the selection frequency of planning units for all solutions.
 #'	\item if "integer": function plots the selection for the n'th solution, use 0 to plot the best solution.
 #'	\item if "character": set to name of species to display its density, or "all" for sum density of all species, or "rich" to get species richness in each planning unit.
-#'	\item if "MarxanSolved" plots the difference in solutions: \itemize{
+#'	\item if "MarxanSolved" plots the difference in solutions.
+#' }
+#' @param i "numeric" or NULL object. Defaults to NULL. 
+#'	\itemize{
 #'		\item if i is "NULL": differences in selection frequencies are plotted.
 #'		\item if i is "integer" and j is "integer", plots differences selection status for solution i in x, and solution j in y. Set i or j to 0 to refer to the best solution in x or y respectively.
-#'		}
-#' }
+#'	}
+#' @param j "numeric" or NULL object. See \code{i} for more information. Defaults to NULL.
 #' @param colramp "character" name of colour palette (see \code{\link[RColorBrewer]{brewer.pal.info}}).
+#' @param lockedincol "character" color to plot locked in planning units.
+#' @param lockedoutcol "character" color to plot locked out planning units.
 #' @param xlockedincol "character" color to plot locked in planning units in object \code{x}.
 #' @param ylockedincol "character" color to plot locked in planning units in object \code{y}.
 #' @param xlockedoutcol "character" color to plot locked out planning units in object \code{x}.
@@ -427,6 +456,7 @@ basemap<-function(x, ...) {UseMethod("basemap")}
 #' @param basemap "character" name of basemap to display. Valid names are "roadmap", "mobile", "satellite", "terrain", "hybrid", "mapmaker-roadmap", "mapmaker-hybrid".
 #' @param grayscale "logical" should basemap be gray scale?
 #' @param force_reset "logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.
+#' @param ... note used.
 #' @note This function will return an error if spatial polygons were not supplied during the construction of the Marxan object.
 #' @export
 #' @seealso \code{\link{MarxanResults-class}}, \code{\link{MarxanSolved-class}}, \code{\link{basemap}} \code{\link{marxan}}, \code{\link{dendrogram}}, \code{\link{dotchart}}, \code{\link{ordiplot}}, \code{\link{spplot}}
@@ -440,7 +470,8 @@ setGeneric("plot")
 #'
 #' @param x "MarxanOpts", "MarxanData", "MarxanUnsolved", or "MarxanSolved" object.
 #' @param formula "formula" with update commands (see examples).
-#' @param sovle "logical" should solutions be generated for the new object?
+#' @param solve "logical" should solutions be generated for the new object?
+#' @param force_reset "logical" ignore data in cache? Setting this as ignore will make function slower but may avoid bugs in cache system.
 #' @return "MarxanSolved" or "MarxanUnsolved" object depending on solve argument.
 #' @seealso \code{\link{MarxanSolved-class}}, \code{\link{MarxanUnsolved-class}}, \code{\link{marxan}}, \code{\link{opt}}, \code{\link{spp}}, \code{\link{pu}}
 #' @name update

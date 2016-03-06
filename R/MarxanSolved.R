@@ -71,7 +71,7 @@ print.MarxanSolved<-function(x) {
 	print.MarxanResults(x@results, FALSE)
 }
 
-# ' @export
+#' @export
 setMethod(
 	'show',
 	'MarxanSolved',
@@ -496,13 +496,13 @@ targets.MarxanSolved<-function(x) {
 }
 
 #' @export
-#' @describeIn maxtargets
+#' @rdname maxtargets
 maxtargets.MarxanSolved<-function(x) {
 	return(maxtargets.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn maxtargets
+#' @rdname maxtargets
 `maxtargets<-.MarxanSolved`<-function(x,value) {
 	stopifnot(is.numeric(value) & !any(is.na(value)))
 	x@data@species$maxtargets<-value

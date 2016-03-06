@@ -1,8 +1,4 @@
-library(rgdal)
-library(raster)
-library(maptools)
-library(plyr)
-library(data.table)
+context('02-run-marxan')
 
 # test MarxanOpts methods
 test_that("MarxanOpts methods don't work", {

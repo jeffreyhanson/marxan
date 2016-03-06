@@ -213,18 +213,19 @@ setMethod(
 #' @param puvspecies_spo "data.frame" with data in \code{puvspecies} ordered by 'species' column. Defaults to \code{NULL}, and will generate data from \code{puvspecies}.
 #' @param skipchecks "logical" Skip data integrity checks? May improve speed for big data sets. Defaults to \code{FALSE}.
 #' @param .cache "environment" used to cache calculations. Defaults to a new environment.
+#' @param ... not used.
 #' @note Generally, users are not encouraged to change arguments to \code{.cache}.
 #' @return MarxanData object
 #' @seealso \code{\link[PBSmapping]{PolySet}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}, \code{\link{format.MarxanData}}, \code{\link{MarxanData-class}}.
 #' @export
 #' @examples
-#' data(planningunits, species)
+#' data(taspu, tasinvis)
 #' x<-MarxanData(
-#' 	planningunits@@data,
+#' 	taspu@@data,
 #' 	data.frame(id=1L, target=12, spf=23, name='species1', stringsAsFactors=FALSE),
-#'  calcPuVsSpeciesData(planningunits, species[[1]]),
-#'  calcBoundaryData(planningunits),
-#'  SpatialPolygons2PolySet(planningunits)
+#'  calcPuVsSpeciesData(taspu, tasinvis[[1]]),
+#'  calcBoundaryData(taspu),
+#'  SpatialPolygons2PolySet(taspu)
 #' )
 MarxanData<-function(pu, species, puvspecies, boundary, polygons=NULL, puvspecies_spo=NULL, skipchecks=FALSE, .cache=new.env(), ...) {
 	# convert factors to characters
@@ -332,6 +333,10 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 #' @param polygons "SpatialPolygons" with planning unit data.
 #' @param rasters "RasterLayer", "RasterStack", "RasterBrick" with species distribution data.
 #' @param targets "numeric" vector for targets for each species (eg. 12), or "character" vector with percent-based targets (eg. '12\%'). Defaults to '20\%' for each species.
+#' @param spf "numeric" species penalty factors.
+#' @param sepdistance "numeric" species minimum separation distance.
+#' @param sepnum "numeric" species seperated feature occurences.
+#' @param targetocc "numeric" species occurence targets.
 #' @param pu "data.frame" planning unit data; with "integer" 'id', "numeric" 'cost', "integer" 'status' columns. Default behaviour is to generate a table with all costs and statuses set to 1 and 0 (respectively).
 #' @param species "data.frame" with species data; with "integer" 'id', "numeric" 'target', "numeric" 'spf', and "character" 'name' columns. Default behaviour is to base targets on \code{target} argument, set 'spf' to 1, and set 'names' use names of layers in \code{rasters} argument.
 #' @param puvspecies "data.frame" pu vs. species data; with "species", "pu", and "amount" columns. Defaults to \code{NULL}, and will be calculated using \code{calcPuVsSpeciesData}.
@@ -342,9 +347,9 @@ write.MarxanData<-function(x, dir=getwd(), ...) {
 #' @seealso \code{\link{MarxanData-class}}, \code{\link{MarxanData}}, \code{\link{read.MarxanData}}, \code{\link{write.MarxanData}}.
 #' @export format.MarxanData
 #' @examples
-#' data(planningunits, species)
-#' x<-MarxanData(planningunits, rasters=species, targets="10\%")
-#' y<-MarxanData(planningunits, rasters=species)
+#' data(taspu, tasinvis)
+#' x<-MarxanData(taspu, rasters=tasinvis, targets="10%")
+#' y<-MarxanData(taspu, rasters=tasinvis)
 #' stopifnot(identical(x,y))
 format.MarxanData<-function(polygons, rasters, targets="20%", spf=rep(1, nlayers(rasters)), sepdistance=rep(0, nlayers(rasters)), sepnum=rep(0L,nlayers(rasters)), targetocc=rep(0L,nlayers(rasters)), pu=NULL, species=NULL, puvspecies=NULL, puvspecies_spo=NULL, boundary=NULL, ..., verbose=FALSE) {
 	# init
@@ -640,7 +645,8 @@ setMethod(
 )
 
 
-#' @describeIn is.cached
+#' @rdname is.cached
+#' @export
 setMethod(
 	f="is.cached", 
 	signature(x="MarxanData", name="character"), 
@@ -649,7 +655,8 @@ setMethod(
 	}
 )
 
-#' @describeIn cache
+#' @rdname cache
+#' @export
 setMethod(
 	f="cache", 
 	signature(x="MarxanData", name="character", y="ANY"), 
@@ -658,7 +665,8 @@ setMethod(
 	}
 )
 
-#' @describeIn cache
+#' @rdname cache
+#' @export
 setMethod(
 	f="cache", 
 	signature(x="MarxanData", name="character", y="missing"), 
@@ -668,7 +676,7 @@ setMethod(
 )
 
 #' @rdname is.comparable
-#' export
+#' @export
 setMethod(
 	f="is.comparable",
 	signature(x="MarxanData", y="MarxanData"),
@@ -732,14 +740,14 @@ targets.MarxanData<-function(x) {
 	return(x)
 }
 
+#' @rdname maxtargets
 #' @export
-#' @describeIn maxtargets
 maxtargets.MarxanData<-function(x) {
 	return(x@species$maxtargets)
 }
 
+#' @rdname maxtargets
 #' @export
-#' @describeIn maxtargets
 `maxtargets<-.MarxanData`<-function(x, value) {
 	stopifnot(is.numeric(value) & !any(is.na(value)))
 	x@species$maxtargets<-value

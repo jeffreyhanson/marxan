@@ -1,8 +1,4 @@
-library(rgdal)
-library(raster)
-library(maptools)
-library(plyr)
-library(data.table)
+context('04-visualisation')
 
 # test statistical methods
 test_that("Marxan visualisation methods don't work", {

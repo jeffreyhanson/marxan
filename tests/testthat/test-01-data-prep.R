@@ -1,7 +1,4 @@
-library(maptools)
-library(raster)
-library(rgdal)
-library(testthat)
+context('01-data-prep')
 
 # rasterize
 test_that("native rasterize function and GDAL interface produce different output", {

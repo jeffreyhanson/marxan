@@ -22,7 +22,7 @@ NULL
 #' @slot VERBOSITY "integer" Amount of output displayed on the program screen. Defaults to 1L.
 #' @slot NCORES "integer" Number of cores to use for processing. Defaults to 1L.
 
-#' @note This class was not called "MarxanPars" due to the inevitable conflicts with \code{\link[base]{par}}.
+#' @note This class was not called "MarxanPars" due to the inevitable conflicts with \code{\link[graphics]{par}}.
 #' @export
 setClass("MarxanOpts",
 	representation(
@@ -118,12 +118,12 @@ setClass("MarxanOpts",
 #' @seealso \code{\link{MarxanOpts-class}},  \code{\link{read.MarxanOpts}}, \code{\link{write.MarxanOpts}}.
 #' @export
 #' @examples
-#' x<-MarxanOpts(NCORES=4, NUMREPS=2, NUMITNS=5)
+#' x<-MarxanOpts(NCORES=4L, NUMREPS=2L, NUMITNS=5L)
 MarxanOpts<-function(..., ignore.extra=FALSE) {
 	x<-new('MarxanOpts')
 	args<-as.list(substitute(list(...)))[c(-1L)]
 	extra<-which(!names(args) %in% names(getSlots("MarxanOpts")))
-	if (length(extra)>0) {		
+	if (length(extra)>0) {
 		if (ignore.extra) {
 			args<-args[-extra]
 		} else {

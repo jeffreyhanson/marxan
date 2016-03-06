@@ -225,13 +225,13 @@ targets.MarxanUnsolved<-function(x) {
 }
 
 #' @export
-#' @describeIn maxtargets
+#' @rdname maxtargets
 maxtargets.MarxanUnsolved<-function(x) {
 	return(maxtargets.MarxanData(x@data))
 }
 
 #' @export
-#' @describeIn maxtargets
+#' @rdname maxtargets
 `maxtargets<-.MarxanUnsolved`<-function(x,value) {
 	stopifnot(is.numeric(value) & !any(is.na(value)))
 	x@data@species$maxtargets<-value

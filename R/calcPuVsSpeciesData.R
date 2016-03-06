@@ -18,9 +18,9 @@ NULL
 #' @seealso \code{\link{is.gdalInstalled}}, \code{\link{zonalSum}}, \url{http://www.gdal.org/}, \url{http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries}.
 #' @export
 #' @examples
-#' data(species, planningunits)
-#' puvspr1.dat<-calcPuVsSpeciesData(planningunits, species[[1]])
-#' puvspr2.dat<-calcPuVsSpeciesData(planningunits, species)
+#' data(taspu, tasinvis)
+#' puvspr1.dat<-calcPuVsSpeciesData(taspu, tasinvis[[1]])
+#' puvspr2.dat<-calcPuVsSpeciesData(taspu, tasinvis)
 calcPuVsSpeciesData<-function(x, ...) UseMethod("calcPuVsSpeciesData")
 
 #' @export

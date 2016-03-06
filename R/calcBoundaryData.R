@@ -17,8 +17,8 @@ NULL
 #' @seealso this function is based on the algorithm on by QMARXAN \url{http://aproposinfosystems.com/products/qmarxan/} for calculating boundary length.
 #' @export
 #' @examples 
-#' data(planningunits)
-#' bound.dat <- calcBoundaryData(planningunits)
+#' data(taspu)
+#' bound.dat <- calcBoundaryData(taspu)
 #' summary(bound.dat)
 calcBoundaryData<-function(x,...) UseMethod("calcBoundaryData")
 
