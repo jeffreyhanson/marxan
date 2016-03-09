@@ -712,7 +712,7 @@ names.MarxanData<-function(x) {
 #' @rdname spfs
 #' @inheritParams spfs
 spfs.MarxanData<-function(x) {
-	return(x@species$spfs)
+	return(x@species$spf)
 }
 
 #' @export
