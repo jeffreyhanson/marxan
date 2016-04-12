@@ -29,6 +29,7 @@ calcPuVsSpeciesData.SpatialPolygons<-function(x,y,ids=seq_len(nlayers(y)), ncore
 	# check for invalid inputs
 	stopifnot(inherits(y, "Raster"))
 	stopifnot(nlayers(y)==length(ids))
+	return(x@polygons)
 	return(
 		calcPuVsSpeciesData.SpatialPolygonsDataFrame(
 			x=SpatialPolygonsDataFrame(x@polygons, data=data.frame(id=seq_len(nrow(x@data)), row.names=laply(x@polygons, slot, name="ID"))),
