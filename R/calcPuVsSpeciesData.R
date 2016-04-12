@@ -28,10 +28,10 @@ calcPuVsSpeciesData<-function(x, ...) UseMethod("calcPuVsSpeciesData")
 calcPuVsSpeciesData.SpatialPolygons<-function(x,y,ids=seq_len(nlayers(y)), ncores=1, gdal=FALSE, ...) {
 	# check for invalid inputs
 	stopifnot(inherits(y, "Raster"))
-	stopifnot(nlayers(y)!=length(ids))
+	stopifnot(nlayers(y)==length(ids))
 	return(
 		calcPuVsSpeciesData.SpatialPolygonsDataFrame(
-			x=SpatialPolygonsDataFrame(x@polygons, data=data.frame(id=seq_len(nrow(x@data)), row.names=laply(x@polygons, slot, name="ID"))),
+			x=SpatialPolygonsDataFrame(x, data=data.frame(id=seq_len(length(x)), row.names=laply(x@polygons, slot, name="ID"))),
 			y=y,
 			ids=ids,
 			ncores=ncores,
