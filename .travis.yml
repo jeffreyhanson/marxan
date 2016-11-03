@@ -29,7 +29,6 @@ r_binary_packages:
   - RgoogleMaps
   - testthat
   - data.table
-  - doSNOW
   - RColorBrewer
   - scales
   - vegan

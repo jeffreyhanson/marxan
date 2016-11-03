@@ -12,10 +12,9 @@
 #' @importFrom ape which.edge
 #' @importFrom ape axisPhylo
 
-#' @importFrom snow makeCluster
-#' @importFrom snow stopCluster
-#' @importFrom snow stopCluster.default
-#' @importFrom doSNOW registerDoSNOW
+#' @importFrom parallel makeCluster
+#' @importFrom parallel stopCluster
+#' @importFrom doParallel registerDoParallel
 
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom RColorBrewer brewer.pal.info

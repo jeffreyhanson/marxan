@@ -48,7 +48,7 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 		}
 	}
 	# set up marxan dir structure
-	wd<-file.path(wd, paste0('M',paste(sample(letters, 10),collapse="")))
+	wd<-file.path(normalizePath(wd), paste0('M',paste(sample(letters, 10),collapse="")))
 	coredirs<-file.path(wd,seq_len(x@opts@NCORES))
 	dir.create(file.path(wd, 'input'),recursive=TRUE, showWarnings=TRUE)
 	laply(coredirs, dir.create, recursive=TRUE, showWarnings=TRUE)
@@ -64,8 +64,8 @@ solve.MarxanUnsolved=function(x, wd=tempdir(), seeds=sample.int(n=10000L, size=x
 		laply(paste0('chmod +x "', file.path(coredirs, basename(options()$marxanExecutablePath)), '"'), system)
 	# set up parrallelisation
 	if (x@opts@NCORES>1) {
-		clust<-makeCluster(x@opts@NCORES, type="SOCK")
-		registerDoSNOW(clust)
+		clust<-makeCluster(x@opts@NCORES, type="PSOCK")
+		registerDoParallel(clust)
 	}
 	# run marxan
 	oldwd<-getwd()

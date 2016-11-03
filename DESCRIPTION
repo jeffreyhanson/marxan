@@ -1,8 +1,7 @@
 Package: marxan
 Type: Package
 Title: Decision support tools for reserve selection in R using Marxan
-Version: 1.0.0
-Date: 2015-01-12
+Version: 1.0.0.1
 Author: Jeffrey O. Hanson <jeffrey.hanson@uqconnect.edu.au>, Matthew E. Watts
     <m.watts@uq.edu.au>
 Maintainer: Jeffrey O. Hanson <jeffrey.hanson@uqconnect.edu.au>
@@ -48,10 +47,10 @@ Imports:
     PBSmapping,
     RgoogleMaps,
     data.table,
-    doSNOW,
+    doParallel,
     RColorBrewer,
     scales,
-    snow,
+    parallel,
     vegan
 LinkingTo: Rcpp
 VignetteBuilder: knitr

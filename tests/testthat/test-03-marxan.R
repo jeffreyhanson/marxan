@@ -1,7 +1,7 @@
-conrext('03-marxan')
+context('03-marxan')
 
 # test main marxan function
-test_that("main marxan function doesn't work", {
+test_that("main marxan function", {
 	# make some data
 	template<-disaggregate(raster(matrix(1:9, ncol=3), xmn=0, xmx=1, ymn=0, ymx=1, crs=CRS('+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ')),fact=5)
 	polys<-rasterToPolygons(template, n=4, dissolve=TRUE)	

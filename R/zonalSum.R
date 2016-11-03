@@ -37,10 +37,10 @@ setMethod(
 		} else {
 			bs<-blockSize(x)	
 			if (ncores>1) {
-				clust<-makeCluster(ncores, type="SOCK")
+				clust<-makeCluster(ncores, type="PSOCK")
 				clusterEvalQ(clust, {library(raster);library(Rcpp)})
 				clusterExport(clust, c("bs", "x", "rcpp_groupsum"))
-				registerDoSNOW(clust)
+				registerDoParallel(clust)
 			}
 			x<-rbind.fill(llply(seq_len(nlayers(y)), function(l) {
 				return(zonalSum.RasterLayerNotInMemory(bs, x, y[[l]], ids[l], registered=ncores>1))

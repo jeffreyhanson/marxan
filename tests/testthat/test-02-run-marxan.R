@@ -1,7 +1,7 @@
 context('02-run-marxan')
 
 # test MarxanOpts methods
-test_that("MarxanOpts methods don't work", {
+test_that("MarxanOpts", {
 	opts1<-MarxanOpts()
 	opts1<-update(opts1,~opt(BLM=5))
 	opts2<-MarxanOpts(BLM=5)
@@ -11,7 +11,7 @@ test_that("MarxanOpts methods don't work", {
 })
 
 # test MarxanData methods
-test_that("MarxanData methods don't work", {
+test_that("MarxanData", {
 	# make some data
 	template<-disaggregate(raster(matrix(1:9, ncol=3), xmn=0, xmx=1, ymn=0, ymx=1, crs=CRS('+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ')),fact=5)
 	polys<-rasterToPolygons(template, n=4, dissolve=TRUE)	
@@ -66,7 +66,7 @@ test_that("MarxanData methods don't work", {
 })
 
 # test MarxanUnsolved methods
-test_that("MarxanUnsolved methods don't work", {
+test_that("MarxanUnsolved", {
 	# generate data
 	template<-disaggregate(raster(matrix(1:9, ncol=3), xmn=0, xmx=1, ymn=0, ymx=1, crs=CRS('+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ')),fact=5)
 	polys<-rasterToPolygons(template, n=4, dissolve=TRUE)	
@@ -97,7 +97,7 @@ test_that("MarxanUnsolved methods don't work", {
 
 
 # test MarxanUnsolved and MarxanSolved basic functions
-test_that("MarxanUnsolved methods don't work", {
+test_that("MarxanSolved", {
 	# generate data
 	template<-disaggregate(raster(matrix(1:9, ncol=3), xmn=0, xmx=1, ymn=0, ymx=1, crs=CRS('+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ')),fact=5)
 	polys<-rasterToPolygons(template, n=4, dissolve=TRUE)	

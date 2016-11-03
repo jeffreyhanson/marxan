@@ -1,7 +1,7 @@
 context('01-data-prep')
 
 # rasterize
-test_that("native rasterize function and GDAL interface produce different output", {
+test_that("GDAL interface function", {
 	if (is.gdalInstalled()) {
 		template<-disaggregate(raster(matrix(1:9, ncol=3), xmn=0, xmx=1, ymn=0, ymx=1, crs=CRS('+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ')),fact=5)
 		polys<-rasterToPolygons(template, n=4, dissolve=TRUE)
@@ -12,7 +12,7 @@ test_that("native rasterize function and GDAL interface produce different output
 })
 
 # zonal sum
-test_that("Zonal sum functions do not produce same output", {
+test_that("Zonal sum function", {
 	purast<-disaggregate(raster(matrix(1:9, ncol=3)),fact=5)
 	species<-purast*abs(rnorm(ncell(purast)))
 	zs1<-zonal(species, purast, fun='sum')
@@ -22,7 +22,7 @@ test_that("Zonal sum functions do not produce same output", {
 })
 
 # convert SpatialPolygons to PolySet
-test_that("raster and marxan polygons to PolySet functions produce different output", {
+test_that("marxan polygons to PolySet function", {
 	template<-disaggregate(raster(matrix(1:9, ncol=3), xmn=0, xmx=1, ymn=0, ymx=1, crs=CRS('+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ')),fact=5)
 	polys<-rasterToPolygons(template, n=4, dissolve=TRUE)
 	pdf1<-marxan:::rcpp_Polygons2PolySet(polys@polygons)
@@ -35,7 +35,7 @@ test_that("raster and marxan polygons to PolySet functions produce different out
 })
 
 # generate boundary length data.frame
-test_that("boundary length data doesn't work", {
+test_that("calculate boundary length data ", {
 	polys<-rasterToPolygons(
 		raster(
 			matrix(1:9, ncol=3), 
@@ -50,7 +50,7 @@ test_that("boundary length data doesn't work", {
 })
 
 # calculate puvspecies data
-test_that("pu v species calculations functions don't work", {
+test_that("pu v species function", {
 	template<-disaggregate(raster(matrix(1:9, ncol=3), xmn=0, xmx=1, ymn=0, ymx=1, crs=CRS('+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs ')),fact=5)
 	polys<-rasterToPolygons(template, n=4, dissolve=TRUE)
 	species<-setValues(template, round(runif(ncell(template))))
